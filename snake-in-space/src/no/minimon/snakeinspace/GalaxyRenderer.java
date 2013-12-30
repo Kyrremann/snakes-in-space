@@ -35,7 +35,9 @@ public class GalaxyRenderer {
 	}
 
 	private void drawAstroids() {
-		// TODO Auto-generated method stub
+		for (Asteroid asteroid : galaxy.getAsteroids()) {
+			asteroid.draw(renderer);
+		}
 	}
 
 	private void drawBackground() {

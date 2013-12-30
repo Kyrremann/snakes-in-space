@@ -127,7 +127,6 @@ public class Snake {
 	}
 
 	private void swapHeadToOtherSide(int width, int height) {
-		System.out.println("going through");
 		if (position.x < 0) {
 			position.x = width;
 		} else if (position.x > width) {

@@ -42,6 +42,11 @@ public class GameScreen implements Screen, InputProcessor {
 			snake.update(delta);
 			snake.hitDetection(width, height);
 		}
+		
+		for (Asteroid asteroid : galaxy.getAsteroids()) {
+			asteroid.update(delta);
+			asteroid.hitDetection(width, height);
+		}
 		galaxy.updateAppleSnakeInteraction();
 		
 		renderer.render(delta);
