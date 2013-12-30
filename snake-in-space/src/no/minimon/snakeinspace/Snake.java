@@ -22,7 +22,7 @@ public class Snake {
 	private ArrayList<Tail> tails;
 	private State state;
 	private String name;
-	private boolean goingThroughWall;
+//	private boolean goingThroughWall;
 
 	public Snake(String name, Vector2 position) {
 		this.position = position;
@@ -89,15 +89,15 @@ public class Snake {
 		if (index != 0) {
 			tail.angle = (float) Math.toDegrees(Math.atan2(dy, dx));
 		}
-
-		if (!goingThroughWall) {
+		
+		if (!tail.goingThroughWall) {
 			next.x = in.x
 					- ((float) Math.cos(Math.toRadians(tail.angle)) * SIZE);
 			next.y = in.y
 					- ((float) Math.sin(Math.toRadians(tail.angle)) * SIZE);
 		} else {
 			if (movePieceToOtherSide(index, in) && index >= tails.size()) {
-				goingThroughWall = false;
+				tail.goingThroughWall = false;
 			}
 		}
 	}
@@ -137,7 +137,7 @@ public class Snake {
 		} else if (position.y > height) {
 			position.y = 0;
 		}
-		goingThroughWall = true;
+		tails.get(1).goingThroughWall = true;
 	}
 
 	private boolean movePieceToOtherSide(int index, Vector2 in) {
@@ -146,23 +146,51 @@ public class Snake {
 		Tail tail = tails.get(index);
 		Vector2 next = tail.position;
 		float angle = tail.angle;
+		
 		if (next.x < 0) {
 			next.x = width;
 			next.y = in.y - ((float) Math.sin(Math.toRadians(angle)) * SIZE);
+			
+			tail.goingThroughWall = false;
+			if (index + 1 < tails.size()){
+				tails.get(index+1).goingThroughWall = true;
+			}
 		} else if (next.x > width) {
 			next.x = 0;
 			next.y = in.y - ((float) Math.sin(Math.toRadians(angle)) * SIZE);
+			
+			tail.goingThroughWall = false;
+			if (index + 1 < tails.size()){
+				tails.get(index+1).goingThroughWall = true;
+			}
 		} else if (next.y < 0) {
 			next.y = height;
 			next.x = in.x - ((float) Math.cos(Math.toRadians(angle)) * SIZE);
+			
+			tail.goingThroughWall = false;
+			if (index + 1 < tails.size()){
+				tails.get(index+1).goingThroughWall = true;
+			}
 		} else if (next.y > height) {
 			next.y = 0;
 			next.x = in.x - ((float) Math.cos(Math.toRadians(angle)) * SIZE);
+			
+			tail.goingThroughWall = false;
+			if (index + 1 < tails.size()){
+				tails.get(index+1).goingThroughWall = true;
+			}
 		} else {
-			next.x = in.x
-					- ((float) Math.cos(Math.toRadians(tail.angle)) * SIZE);
-			next.y = in.y
-					- ((float) Math.sin(Math.toRadians(tail.angle)) * SIZE);
+			if (tail.goingThroughWall) {
+				Tail tail_prev = tails.get(index - 1); 
+				// continue moving 'forward'  (using tail behind's angle)
+				next.x = next.x + (float) Math.cos(Math.toRadians(tail_prev.angle))*4;
+				next.y = next.y + (float) Math.sin(Math.toRadians(tail_prev.angle))*4;
+			} else {
+				next.x = in.x
+						- ((float) Math.cos(Math.toRadians(tail.angle)) * SIZE);
+				next.y = in.y
+						- ((float) Math.sin(Math.toRadians(tail.angle)) * SIZE);				
+			}
 			return false;
 		}
 
@@ -196,15 +224,18 @@ public class Snake {
 
 		public float angle;
 		public Vector2 position;
+		public boolean goingThroughWall;
 
 		public Tail() {
 			this.position = new Vector2(0f, 0f);
 			this.angle = 0;
+			this.goingThroughWall = false;
 		}
 
 		public Tail(Vector2 position, float angle) {
 			this.position = position;
 			this.angle = angle;
+			this.goingThroughWall = false;
 		}
 
 		public float getX() {
