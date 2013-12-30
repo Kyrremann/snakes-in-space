@@ -78,7 +78,7 @@ public class Galaxy {
 			for (Snake snake : snakes) {
 				if (GalaxyUtils.circlesIntersect(apple.getPosition(), 5,
 						snake.getPosition(), 7)) {
-					snake.addTail();
+					snake.eatApple();
 					remove = apple;
 					break;
 				}
@@ -121,5 +121,23 @@ public class Galaxy {
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
+	}
+
+	public void snakeAsteroidHitDetection() {
+		for (Snake snake : getSnakes()) {
+			for (Asteroid asteroid : getAsteroids()) {
+				Tail remove = null;
+				for (Tail tail : snake.getTails()) {
+					if (GalaxyUtils.circlesIntersect(tail.position, 7, asteroid.position, 7)) {
+						remove = tail;
+						break;
+					}
+				}
+				
+				if (remove != null) {
+					snake.removeTailPiece(remove);
+				}
+			}
+		}
 	}
 }

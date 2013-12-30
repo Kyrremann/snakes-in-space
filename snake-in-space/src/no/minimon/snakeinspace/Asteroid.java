@@ -8,9 +8,9 @@ public class Asteroid {
 
 	private final int SPEED;
 	private final float ROTATE_SPEED;
-	private final int SIZE;
+	public final int SIZE;
 
-	private Vector2 position;
+	public Vector2 position;
 	private float angle;
 	private float rotate;
 

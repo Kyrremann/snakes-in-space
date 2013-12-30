@@ -21,15 +21,17 @@ public class Snake {
 	private Vector2 position;
 	private ArrayList<Tail> tails;
 	private State state;
-	private String name;
-//	private boolean goingThroughWall;
+	// private boolean goingThroughWall;
+	private int applesEaten;
+	private int tailsLost;
 
 	public Snake(String name, Vector2 position) {
 		this.position = position;
 		this.state = State.IDLE;
-		this.name = name;
+		this.applesEaten = 0;
+		this.tailsLost = 0;
 
-		tails = new ArrayList<Snake.Tail>();
+		tails = new ArrayList<Tail>();
 		for (int i = 0; i < 10; i++) {
 			tails.add(new Tail(new Vector2(0, 0), 0));
 		}
@@ -89,7 +91,7 @@ public class Snake {
 		if (index != 0) {
 			tail.angle = (float) Math.toDegrees(Math.atan2(dy, dx));
 		}
-		
+
 		if (!tail.goingThroughWall) {
 			next.x = in.x
 					- ((float) Math.cos(Math.toRadians(tail.angle)) * SIZE);
@@ -145,50 +147,52 @@ public class Snake {
 		Tail tail = tails.get(index);
 		Vector2 next = tail.position;
 		float angle = tail.angle;
-		
+
 		if (next.x < 0) {
 			next.x = width;
 			next.y = in.y - ((float) Math.sin(Math.toRadians(angle)) * SIZE);
-			
+
 			tail.goingThroughWall = false;
-			if (index + 1 < tails.size()){
-				tails.get(index+1).goingThroughWall = true;
+			if (index + 1 < tails.size()) {
+				tails.get(index + 1).goingThroughWall = true;
 			}
 		} else if (next.x > width) {
 			next.x = 0;
 			next.y = in.y - ((float) Math.sin(Math.toRadians(angle)) * SIZE);
-			
+
 			tail.goingThroughWall = false;
-			if (index + 1 < tails.size()){
-				tails.get(index+1).goingThroughWall = true;
+			if (index + 1 < tails.size()) {
+				tails.get(index + 1).goingThroughWall = true;
 			}
 		} else if (next.y < 0) {
 			next.y = height;
 			next.x = in.x - ((float) Math.cos(Math.toRadians(angle)) * SIZE);
-			
+
 			tail.goingThroughWall = false;
-			if (index + 1 < tails.size()){
-				tails.get(index+1).goingThroughWall = true;
+			if (index + 1 < tails.size()) {
+				tails.get(index + 1).goingThroughWall = true;
 			}
 		} else if (next.y > height) {
 			next.y = 0;
 			next.x = in.x - ((float) Math.cos(Math.toRadians(angle)) * SIZE);
-			
+
 			tail.goingThroughWall = false;
-			if (index + 1 < tails.size()){
-				tails.get(index+1).goingThroughWall = true;
+			if (index + 1 < tails.size()) {
+				tails.get(index + 1).goingThroughWall = true;
 			}
 		} else {
 			if (tail.goingThroughWall) {
-				Tail tail_prev = tails.get(index - 1); 
-				// continue moving 'forward'  (using tail behind's angle)
-				next.x = next.x + (float) Math.cos(Math.toRadians(tail_prev.angle))*4;
-				next.y = next.y + (float) Math.sin(Math.toRadians(tail_prev.angle))*4;
+				Tail tail_prev = tails.get(index - 1);
+				// continue moving 'forward' (using tail behind's angle)
+				next.x = next.x
+						+ (float) Math.cos(Math.toRadians(tail_prev.angle)) * 4;
+				next.y = next.y
+						+ (float) Math.sin(Math.toRadians(tail_prev.angle)) * 4;
 			} else {
 				next.x = in.x
 						- ((float) Math.cos(Math.toRadians(tail.angle)) * SIZE);
 				next.y = in.y
-						- ((float) Math.sin(Math.toRadians(tail.angle)) * SIZE);				
+						- ((float) Math.sin(Math.toRadians(tail.angle)) * SIZE);
 			}
 			return false;
 		}
@@ -207,6 +211,7 @@ public class Snake {
 	}
 
 	private void removeTailPiece(int index) {
+		tailsLost++;
 		tails.remove(index);
 		if (index == 0) {
 			position.x = getHead().position.x;
@@ -214,45 +219,26 @@ public class Snake {
 			getHead().angle = getHead().angle + 180;
 		}
 	}
+	
+	public boolean removeTailPiece(Tail tail) {
+		tailsLost++;
+		return tails.remove(tail);
+	}
 
 	public void addTail() {
 		tails.add(new Tail());
 	}
 
-	private class Tail {
-
-		public float angle;
-		public Vector2 position;
-		public boolean goingThroughWall;
-
-		public Tail() {
-			this.position = new Vector2(0f, 0f);
-			this.angle = 0;
-			this.goingThroughWall = false;
-		}
-
-		public Tail(Vector2 position, float angle) {
-			this.position = position;
-			this.angle = angle;
-			this.goingThroughWall = false;
-		}
-
-		public float getX() {
-			return position.x;
-		}
-
-		public float getY() {
-			return position.y;
-		}
-
-		@Override
-		public String toString() {
-			return String.format("%s: (%f,%f) %f", name, position.x,
-					position.y, angle);
-		}
-	}
-
 	public Vector2 getPosition() {
 		return position;
+	}
+
+	public void eatApple() {
+		applesEaten++;
+		addTail();
+	}
+
+	public ArrayList<Tail> getTails() {
+		return tails;
 	}
 }

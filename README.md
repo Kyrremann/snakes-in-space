@@ -4,3 +4,4 @@ The successor of Snake in Space is coming to an Ouya or computer near you! Stay 
 
 ==TODO==
 * Make it work
+* When the game is played with hard walls, the snake should bounce like this: http://stackoverflow.com/a/573206
