@@ -15,17 +15,14 @@ public class Galaxy {
 	private int height;
 	private Random random;
 
-	public Galaxy(boolean mode) {
+	public Galaxy(int players) {
 		random = new Random();
 		snakes = new ArrayList<Snake>(2);
 		apples = new ArrayList<Apple>();
 		asteroids = new ArrayList<Asteroid>(4);
-		if (!mode) {
-			createDemoGalaxy();
-		} else {
-			createTwoPlayerDemo();
-		}
 		createAsteroids();
+		for (int i = 0; i <= players; i++)
+			snakes.add(new Snake("Player " + i, new Vector2(100f, 100f)));
 	}
 
 	private void createAsteroids() {
@@ -38,15 +35,6 @@ public class Galaxy {
 		return new Asteroid(getRandomInt(75, 175), getRandomInt(-2, 2), getRandomInt(10, 30),
 				new Vector2(getRandomFloat(0, 600),	getRandomFloat(0, 800)),
 				getRandomFloat(0, 360));
-	}
-
-	private void createDemoGalaxy() {
-		snakes.add(new Snake("Player One", new Vector2(100f, 100f)));
-	}
-
-	private void createTwoPlayerDemo() {
-		snakes.add(new Snake("Player One", new Vector2(100f, 100f)));
-		snakes.add(new Snake("Player Two", new Vector2(100f, 500f)));
 	}
 
 	public Snake getSnake(int index) {
@@ -146,9 +134,7 @@ public class Galaxy {
 			for (Asteroid asteroid2 : getAsteroids()) {
 				if (asteroid.equals(asteroid2)) continue;
 				if (GalaxyUtils.circlesIntersect(asteroid.position, 10, asteroid2.position, 10)) {
-					System.out.println(asteroid.angle);
 					asteroid.angle += 180;
-					System.out.println(asteroid.angle);
 					asteroid2.angle += 180;
 					return;
 				}

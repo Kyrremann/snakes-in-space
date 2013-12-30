@@ -13,9 +13,9 @@ public class GameScreen implements Screen, InputProcessor {
 	private GalaxyRenderer renderer;
 	private GalaxyController controller;
 	private int width, height;
-	private boolean mode;
+	private int mode;
 
-	public GameScreen(int width, int height, boolean seleted) {
+	public GameScreen(int width, int height, int seleted) {
 		this.width = width;
 		this.height = height;
 		this.mode = seleted;

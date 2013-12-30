@@ -16,7 +16,6 @@ public class GalaxyController extends ControllerAdapter {
 
 	@Override
 	public boolean buttonDown(Controller controller, int buttonIndex) {
-		Gdx.app.log("DOWN", controller.getName());
 		keyDown(indexOf(controller), buttonIndex);
 		return true;
 	}
@@ -29,15 +28,19 @@ public class GalaxyController extends ControllerAdapter {
 
 	public void keyDown(int player, int keyCode) {
 		player = mapCorrectPlayerIndex(player, keyCode);
-		if (player < 0)
+		if (player < 0 || player > galaxy.getSnakes().size())
 			return;
 		switch (keyCode) {
 		case Keys.LEFT:
 		case Keys.A:
+		case Keys.G:
+		case Keys.I:
 			galaxy.getSnake(player).setState(Snake.State.LEFT);
 			break;
 		case Keys.RIGHT:
 		case Keys.D:
+		case Keys.J:
+		case Keys.P:
 			galaxy.getSnake(player).setState(Snake.State.RIGHT);
 		default:
 			break;
@@ -60,6 +63,10 @@ public class GalaxyController extends ControllerAdapter {
 				return 0;
 			} else if ((keyCode == Keys.A || keyCode == Keys.D)) {
 				return 1;
+			} else if ((keyCode == Keys.G || keyCode == Keys.J)) {
+				return 2;
+			} else if ((keyCode == Keys.I || keyCode == Keys.P)) {
+				return 3;
 			}
 		}
 		return player - 1;

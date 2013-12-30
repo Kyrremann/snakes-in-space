@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MenuScreen implements Screen, InputProcessor {
 
+	private final String TITLE = "Snakes in Space";
+
 	private MenuController controller;
 	private int height;
 	private int width;
@@ -19,8 +21,7 @@ public class MenuScreen implements Screen, InputProcessor {
 	private float stringHeight;
 	private float menuX;
 	private float menuY;
-	private boolean seleted;
-	private String string;
+	private int seleted;
 	private SnakeInSpace snakeInSpace;
 
 	public MenuScreen(SnakeInSpace snakeInSpace, int width, int height) {
@@ -48,28 +49,29 @@ public class MenuScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		SpriteBatch batch = new SpriteBatch();
 		batch.begin();
+		String players1 = "1 player", players2 = "2 player", players3 = "3 player", players4 = "4 player";
 
-		string = "Snakes in Space";
-		font.draw(batch, string, menuX - (font.getBounds(string).width / 2),
-				menuY + stringHeight);
-
-		if (seleted) {
-			string = "1 player";
-			font.draw(batch, string,
-					menuX - (font.getBounds(string).width / 2), menuY);
-			string = "- 2 player -";
-			font.draw(batch, string,
-					menuX - (font.getBounds(string).width / 2), menuY
-							- (stringHeight));
-		} else {
-			string = "- 1 player -";
-			font.draw(batch, string,
-					menuX - (font.getBounds(string).width / 2), menuY);
-			string = "2 player";
-			font.draw(batch, string,
-					menuX - (font.getBounds(string).width / 2), menuY
-							- (stringHeight));
+		switch (seleted) {
+		case 0:
+			players1 = "- 1 player -";
+			break;
+		case 1:
+			players2 = "- 2 players -";
+			break;
+		case 2:
+			players3 = "- 3 players -";
+			break;
+		case 3:
+			players4 = "- 4 players -";
+			break;
 		}
+		float width = (font.getBounds(TITLE).width / 2);
+
+		font.draw(batch, TITLE, menuX - width, menuY + stringHeight);
+		font.draw(batch, players1, menuX - width, menuY - (stringHeight));
+		font.draw(batch, players2, menuX - width, menuY - (stringHeight * 2));
+		font.draw(batch, players3, menuX - width, menuY - (stringHeight * 3));
+		font.draw(batch, players4, menuX - width, menuY - (stringHeight * 4));
 
 		batch.end();
 	}
@@ -105,14 +107,19 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (keycode == Keys.UP || keycode == Keys.DOWN) {
-			seleted = !seleted;
+		if (keycode == Keys.UP) {
+			seleted--;
+			if (seleted < 0) seleted = 3;
+			return true;
+		} else if (keycode == Keys.DOWN) {
+			seleted++;
+			if (seleted > 3) seleted = 0;
 			return true;
 		} else if (keycode == Keys.ENTER) {
 			snakeInSpace.setScreen(new GameScreen(width, height, seleted));
 			return true;
 		}
-		
+
 		return false;
 	}
 
