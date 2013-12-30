@@ -11,7 +11,7 @@ public class Asteroid {
 	public final int SIZE;
 
 	public Vector2 position;
-	private float angle;
+	public float angle;
 	private float rotate;
 
 	public Asteroid(int speed, float rotateSpeed, int size, Vector2 position, float angle) {

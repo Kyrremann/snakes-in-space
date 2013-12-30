@@ -140,4 +140,19 @@ public class Galaxy {
 			}
 		}
 	}
+
+	public void asteroidAsteroidHitDetection() {
+		for (Asteroid asteroid : getAsteroids()) {
+			for (Asteroid asteroid2 : getAsteroids()) {
+				if (asteroid.equals(asteroid2)) continue;
+				if (GalaxyUtils.circlesIntersect(asteroid.position, 10, asteroid2.position, 10)) {
+					System.out.println(asteroid.angle);
+					asteroid.angle += 180;
+					System.out.println(asteroid.angle);
+					asteroid2.angle += 180;
+					return;
+				}
+			}
+		}
+	}
 }

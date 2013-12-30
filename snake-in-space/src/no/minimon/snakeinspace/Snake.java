@@ -12,16 +12,12 @@ public class Snake {
 		LEFT, RIGHT, IDLE;
 	}
 
-	// Kanskje jeg skal bruke en Node klasse for å ta vare på hale-deler som man
-	// mister eller legger fra seg
-
 	public static final float SPEED = 200;
 	public static final int SIZE = 10;
 
 	private Vector2 position;
 	private ArrayList<Tail> tails;
 	private State state;
-	// private boolean goingThroughWall;
 	private int applesEaten;
 	private int tailsLost;
 
@@ -123,7 +119,6 @@ public class Snake {
 
 	public void hitDetection(int width, int height) {
 		if (hasSnakeHitWall(width, height)) {
-			// removeTailPiece(0);
 			swapHeadToOtherSide(width, height);
 		}
 	}

@@ -50,6 +50,7 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		galaxy.updateAppleSnakeInteraction();
 		galaxy.snakeAsteroidHitDetection();
+		galaxy.asteroidAsteroidHitDetection();
 		
 		renderer.render(delta);
 	}
