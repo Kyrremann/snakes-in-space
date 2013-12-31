@@ -22,7 +22,7 @@ public class Galaxy {
 		asteroids = new ArrayList<Asteroid>(4);
 		createAsteroids();
 		for (int i = 0; i <= players; i++)
-			snakes.add(new Snake("Player " + i, new Vector2(100f, 100f)));
+			snakes.add(new Snake("Player " + i, new Vector2(100, 100)));
 	}
 
 	private void createAsteroids() {

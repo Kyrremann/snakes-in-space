@@ -2,6 +2,7 @@ package no.minimon.snakeinspace;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -12,91 +13,163 @@ public class Snake {
 		LEFT, RIGHT, IDLE;
 	}
 
-	public static final float SPEED = 200;
+	public static final float SPEED = 200; // pixels per second
 	public static final int SIZE = 10;
+	private static final float TURN_SPEED = 360; // degrees per second
+	public static final int WIDTH = 800; // consider moving var somewhere else?
+	public static final int HEIGHT = 600; // same here
 
-	private Vector2 position;
 	private ArrayList<Tail> tails;
 	private State state;
 	private int applesEaten;
 	private int tailsLost;
 
 	public Snake(String name, Vector2 position) {
-		this.position = position;
 		this.state = State.IDLE;
 		this.applesEaten = 0;
 		this.tailsLost = 0;
 
 		tails = new ArrayList<Tail>();
 		for (int i = 0; i < 10; i++) {
-			tails.add(new Tail(new Vector2(0, 0), 0));
+			tails.add(new Tail());
 		}
 
-		tails.get(0).angle = (float) Math.toDegrees(Math.atan2(300, 400));
-		calculateHeadPiece(1);
+		getHead().direction = new Vector2(3,4).nor(); 
+		getHead().position = position;
 	}
 
 	public void setState(State state) {
 		this.state = state;
 	}
 
-	public void turnLeft() {
-		tails.get(0).angle += 7f;
+	// turn left at TURN_SPEED degrees per second
+	public void turnLeft(float delta) {
+		tails.get(0).direction.rotate(TURN_SPEED * delta);
 	}
 
-	public void turnRight() {
-		tails.get(0).angle -= 7f;
+	// turn right at TURNSPEED degrees per second
+	public void turnRight(float delta) {
+		tails.get(0).direction.rotate(TURN_SPEED * delta * -1);
 	}
 
 	public void update(float delta) {
-		moveSnake();
-		calculateHeadPiece(delta);
-
-		calculateTailPiece(0, position);
-		for (int i = 0; i < tails.size() - 1; i++) {
-			calculateTailPiece(i + 1, tails.get(i).position);
+		// turn head piece of snake
+		turnSnake(delta);
+		
+		// update rotation and position of all pieces (head ignores rotation!)
+		for (int i = 0; i < tails.size(); i++) {
+			calculatePieceLocation(delta, i);
 		}
 	}
 
-	private void moveSnake() {
+	private void turnSnake(float delta) {
 		switch (state) {
 		case LEFT:
-			turnLeft();
+			turnLeft(delta);
 			break;
 		case RIGHT:
-			turnRight();
+			turnRight(delta);
 		default:
 			break;
 		}
 	}
 
-	public void calculateHeadPiece(float delta) {
-		position.x += ((float) Math.cos(Math.toRadians(tails.get(0).angle)))
-				* delta * SPEED;
-		position.y += ((float) Math.sin(Math.toRadians(tails.get(0).angle)))
-				* delta * SPEED;
-	}
+	/**
+	 * update head location (first tail segment) of piece at index
+	 * 
+	 * @param index - the piece to update
+	 * @param delta - the amount to update (1 = per second)
+	 */
+	public void calculatePieceLocation(float delta, int index) {
+		Tail piece = tails.get(index);
+		
+		// if head piece, move straight forward (angle predetermined)
+		if (index == 0) {
+			piece.position.add( piece.direction.cpy().scl(SPEED * delta) );
+		} 
+		// if other piece, calculate new angle, then move straight forward
+		else {
+			Tail prev = tails.get(index-1);
+			
+			// ASSUMPTION: SPEED is never greater than WIDTH or HEIGHT!!!!
+			
+			// OPTIMIZE: shrink repeated code here!!!
+			// if dist to prev is greater than SPEED dictates = it has wrapped
+			if (piece.position.cpy().sub(prev.position).x > SPEED) {
+				// prev has wrapped towards west
+				
+				// this piece shall move towards a new destination (un-wrapped)
+				Vector2 dest = prev.position.cpy();
+				dest.x += WIDTH; // 'un-wrapping' the prev's position
+				
+				// point piece at NEW DEST (not prev piece)
+				piece.direction = dest.cpy().sub(piece.position);
+				piece.direction.nor(); // normalize direction
 
-	public void calculateTailPiece(int index, Vector2 in) {
-		Tail tail = tails.get(index);
-		Vector2 next = tail.position;
+				piece.position = 
+						dest.cpy().sub(piece.direction.cpy().scl(SIZE));
+			} else if (piece.position.cpy().sub(prev.position).x < -SPEED) {
+				// prev has wrapped towards east
+				
+				// this piece shall move towards a new destination (un-wrapped)
+				Vector2 dest = prev.position.cpy();
+				dest.x -= WIDTH; // 'un-wrapping' the prev's position
+				
+				// point piece at NEW DEST (not prev piece)
+				piece.direction = dest.cpy().sub(piece.position);
+				piece.direction.nor(); // normalize direction
 
-		float dx = in.x - next.x;
-		float dy = in.y - next.y;
+				piece.position = 
+						dest.cpy().sub(piece.direction.cpy().scl(SIZE));
+			} else if (piece.position.cpy().sub(prev.position).y > SPEED) {
+				// prev has wrapped towards south
 
-		if (index != 0) {
-			tail.angle = (float) Math.toDegrees(Math.atan2(dy, dx));
-		}
+				// this piece shall move towards a new destination (un-wrapped)
+				Vector2 dest = prev.position.cpy();
+				dest.y += HEIGHT; // 'un-wrapping' the prev's position
 
-		if (!tail.goingThroughWall) {
-			next.x = in.x
-					- ((float) Math.cos(Math.toRadians(tail.angle)) * SIZE);
-			next.y = in.y
-					- ((float) Math.sin(Math.toRadians(tail.angle)) * SIZE);
-		} else {
-			if (movePieceToOtherSide(index, in) && index >= tails.size()) {
-				tail.goingThroughWall = false;
+				// point piece at NEW DEST (not prev piece)
+				piece.direction = dest.cpy().sub(piece.position);
+				piece.direction.nor(); // normalize direction
+
+				piece.position = 
+						dest.cpy().sub(piece.direction.cpy().scl(SIZE));
+			} else if (piece.position.cpy().sub(prev.position).y < -SPEED) {
+				// prev has wrapped towards north
+
+				// this piece shall move towards a new destination (un-wrapped)
+				Vector2 dest = prev.position.cpy();
+				dest.y -= HEIGHT; // 'un-wrapping' the prev's position
+
+				// point piece at NEW DEST (not prev piece)
+				piece.direction = dest.cpy().sub(piece.position);
+				piece.direction.nor(); // normalize direction
+
+				piece.position = 
+						dest.cpy().sub(piece.direction.cpy().scl(SIZE));
+			}	
+			else {
+				// continue 'normally'
+
+				// point piece directly at prev piece
+				piece.direction = prev.position.cpy().sub(piece.position);
+				piece.direction.nor(); // normalize direction
+				
+				// set location to SIZE distance from preceding piece
+				piece.position = prev.position.cpy().sub(piece.direction.cpy()
+						.scl(SIZE));
 			}
+		}
+		// if outside boundaries, wrap to other side
+		if (piece.position.x < 0){
+			piece.position.x += WIDTH; // wrap to east
+		} else if (piece.position.x > WIDTH) {
+			piece.position.x -= WIDTH; // wrap to west
+		}
+		if (piece.position.y < 0){
+			piece.position.y += HEIGHT; // wrap to north
+		} else if (piece.position.y > HEIGHT) {
+			piece.position.y -= HEIGHT; // wrap to south
 		}
 	}
 
@@ -109,90 +182,19 @@ public class Snake {
 	private void drawSnake(Tail tail, ShapeRenderer renderer) {
 		renderer.begin(ShapeType.Line);
 		renderer.identity();
-		renderer.setColor(tail.position.x / 265, tail.position.y / 256,
-				tail.angle / 256, 255);
+		//renderer.setColor(tail.position.x / 265, tail.position.y / 256,
+//				tail.direction.x / 256, 255);
+		renderer.setColor(Color.WHITE);
 		renderer.translate(tail.position.x, tail.position.y, 0);
-		renderer.rotate(0, 0, 1, tail.angle);
+		renderer.rotate(0, 0, 1, tail.direction.angle());
 		renderer.triangle(0, -5, 0, 5, 10, 0);
 		renderer.end();
 	}
 
 	public void hitDetection(int width, int height) {
 		if (hasSnakeHitWall(width, height)) {
-			swapHeadToOtherSide(width, height);
+			//swapHeadToOtherSide(width, height);
 		}
-	}
-
-	private void swapHeadToOtherSide(int width, int height) {
-		if (position.x < 0) {
-			position.x = width;
-		} else if (position.x > width) {
-			position.x = 0;
-		} else if (position.y < 0) {
-			position.y = height;
-		} else if (position.y > height) {
-			position.y = 0;
-		}
-		tails.get(1).goingThroughWall = true;
-	}
-
-	private boolean movePieceToOtherSide(int index, Vector2 in) {
-		int width = 800;
-		int height = 600;
-		Tail tail = tails.get(index);
-		Vector2 next = tail.position;
-		float angle = tail.angle;
-
-		if (next.x < 0) {
-			next.x = width;
-			next.y = in.y - ((float) Math.sin(Math.toRadians(angle)) * SIZE);
-
-			tail.goingThroughWall = false;
-			if (index + 1 < tails.size()) {
-				tails.get(index + 1).goingThroughWall = true;
-			}
-		} else if (next.x > width) {
-			next.x = 0;
-			next.y = in.y - ((float) Math.sin(Math.toRadians(angle)) * SIZE);
-
-			tail.goingThroughWall = false;
-			if (index + 1 < tails.size()) {
-				tails.get(index + 1).goingThroughWall = true;
-			}
-		} else if (next.y < 0) {
-			next.y = height;
-			next.x = in.x - ((float) Math.cos(Math.toRadians(angle)) * SIZE);
-
-			tail.goingThroughWall = false;
-			if (index + 1 < tails.size()) {
-				tails.get(index + 1).goingThroughWall = true;
-			}
-		} else if (next.y > height) {
-			next.y = 0;
-			next.x = in.x - ((float) Math.cos(Math.toRadians(angle)) * SIZE);
-
-			tail.goingThroughWall = false;
-			if (index + 1 < tails.size()) {
-				tails.get(index + 1).goingThroughWall = true;
-			}
-		} else {
-			if (tail.goingThroughWall) {
-				Tail tail_prev = tails.get(index - 1);
-				// continue moving 'forward' (using tail behind's angle)
-				next.x = next.x
-						+ (float) Math.cos(Math.toRadians(tail_prev.angle)) * 4;
-				next.y = next.y
-						+ (float) Math.sin(Math.toRadians(tail_prev.angle)) * 4;
-			} else {
-				next.x = in.x
-						- ((float) Math.cos(Math.toRadians(tail.angle)) * SIZE);
-				next.y = in.y
-						- ((float) Math.sin(Math.toRadians(tail.angle)) * SIZE);
-			}
-			return false;
-		}
-
-		return true;
 	}
 
 	private boolean hasSnakeHitWall(int width, int height) {
@@ -209,9 +211,7 @@ public class Snake {
 		tailsLost++;
 		tails.remove(index);
 		if (index == 0) {
-			position.x = getHead().position.x;
-			position.y = getHead().position.y;
-			getHead().angle = getHead().angle + 180;
+			getHead().direction = getHead().direction.scl(-1);
 		}
 	}
 	
@@ -225,7 +225,7 @@ public class Snake {
 	}
 
 	public Vector2 getPosition() {
-		return position;
+		return getHead().position;
 	}
 
 	public void eatApple() {
