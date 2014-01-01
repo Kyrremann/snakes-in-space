@@ -13,3 +13,5 @@ TODO
 * Add Ouya monetizing (mohahaha!)
 * When the game is played with hard walls, the snake should bounce like this: http://stackoverflow.com/a/573206
 * Optimize Ouya controllers
+* Add the famous Snake Shield!
+* Add Snake Bombs (it's when you leave the last piece of your tail to detonate)
