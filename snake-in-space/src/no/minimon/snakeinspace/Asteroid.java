@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
-public class Asteroid {
+public class Asteroid implements Movable {
 
 	private final int SPEED;
 	private final float ROTATE_SPEED;
@@ -14,7 +14,8 @@ public class Asteroid {
 	public float angle;
 	private float rotate;
 
-	public Asteroid(int speed, float rotateSpeed, int size, Vector2 position, float angle) {
+	public Asteroid(int speed, float rotateSpeed, int size, Vector2 position,
+			float angle) {
 		SPEED = speed;
 		SIZE = size;
 		ROTATE_SPEED = rotateSpeed;
@@ -28,7 +29,7 @@ public class Asteroid {
 		position.y += ((float) Math.sin(Math.toRadians(angle))) * delta * SPEED;
 		angle += .1f;
 		rotate += ROTATE_SPEED;
-		
+
 	}
 
 	public void hitDetection(int width, int height) {
@@ -63,8 +64,14 @@ public class Asteroid {
 		renderer.setColor(33, 33, 33, 255);
 		renderer.translate(position.x, position.y, 0);
 		renderer.rotate(0, 0, 1, rotate);
-		renderer.polygon(new float[] {0,0, 12,1, 18,10, 13,16, -1,17, -4,14, 1,10, -6,10, -5,3});
+		renderer.polygon(new float[] { 0, 0, 12, 1, 18, 10, 13, 16, -1, 17, -4,
+				14, 1, 10, -6, 10, -5, 3 });
 		renderer.end();
+	}
+
+	@Override
+	public Vector2 getPosition() {
+		return position;
 	}
 
 }

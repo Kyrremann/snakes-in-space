@@ -13,17 +13,17 @@ public class GameScreen implements Screen, InputProcessor {
 	private GalaxyRenderer renderer;
 	private GalaxyController controller;
 	private int width, height;
-	private int mode;
+	private int players;
 
-	public GameScreen(int width, int height, int seleted) {
+	public GameScreen(int width, int height, int players) {
 		this.width = width;
 		this.height = height;
-		this.mode = seleted;
+		this.players = players;
 	}
 
 	@Override
 	public void show() {
-		galaxy = new Galaxy(mode);
+		galaxy = new Galaxy(players, width, height);
 		renderer = new GalaxyRenderer(galaxy, true);
 		controller = new GalaxyController(galaxy);
 		if (Ouya.runningOnOuya) {
@@ -40,7 +40,12 @@ public class GameScreen implements Screen, InputProcessor {
 		galaxy.updateApple(delta);
 		
 		for (Snake snake : galaxy.getSnakes()) {
+<<<<<<< HEAD
 			snake.update(delta);
+=======
+			snake.update(delta, width, height);
+			snake.hitDetection(width, height);
+>>>>>>> f56a51d9fde677ad5fe0a8e5a8b7de89fa55ac5f
 		}
 		
 		for (Asteroid asteroid : galaxy.getAsteroids()) {
@@ -104,31 +109,26 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

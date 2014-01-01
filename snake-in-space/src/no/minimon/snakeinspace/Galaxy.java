@@ -15,12 +15,20 @@ public class Galaxy {
 	private int height;
 	private Random random;
 
-	public Galaxy(int players) {
+	public Galaxy(int players, int width, int height) {
+		this.width = width;
+		this.height = height;
+
 		random = new Random();
-		snakes = new ArrayList<Snake>(2);
+		snakes = new ArrayList<Snake>(players);
 		apples = new ArrayList<Apple>();
 		asteroids = new ArrayList<Asteroid>(4);
+
 		createAsteroids();
+		createPlayers(players);
+	}
+
+	private void createPlayers(int players) {
 		for (int i = 0; i <= players; i++)
 			snakes.add(new Snake("Player " + i, new Vector2(100, 100)));
 	}
@@ -31,9 +39,11 @@ public class Galaxy {
 		asteroids.add(createAsteroid());
 		asteroids.add(createAsteroid());
 	}
+
 	private Asteroid createAsteroid() {
-		return new Asteroid(getRandomInt(75, 175), getRandomInt(-2, 2), getRandomInt(10, 30),
-				new Vector2(getRandomFloat(0, 600),	getRandomFloat(0, 800)),
+		return new Asteroid(getRandomInt(75, 175), getRandomInt(-2, 2),
+				getRandomInt(10, 30), new Vector2(
+						getRandomPositionClearOfEverythingElse()),
 				getRandomFloat(0, 360));
 	}
 
@@ -83,22 +93,28 @@ public class Galaxy {
 	}
 
 	private Vector2 getRandomPositionClearOffSnakes() {
-		Vector2 position = new Vector2(getRandomX(), getRandomY());
+		Vector2 position = new Vector2(getRandomFloat(10, width),
+				getRandomFloat(10, height));
 
 		while (GalaxyUtils.isIntersectionWith(position, snakes)) {
-			position.x = getRandomX();
-			position.y = getRandomY();
+			position.x = getRandomFloat(10, width);
+			position.y = getRandomFloat(10, height);
 		}
 
 		return position;
 	}
 
-	private float getRandomX() {
-		return Math.abs((float) ((Math.random() * (10 - width)) + 10));
-	}
+	private Vector2 getRandomPositionClearOfEverythingElse() {
+		Vector2 position = new Vector2(getRandomFloat(10, width),
+				getRandomFloat(10, height));
 
-	private float getRandomY() {
-		return Math.abs((float) ((Math.random() * (10 - height)) + 10));
+		while (GalaxyUtils.isIntersectionWith(position, snakes)
+				|| GalaxyUtils.isIntersectionWith(position, asteroids)) {
+			position.x = getRandomFloat(10, width);
+			position.y = getRandomFloat(10, height);
+		}
+
+		return position;
 	}
 
 	private float getRandomFloat(int min, int max) {
@@ -119,12 +135,13 @@ public class Galaxy {
 			for (Asteroid asteroid : getAsteroids()) {
 				Tail remove = null;
 				for (Tail tail : snake.getTails()) {
-					if (GalaxyUtils.circlesIntersect(tail.position, 7, asteroid.position, 7)) {
+					if (GalaxyUtils.circlesIntersect(tail.position, 7,
+							asteroid.position, 7)) {
 						remove = tail;
 						break;
 					}
 				}
-				
+
 				if (remove != null) {
 					snake.removeTailPiece(remove);
 				}
@@ -135,8 +152,10 @@ public class Galaxy {
 	public void asteroidAsteroidHitDetection() {
 		for (Asteroid asteroid : getAsteroids()) {
 			for (Asteroid asteroid2 : getAsteroids()) {
-				if (asteroid.equals(asteroid2)) continue;
-				if (GalaxyUtils.circlesIntersect(asteroid.position, 10, asteroid2.position, 10)) {
+				if (asteroid.equals(asteroid2))
+					continue;
+				if (GalaxyUtils.circlesIntersect(asteroid.position, 10,
+						asteroid2.position, 10)) {
 					asteroid.angle += 180;
 					asteroid2.angle += 180;
 					return;
