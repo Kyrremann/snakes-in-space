@@ -18,7 +18,7 @@ public class MenuScreen implements Screen, InputProcessor {
 	private MenuController controller;
 	private BitmapFont font;
 	private GalaxySounds sounds;
-	
+
 	private float stringHeight;
 	private float menuX;
 	private float menuY;
@@ -30,7 +30,7 @@ public class MenuScreen implements Screen, InputProcessor {
 		this.snakeInSpace = snakeInSpace;
 		this.width = width;
 		this.height = height;
-		
+
 		sounds = new GalaxySounds();
 		font = new BitmapFont();
 		stringHeight = 15;
@@ -114,14 +114,17 @@ public class MenuScreen implements Screen, InputProcessor {
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.UP) {
 			seleted--;
-			if (seleted < 0) seleted = 3;
+			if (seleted < 0)
+				seleted = 3;
 			return true;
 		} else if (keycode == Keys.DOWN) {
 			seleted++;
-			if (seleted > 3) seleted = 0;
+			if (seleted > 3)
+				seleted = 0;
 			return true;
 		} else if (keycode == Keys.ENTER) {
-			snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width, height, seleted));
+			snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width,
+					height, seleted));
 			return true;
 		} else if (keycode == Keys.ESCAPE) {
 			Gdx.app.exit();

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 
 public class Galaxy {
@@ -19,7 +18,8 @@ public class Galaxy {
 	private Random random;
 	private GalaxySounds sounds;
 
-	public Galaxy(SnakeInSpace snakeInSpace, GalaxySounds galaxySounds, int players, int width, int height) {
+	public Galaxy(SnakeInSpace snakeInSpace, GalaxySounds galaxySounds,
+			int players, int width, int height) {
 		this.snakeInSpace = snakeInSpace;
 		this.sounds = galaxySounds;
 		this.width = width;
@@ -84,7 +84,8 @@ public class Galaxy {
 					if (GalaxyUtils.circlesIntersect(apple.getPosition(), 5,
 							snake.getPosition(), 7)) {
 						snake.eatApple();
-						sounds.playNom(getRandomInt(0, sounds.nomSounds.size() - 1));
+						sounds.playNom(getRandomInt(0,
+								sounds.nomSounds.size() - 1));
 						remove = apple;
 						break;
 

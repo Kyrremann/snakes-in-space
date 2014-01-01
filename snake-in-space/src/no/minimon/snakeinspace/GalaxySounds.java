@@ -16,8 +16,8 @@ public class GalaxySounds {
 	public GalaxySounds() {
 		nomSounds = new ArrayList<Sound>();
 		for (int i = 1; i < 10; i++) {
-			nomSounds.add(Gdx.audio.newSound(Gdx.files.internal("nom"
-					+ i + ".ogg")));
+			nomSounds.add(Gdx.audio.newSound(Gdx.files.internal("nom" + i
+					+ ".ogg")));
 		}
 		theme = Gdx.audio.newSound(Gdx.files.internal("theme.ogg"));
 		explosion = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));

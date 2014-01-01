@@ -14,8 +14,7 @@ public class SnakeInSpace extends Game {
 
 	@Override
 	public void create() {
-		// setScreen(new GameScreen(width, height));
 		setScreen(new MenuScreen(this, width, height));
 	}
-	
+
 }

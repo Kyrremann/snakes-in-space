@@ -6,13 +6,13 @@ import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 
 public class SnakeAdapter extends ControllerAdapter {
-	
+
 	private Galaxy galaxy;
 
 	public SnakeAdapter(Galaxy galaxy) {
 		this.galaxy = galaxy;
 	}
-	
+
 	@Override
 	public boolean buttonDown(Controller controller, int buttonIndex) {
 		if (controller.getName().equals(Ouya.ID)) {
@@ -27,14 +27,13 @@ public class SnakeAdapter extends ControllerAdapter {
 			return super.buttonDown(controller, buttonIndex);
 		}
 	}
-	
+
 	@Override
 	public boolean buttonUp(Controller controller, int buttonIndex) {
 		if (controller.getName().equals(Ouya.ID)) {
 			/* if (controller.getButton(Ouya.BUTTON_DPAD_LEFT)
 					|| controller.getButton(Ouya.BUTTON_DPAD_RIGHT)) { */
-			if (buttonIndex == 21 
-					|| buttonIndex == 22) {
+			if (buttonIndex == 21 || buttonIndex == 22) {
 				galaxy.getSnake(0).setState(Snake.State.IDLE);
 			}
 			return true;
@@ -42,13 +41,13 @@ public class SnakeAdapter extends ControllerAdapter {
 			return super.buttonDown(controller, buttonIndex);
 		}
 	}
-	
+
 	@Override
 	public void connected(Controller controller) {
 		System.out.println(controller.getName());
 		super.connected(controller);
 	}
-	
+
 	@Override
 	public void disconnected(Controller controller) {
 		System.out.println(controller.getName());

@@ -67,7 +67,7 @@ public class GalaxyController extends ControllerAdapter {
 		player = mapCorrectPlayerIndex(player, keyCode);
 		if (player < 0)
 			return;
-		switch (keyCode){
+		switch (keyCode) {
 		case Keys.LEFT:
 		case Keys.RIGHT:
 

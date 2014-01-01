@@ -15,7 +15,7 @@ public class Snake implements Movable {
 
 	private int SIZE = 10;
 	private float TURN_SPEED = 360; // degrees per second
-	
+
 	private float BASE_SPEED = 200;
 	private float MAX_SPEED = 400;
 	private float SPEED = BASE_SPEED; // pixels per second
@@ -79,9 +79,9 @@ public class Snake implements Movable {
 		for (int i = 0; i < tails.size(); i++) {
 			calculatePieceLocation(delta, i, width, height);
 		}
-		
+
 		// update acceleration
-		updateAcceleration( delta );
+		updateAcceleration(delta);
 	}
 
 	/**
@@ -89,24 +89,24 @@ public class Snake implements Movable {
 	 * 
 	 * @param delta
 	 */
-	private void updateAcceleration( float delta ) {
+	private void updateAcceleration(float delta) {
 		// update speed
-		SPEED += ((ACCELERATION * ACCELERATION_DIR)*delta);
-		
+		SPEED += ((ACCELERATION * ACCELERATION_DIR) * delta);
+
 		// if max speed, stop accelerating.
-		if ( SPEED > MAX_SPEED ) {
+		if (SPEED > MAX_SPEED) {
 			SPEED = MAX_SPEED;
 			ACCELERATION_DIR = 0;
-		} 
+		}
 		// if min speed, stop decelerating
-		if ( SPEED < BASE_SPEED ) {
+		if (SPEED < BASE_SPEED) {
 			SPEED = BASE_SPEED;
 			ACCELERATION_DIR = 0;
 		}
 	}
 
 	private void turnSnake(float delta) {
-		if (getHead() != null){
+		if (getHead() != null) {
 			switch (state) {
 			case LEFT:
 				turnLeft(delta);
@@ -141,7 +141,7 @@ public class Snake implements Movable {
 		}
 		// if other piece, calculate new angle, then move straight forward
 		else {
-			
+
 			Tail prev = tails.get(index - 1);
 
 			// ASSUMPTION: when segments separated by more than SPEED -> wrap
@@ -271,7 +271,7 @@ public class Snake implements Movable {
 	}
 
 	private Tail getHead() {
-		if (tails.isEmpty()){
+		if (tails.isEmpty()) {
 			return null;
 		}
 		return tails.get(0);
@@ -291,7 +291,7 @@ public class Snake implements Movable {
 	 * @return position of first segment, null if snake is 'dead' / empty
 	 */
 	public Vector2 getPosition() {
-		if (tails.isEmpty()){
+		if (tails.isEmpty()) {
 			return null;
 		}
 		return getHead().position;
@@ -309,18 +309,19 @@ public class Snake implements Movable {
 	public String getName() {
 		return name;
 	}
-	
+
 	public int getPlayerId() {
 		return player;
 	}
-	
+
 	/**
-	 * starts acceleration (true) or deceleration (false) of snake.
-	 * this continues until either MAX_SPEED or BASE_SPEED is hit.
+	 * starts acceleration (true) or deceleration (false) of snake. this
+	 * continues until either MAX_SPEED or BASE_SPEED is hit.
+	 * 
 	 * @param b
 	 */
 	public void accelerate(boolean b) {
-		if (b){
+		if (b) {
 			ACCELERATION_DIR = 1;
 		} else {
 			ACCELERATION_DIR = -1;

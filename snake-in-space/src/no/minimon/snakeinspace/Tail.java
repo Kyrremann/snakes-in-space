@@ -19,7 +19,6 @@ public class Tail {
 
 	@Override
 	public String toString() {
-		return String.format("(%f,%f) %f", position.x, position.y,
-				direction);
+		return String.format("(%f,%f) %f", position.x, position.y, direction);
 	}
 }
