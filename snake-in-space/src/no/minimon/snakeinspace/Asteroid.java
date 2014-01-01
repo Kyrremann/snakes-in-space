@@ -6,30 +6,28 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Asteroid implements Movable {
 
-	private final int SPEED;
 	private final float ROTATE_SPEED;
-	public final int SIZE;
 
+	public int radius;
 	public Vector2 position;
-	public float angle;
+	public Vector2 velocity; // direction and speed
 	private float rotate;
 
-	public Asteroid(int speed, float rotateSpeed, int size, Vector2 position,
-			float angle) {
-		SPEED = speed;
-		SIZE = size;
+	public Asteroid(float rotateSpeed, int radius, Vector2 position,
+			Vector2 velocity) {
+		this.radius = radius;
 		ROTATE_SPEED = rotateSpeed;
-		this.angle = angle;
+		this.velocity = velocity;
 		this.position = position;
 		this.rotate = rotateSpeed;
 	}
 
 	public void update(float delta) {
-		position.x += ((float) Math.cos(Math.toRadians(angle))) * delta * SPEED;
-		position.y += ((float) Math.sin(Math.toRadians(angle))) * delta * SPEED;
-		angle += .1f;
-		rotate += ROTATE_SPEED;
+		// update position
+		position.add(velocity.cpy().scl(delta));
 
+		// update rotation
+		rotate += ROTATE_SPEED;
 	}
 
 	public void hitDetection(int width, int height) {
@@ -43,7 +41,8 @@ public class Asteroid implements Movable {
 			position.x = width;
 		} else if (position.x > width) {
 			position.x = 0;
-		} else if (position.y < 0) {
+		}
+		if (position.y < 0) {
 			position.y = height;
 		} else if (position.y > height) {
 			position.y = 0;
@@ -51,11 +50,14 @@ public class Asteroid implements Movable {
 	}
 
 	/*
-	 * With walls I mean the wall + SIZE * 3
+	 * With walls I mean the wall + SIZE
 	 */
 	private boolean hasAsteroidHitWall(int width, int height) {
-		return (position.x > (width + (SIZE * 3)) || position.x < (0 - (SIZE * 3)))
-				|| (position.y > (height + (SIZE * 3)) || position.y < (0 - (SIZE * 3)));
+		return (position.x > (width + (radius)) || 
+				position.x < (0 - (radius))) 
+				|| 
+				(position.y > (height + (radius)) ||
+						position.y < (0 - (radius)));
 	}
 
 	public void draw(ShapeRenderer renderer) {

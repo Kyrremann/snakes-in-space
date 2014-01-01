@@ -37,17 +37,30 @@ public class Galaxy {
 	}
 
 	private void createAsteroids() {
-		asteroids.add(createAsteroid());
-		asteroids.add(createAsteroid());
-		asteroids.add(createAsteroid());
-		asteroids.add(createAsteroid());
+		for (int i=0; i< 10; ++i) {
+			asteroids.add(createAsteroid());			
+		}
 	}
 
 	private Asteroid createAsteroid() {
-		return new Asteroid(getRandomInt(75, 175), getRandomInt(-2, 2),
-				getRandomInt(10, 30), new Vector2(
-						getRandomPositionClearOfEverythingElse()),
-				getRandomFloat(0, 360));
+		float vel_x = (float) random.nextGaussian();
+		float vel_y = (float) random.nextGaussian();
+		
+		Vector2 vel = new Vector2(vel_x, vel_y);
+		
+		// turn into unit vector
+		vel.nor();
+		// currently just a random unit vector (direction), adding speed
+		float speed = Math.abs((float) random.nextGaussian()*80) + 20;
+		// speed distribution of velocity should look something like this:
+		// (0) ______ (20) ``'-,_ (100)
+		vel.scl(speed);
+		
+		return new Asteroid(
+				getRandomInt(-2, 2),
+				20, 
+				new Vector2(getRandomPositionClearOfEverythingElse()),
+				vel );
 	}
 
 	public Snake getSnake(int index) {
@@ -159,8 +172,7 @@ public class Galaxy {
 					continue;
 				if (GalaxyUtils.circlesIntersect(asteroid.position, 10,
 						asteroid2.position, 10)) {
-					asteroid.angle += 180;
-					asteroid2.angle += 180;
+					asteroid.velocity.x *= -1;
 					return;
 				}
 			}
