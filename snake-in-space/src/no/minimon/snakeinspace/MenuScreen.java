@@ -116,8 +116,10 @@ public class MenuScreen implements Screen, InputProcessor {
 			if (seleted > 3) seleted = 0;
 			return true;
 		} else if (keycode == Keys.ENTER) {
-			snakeInSpace.setScreen(new GameScreen(width, height, seleted));
+			snakeInSpace.setScreen(new GameScreen(snakeInSpace, width, height, seleted));
 			return true;
+		} else if (keycode == Keys.ESCAPE) {
+			Gdx.app.exit();
 		}
 
 		return false;
