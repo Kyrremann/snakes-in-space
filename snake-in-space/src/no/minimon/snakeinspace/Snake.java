@@ -13,9 +13,14 @@ public class Snake implements Movable {
 		LEFT, RIGHT, IDLE;
 	}
 
-	public static final float SPEED = 200; // pixels per second
-	public static final int SIZE = 10;
-	private static final float TURN_SPEED = 360; // degrees per second
+	private int SIZE = 10;
+	private float TURN_SPEED = 360; // degrees per second
+	
+	private float BASE_SPEED = 200;
+	private float MAX_SPEED = 400;
+	private float SPEED = BASE_SPEED; // pixels per second
+	private float ACCELERATION = 1000; // pixels per second per second
+	private int ACCELERATION_DIR = 0; // 1 = accel, -1 decel, 0 = no force.
 
 	private ArrayList<Tail> tails;
 	private State state;
@@ -69,6 +74,30 @@ public class Snake implements Movable {
 		// update rotation and position of all pieces (head ignores rotation!)
 		for (int i = 0; i < tails.size(); i++) {
 			calculatePieceLocation(delta, i, width, height);
+		}
+		
+		// update acceleration
+		updateAcceleration( delta );
+	}
+
+	/**
+	 * manipulates SPEED and ACCELERATION_DIR values
+	 * 
+	 * @param delta
+	 */
+	private void updateAcceleration( float delta ) {
+		// update speed
+		SPEED += ((ACCELERATION * ACCELERATION_DIR)*delta);
+		
+		// if max speed, stop accelerating.
+		if ( SPEED > MAX_SPEED ) {
+			SPEED = MAX_SPEED;
+			ACCELERATION_DIR = 0;
+		} 
+		// if min speed, stop decelerating
+		if ( SPEED < BASE_SPEED ) {
+			SPEED = BASE_SPEED;
+			ACCELERATION_DIR = 0;
 		}
 	}
 
@@ -253,5 +282,18 @@ public class Snake implements Movable {
 
 	public ArrayList<Tail> getTails() {
 		return tails;
+	}
+
+	/**
+	 * starts acceleration (true) or deceleration (false) of snake.
+	 * this continues until either MAX_SPEED or BASE_SPEED is hit.
+	 * @param b
+	 */
+	public void accelerate(boolean b) {
+		if (b){
+			ACCELERATION_DIR = 1;
+		} else {
+			ACCELERATION_DIR = -1;
+		}
 	}
 }
