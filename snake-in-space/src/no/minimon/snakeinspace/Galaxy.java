@@ -64,11 +64,14 @@ public class Galaxy {
 		Apple remove = null;
 		for (Apple apple : apples) {
 			for (Snake snake : snakes) {
-				if (GalaxyUtils.circlesIntersect(apple.getPosition(), 5,
-						snake.getPosition(), 7)) {
-					snake.eatApple();
-					remove = apple;
-					break;
+				if (snake.getPosition() != null){
+					if (GalaxyUtils.circlesIntersect(apple.getPosition(), 5,
+							snake.getPosition(), 7)) {
+						snake.eatApple();
+						remove = apple;
+						break;
+
+					}
 				}
 			}
 		}

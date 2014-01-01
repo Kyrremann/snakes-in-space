@@ -16,7 +16,7 @@ public class Snake {
 	public static final float SPEED = 200; // pixels per second
 	public static final int SIZE = 10;
 	private static final float TURN_SPEED = 360; // degrees per second
-	public static final int WIDTH = 800; // consider moving var somewhere else?
+	public static final int WIDTH = 800; // OPTIMIZE: move var somewhere else?
 	public static final int HEIGHT = 600; // same here
 
 	private ArrayList<Tail> tails;
@@ -44,12 +44,12 @@ public class Snake {
 
 	// turn left at TURN_SPEED degrees per second
 	public void turnLeft(float delta) {
-		tails.get(0).direction.rotate(TURN_SPEED * delta);
+		getHead().direction.rotate(TURN_SPEED * delta);
 	}
 
 	// turn right at TURNSPEED degrees per second
 	public void turnRight(float delta) {
-		tails.get(0).direction.rotate(TURN_SPEED * delta * -1);
+		getHead().direction.rotate(TURN_SPEED * delta * -1);
 	}
 
 	public void update(float delta) {
@@ -63,19 +63,21 @@ public class Snake {
 	}
 
 	private void turnSnake(float delta) {
-		switch (state) {
-		case LEFT:
-			turnLeft(delta);
-			break;
-		case RIGHT:
-			turnRight(delta);
-		default:
-			break;
+		if (getHead() != null){
+			switch (state) {
+			case LEFT:
+				turnLeft(delta);
+				break;
+			case RIGHT:
+				turnRight(delta);
+			default:
+				break;
+			}
 		}
 	}
 
 	/**
-	 * update head location (first tail segment) of piece at index
+	 * update location of piece at index
 	 * 
 	 * @param index - the piece to update
 	 * @param delta - the amount to update (1 = per second)
@@ -91,7 +93,7 @@ public class Snake {
 		else {
 			Tail prev = tails.get(index-1);
 			
-			// ASSUMPTION: SPEED is never greater than WIDTH or HEIGHT!!!!
+			// ASSUMPTION: when segments separated by more than SPEED -> wrap
 			
 			// OPTIMIZE: shrink repeated code here!!!
 			// if dist to prev is greater than SPEED dictates = it has wrapped
@@ -191,19 +193,10 @@ public class Snake {
 		renderer.end();
 	}
 
-	public void hitDetection(int width, int height) {
-		if (hasSnakeHitWall(width, height)) {
-			//swapHeadToOtherSide(width, height);
-		}
-	}
-
-	private boolean hasSnakeHitWall(int width, int height) {
-		Tail tail = getHead();
-		return (tail.getX() > width || tail.getX() < 0)
-				|| (tail.getY() > height || tail.getY() < 0);
-	}
-
 	private Tail getHead() {
+		if (tails.isEmpty()){
+			return null;
+		}
 		return tails.get(0);
 	}
 
@@ -224,7 +217,14 @@ public class Snake {
 		tails.add(new Tail());
 	}
 
+	/**
+	 * 
+	 * @return position of first segment, null if snake is 'dead' / empty
+	 */
 	public Vector2 getPosition() {
+		if (tails.isEmpty()){
+			return null;
+		}
 		return getHead().position;
 	}
 
