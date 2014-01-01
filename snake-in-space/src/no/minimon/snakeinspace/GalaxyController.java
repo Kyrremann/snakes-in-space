@@ -48,6 +48,12 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.P:
 			galaxy.getSnake(player).setState(Snake.State.RIGHT);
 			break;
+		case Keys.SPACE:
+		case Keys.S:
+		case Keys.H:
+		case Keys.O:
+			galaxy.getSnake(player).accelerate(true);
+			break;
 		case Keys.MENU:
 			galaxy.snakeInSpace.setScreen(new MenuScreen(galaxy.snakeInSpace,
 					galaxy.width, galaxy.height));
@@ -61,7 +67,28 @@ public class GalaxyController extends ControllerAdapter {
 		player = mapCorrectPlayerIndex(player, keyCode);
 		if (player < 0)
 			return;
-		galaxy.getSnake(player).setState(Snake.State.IDLE);
+		switch (keyCode){
+		case Keys.LEFT:
+		case Keys.RIGHT:
+
+		case Keys.A:
+		case Keys.D:
+
+		case Keys.G:
+		case Keys.J:
+
+		case Keys.I:
+		case Keys.P:
+			galaxy.getSnake(player).setState(Snake.State.IDLE);
+			break;
+		case Keys.SPACE:
+		case Keys.S:
+		case Keys.H:
+		case Keys.O:
+			galaxy.getSnake(player).accelerate(false);
+			break;
+		}
+
 	}
 
 	/**
@@ -69,13 +96,22 @@ public class GalaxyController extends ControllerAdapter {
 	 */
 	public int mapCorrectPlayerIndex(int player, int keyCode) {
 		if (player == -1) {
-			if ((keyCode == Keys.LEFT || keyCode == Keys.RIGHT)) {
+			switch (keyCode) {
+			case Keys.LEFT:
+			case Keys.RIGHT:
+			case Keys.SPACE:
 				return 0;
-			} else if ((keyCode == Keys.A || keyCode == Keys.D)) {
+			case Keys.A:
+			case Keys.S:
+			case Keys.D:
 				return 1;
-			} else if ((keyCode == Keys.G || keyCode == Keys.J)) {
+			case Keys.G:
+			case Keys.H:
+			case Keys.J:
 				return 2;
-			} else if ((keyCode == Keys.I || keyCode == Keys.P)) {
+			case Keys.I:
+			case Keys.O:
+			case Keys.P:
 				return 3;
 			}
 		}
