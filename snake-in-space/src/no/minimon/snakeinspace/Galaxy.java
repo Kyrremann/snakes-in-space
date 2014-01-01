@@ -59,7 +59,7 @@ public class Galaxy {
 		// (0) ______ (20) ``'-,_ (100)
 		vel.scl(speed);
 
-		return new Asteroid(getRandomInt(-2, 2), 20, new Vector2(
+		return new Asteroid(getRandomInt(-2, 2), 10, new Vector2(
 				getRandomPositionClearOfEverythingElse()), vel);
 	}
 
