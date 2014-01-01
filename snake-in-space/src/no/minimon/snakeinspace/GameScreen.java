@@ -13,12 +13,15 @@ public class GameScreen implements Screen, InputProcessor {
 	private Galaxy galaxy;
 	private GalaxyRenderer renderer;
 	private GalaxyController controller;
+
 	private int width, height;
 	private int players;
+	private GalaxySounds sounds;
 
-	public GameScreen(SnakeInSpace snakeInSpace, int width, int height,
-			int players) {
+	public GameScreen(SnakeInSpace snakeInSpace, GalaxySounds sounds,
+			int width, int height, int players) {
 		this.snakeInSpace = snakeInSpace;
+		this.sounds = sounds;
 		this.width = width;
 		this.height = height;
 		this.players = players;
@@ -26,7 +29,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void show() {
-		galaxy = new Galaxy(snakeInSpace, players, width, height);
+		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
 		renderer = new GalaxyRenderer(galaxy, true);
 		controller = new GalaxyController(galaxy);
 		if (Ouya.runningOnOuya) {
@@ -41,7 +44,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		galaxy.updateApple(delta);
-		
+
 		for (Snake snake : galaxy.getSnakes()) {
 			snake.update(delta, width, height);
 			snake.hitDetection(width, height);

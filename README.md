@@ -12,3 +12,4 @@ TODO
 * Let playeys type in name and choose color of snake
 * Add Ouya monetizing (mohahaha!)
 * When the game is played with hard walls, the snake should bounce like this: http://stackoverflow.com/a/573206
+* Optimize Ouya controllers

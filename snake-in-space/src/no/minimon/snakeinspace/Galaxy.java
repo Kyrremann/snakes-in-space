@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 
 public class Galaxy {
@@ -11,14 +12,16 @@ public class Galaxy {
 	public SnakeInSpace snakeInSpace;
 	public int width;
 	public int height;
-	
+
 	private List<Snake> snakes;
 	private List<Apple> apples;
 	private List<Asteroid> asteroids;
 	private Random random;
+	private GalaxySounds sounds;
 
-	public Galaxy(SnakeInSpace snakeInSpace, int players, int width, int height) {
+	public Galaxy(SnakeInSpace snakeInSpace, GalaxySounds galaxySounds, int players, int width, int height) {
 		this.snakeInSpace = snakeInSpace;
+		this.sounds = galaxySounds;
 		this.width = width;
 		this.height = height;
 
@@ -80,7 +83,7 @@ public class Galaxy {
 	}
 
 	public void updateApple(float delta) {
-		if (apples.isEmpty() || apples.size() < snakes.size()) {
+		if (apples.size() < snakes.size()) {
 			Vector2 position = getRandomPositionClearOffSnakes();
 			apples.add(new Apple(position));
 		}
@@ -90,10 +93,11 @@ public class Galaxy {
 		Apple remove = null;
 		for (Apple apple : apples) {
 			for (Snake snake : snakes) {
-				if (snake.getPosition() != null){
+				if (snake.getPosition() != null) {
 					if (GalaxyUtils.circlesIntersect(apple.getPosition(), 5,
 							snake.getPosition(), 7)) {
 						snake.eatApple();
+						sounds.playNom(getRandomInt(0, sounds.nomSounds.size() - 1));
 						remove = apple;
 						break;
 
@@ -154,6 +158,7 @@ public class Galaxy {
 					if (GalaxyUtils.circlesIntersect(tail.position, 7,
 							asteroid.position, 7)) {
 						remove = tail;
+						sounds.explosion.play();
 						break;
 					}
 				}
@@ -173,6 +178,8 @@ public class Galaxy {
 				if (GalaxyUtils.circlesIntersect(asteroid.position, 10,
 						asteroid2.position, 10)) {
 					asteroid.velocity.x *= -1;
+
+					sounds.blop.play();
 					return;
 				}
 			}

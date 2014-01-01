@@ -27,8 +27,10 @@ public class Snake implements Movable {
 	private int applesEaten;
 	private int tailsLost;
 	private int player;
+	private String name;
 
 	public Snake(int player, String name, Vector2 position) {
+		this.name = name;
 		this.state = State.IDLE;
 		this.applesEaten = 0;
 		this.tailsLost = 0;
@@ -241,7 +243,7 @@ public class Snake implements Movable {
 		renderer.end();
 	}
 
-	private Color getPlayerColor() {
+	public Color getPlayerColor() {
 		switch (player) {
 		case 0:
 			return Color.ORANGE;
@@ -304,6 +306,14 @@ public class Snake implements Movable {
 		return tails;
 	}
 
+	public String getName() {
+		return name;
+	}
+	
+	public int getPlayerId() {
+		return player;
+	}
+	
 	/**
 	 * starts acceleration (true) or deceleration (false) of snake.
 	 * this continues until either MAX_SPEED or BASE_SPEED is hit.
