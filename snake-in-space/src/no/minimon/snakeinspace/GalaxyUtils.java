@@ -16,9 +16,9 @@ public class GalaxyUtils {
 	}
 
 	public static boolean isIntersectionWith(Vector2 position,
-			List<Snake> snakes) {
-		for (Snake snake : snakes) {
-			if (circlesIntersect(position, snake.getPosition())) {
+			List<? extends Movable> movables) {
+		for (Movable movable : movables) {
+			if (circlesIntersect(position, movable.getPosition())) {
 				return true;
 			}
 		}

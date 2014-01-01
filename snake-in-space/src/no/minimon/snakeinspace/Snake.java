@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
-public class Snake {
+public class Snake implements Movable {
 
 	public enum State {
 		LEFT, RIGHT, IDLE;
@@ -16,8 +16,6 @@ public class Snake {
 	public static final float SPEED = 200; // pixels per second
 	public static final int SIZE = 10;
 	private static final float TURN_SPEED = 360; // degrees per second
-	public static final int WIDTH = 800; // consider moving var somewhere else?
-	public static final int HEIGHT = 600; // same here
 
 	private ArrayList<Tail> tails;
 	private State state;
@@ -34,31 +32,43 @@ public class Snake {
 			tails.add(new Tail());
 		}
 
-		getHead().direction = new Vector2(3,4).nor(); 
+		getHead().direction = new Vector2(3, 4).nor();
 		getHead().position = position;
 	}
 
 	public void setState(State state) {
 		this.state = state;
 	}
+	
+	public int getApplesEaten() {
+		return applesEaten;
+	}
+	
+	public int getTailsLost() {
+		return tailsLost;
+	}
 
-	// turn left at TURN_SPEED degrees per second
+	/*
+	 *  turn left at TURN_SPEED degrees per second
+	 */
 	public void turnLeft(float delta) {
 		tails.get(0).direction.rotate(TURN_SPEED * delta);
 	}
 
-	// turn right at TURNSPEED degrees per second
+	/*
+	 * turn right at TURNSPEED degrees per second
+	 */
 	public void turnRight(float delta) {
 		tails.get(0).direction.rotate(TURN_SPEED * delta * -1);
 	}
 
-	public void update(float delta) {
+	public void update(float delta, int width, int height) {
 		// turn head piece of snake
 		turnSnake(delta);
-		
+
 		// update rotation and position of all pieces (head ignores rotation!)
 		for (int i = 0; i < tails.size(); i++) {
-			calculatePieceLocation(delta, i);
+			calculatePieceLocation(delta, i, width, height);
 		}
 	}
 
@@ -77,99 +87,102 @@ public class Snake {
 	/**
 	 * update head location (first tail segment) of piece at index
 	 * 
-	 * @param index - the piece to update
-	 * @param delta - the amount to update (1 = per second)
+	 * @param index
+	 *            - the piece to update
+	 * @param delta
+	 *            - the amount to update (1 = per second)
+	 * @param height height of screen
+	 * @param width width of screen
 	 */
-	public void calculatePieceLocation(float delta, int index) {
+	public void calculatePieceLocation(float delta, int index, int width, int height) {
 		Tail piece = tails.get(index);
-		
+
 		// if head piece, move straight forward (angle predetermined)
 		if (index == 0) {
-			piece.position.add( piece.direction.cpy().scl(SPEED * delta) );
-		} 
+			piece.position.add(piece.direction.cpy().scl(SPEED * delta));
+		}
 		// if other piece, calculate new angle, then move straight forward
 		else {
-			Tail prev = tails.get(index-1);
-			
+			Tail prev = tails.get(index - 1);
+
 			// ASSUMPTION: SPEED is never greater than WIDTH or HEIGHT!!!!
-			
+
 			// OPTIMIZE: shrink repeated code here!!!
 			// if dist to prev is greater than SPEED dictates = it has wrapped
 			if (piece.position.cpy().sub(prev.position).x > SPEED) {
 				// prev has wrapped towards west
-				
+
 				// this piece shall move towards a new destination (un-wrapped)
 				Vector2 dest = prev.position.cpy();
-				dest.x += WIDTH; // 'un-wrapping' the prev's position
-				
+				dest.x += width; // 'un-wrapping' the prev's position
+
 				// point piece at NEW DEST (not prev piece)
 				piece.direction = dest.cpy().sub(piece.position);
 				piece.direction.nor(); // normalize direction
 
-				piece.position = 
-						dest.cpy().sub(piece.direction.cpy().scl(SIZE));
+				piece.position = dest.cpy()
+						.sub(piece.direction.cpy().scl(SIZE));
 			} else if (piece.position.cpy().sub(prev.position).x < -SPEED) {
 				// prev has wrapped towards east
-				
+
 				// this piece shall move towards a new destination (un-wrapped)
 				Vector2 dest = prev.position.cpy();
-				dest.x -= WIDTH; // 'un-wrapping' the prev's position
-				
+				dest.x -= width; // 'un-wrapping' the prev's position
+
 				// point piece at NEW DEST (not prev piece)
 				piece.direction = dest.cpy().sub(piece.position);
 				piece.direction.nor(); // normalize direction
 
-				piece.position = 
-						dest.cpy().sub(piece.direction.cpy().scl(SIZE));
+				piece.position = dest.cpy()
+						.sub(piece.direction.cpy().scl(SIZE));
 			} else if (piece.position.cpy().sub(prev.position).y > SPEED) {
 				// prev has wrapped towards south
 
 				// this piece shall move towards a new destination (un-wrapped)
 				Vector2 dest = prev.position.cpy();
-				dest.y += HEIGHT; // 'un-wrapping' the prev's position
+				dest.y += height; // 'un-wrapping' the prev's position
 
 				// point piece at NEW DEST (not prev piece)
 				piece.direction = dest.cpy().sub(piece.position);
 				piece.direction.nor(); // normalize direction
 
-				piece.position = 
-						dest.cpy().sub(piece.direction.cpy().scl(SIZE));
+				piece.position = dest.cpy()
+						.sub(piece.direction.cpy().scl(SIZE));
 			} else if (piece.position.cpy().sub(prev.position).y < -SPEED) {
 				// prev has wrapped towards north
 
 				// this piece shall move towards a new destination (un-wrapped)
 				Vector2 dest = prev.position.cpy();
-				dest.y -= HEIGHT; // 'un-wrapping' the prev's position
+				dest.y -= height; // 'un-wrapping' the prev's position
 
 				// point piece at NEW DEST (not prev piece)
 				piece.direction = dest.cpy().sub(piece.position);
 				piece.direction.nor(); // normalize direction
 
-				piece.position = 
-						dest.cpy().sub(piece.direction.cpy().scl(SIZE));
-			}	
-			else {
+				piece.position = dest.cpy()
+						.sub(piece.direction.cpy().scl(SIZE));
+			} else {
 				// continue 'normally'
 
 				// point piece directly at prev piece
 				piece.direction = prev.position.cpy().sub(piece.position);
 				piece.direction.nor(); // normalize direction
-				
+
 				// set location to SIZE distance from preceding piece
-				piece.position = prev.position.cpy().sub(piece.direction.cpy()
-						.scl(SIZE));
+				piece.position = prev.position.cpy().sub(
+						piece.direction.cpy().scl(SIZE));
 			}
 		}
 		// if outside boundaries, wrap to other side
-		if (piece.position.x < 0){
-			piece.position.x += WIDTH; // wrap to east
-		} else if (piece.position.x > WIDTH) {
-			piece.position.x -= WIDTH; // wrap to west
+		if (piece.position.x < 0) {
+			piece.position.x += width; // wrap to east
+		} else if (piece.position.x > width) {
+			piece.position.x -= width; // wrap to west
 		}
-		if (piece.position.y < 0){
-			piece.position.y += HEIGHT; // wrap to north
-		} else if (piece.position.y > HEIGHT) {
-			piece.position.y -= HEIGHT; // wrap to south
+		if (piece.position.y < 0) {
+			piece.position.y += height; // wrap to north
+		} else if (piece.position.y > height) {
+			piece.position.y -= height; // wrap to south
 		}
 	}
 
@@ -182,8 +195,8 @@ public class Snake {
 	private void drawSnake(Tail tail, ShapeRenderer renderer) {
 		renderer.begin(ShapeType.Line);
 		renderer.identity();
-		//renderer.setColor(tail.position.x / 265, tail.position.y / 256,
-//				tail.direction.x / 256, 255);
+		// renderer.setColor(tail.position.x / 265, tail.position.y / 256,
+		// tail.direction.x / 256, 255);
 		renderer.setColor(Color.WHITE);
 		renderer.translate(tail.position.x, tail.position.y, 0);
 		renderer.rotate(0, 0, 1, tail.direction.angle());
@@ -193,28 +206,20 @@ public class Snake {
 
 	public void hitDetection(int width, int height) {
 		if (hasSnakeHitWall(width, height)) {
-			//swapHeadToOtherSide(width, height);
+			// swapHeadToOtherSide(width, height);
 		}
 	}
 
 	private boolean hasSnakeHitWall(int width, int height) {
 		Tail tail = getHead();
-		return (tail.getX() > width || tail.getX() < 0)
-				|| (tail.getY() > height || tail.getY() < 0);
+		return (tail.position.x > width || tail.position.x < 0)
+				|| (tail.position.y > height || tail.position.y < 0);
 	}
 
 	private Tail getHead() {
 		return tails.get(0);
 	}
 
-	private void removeTailPiece(int index) {
-		tailsLost++;
-		tails.remove(index);
-		if (index == 0) {
-			getHead().direction = getHead().direction.scl(-1);
-		}
-	}
-	
 	public boolean removeTailPiece(Tail tail) {
 		tailsLost++;
 		return tails.remove(tail);
