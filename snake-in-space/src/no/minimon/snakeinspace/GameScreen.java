@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 public class GameScreen implements Screen, InputProcessor {
 
@@ -17,10 +16,12 @@ public class GameScreen implements Screen, InputProcessor {
 
 	private int width, height;
 	private int players;
+	private GalaxySounds sounds;
 
-	public GameScreen(SnakeInSpace snakeInSpace, int width, int height,
-			int players) {
+	public GameScreen(SnakeInSpace snakeInSpace, GalaxySounds sounds,
+			int width, int height, int players) {
 		this.snakeInSpace = snakeInSpace;
+		this.sounds = sounds;
 		this.width = width;
 		this.height = height;
 		this.players = players;
@@ -28,7 +29,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void show() {
-		galaxy = new Galaxy(snakeInSpace, players, width, height);
+		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
 		renderer = new GalaxyRenderer(galaxy, true);
 		controller = new GalaxyController(galaxy);
 		if (Ouya.runningOnOuya) {

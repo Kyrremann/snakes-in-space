@@ -14,24 +14,28 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	private final String TITLE = "Snakes in Space";
 
+	private SnakeInSpace snakeInSpace;
 	private MenuController controller;
-	private int height;
-	private int width;
 	private BitmapFont font;
+	private GalaxySounds sounds;
+	
 	private float stringHeight;
 	private float menuX;
 	private float menuY;
 	private int seleted;
-	private SnakeInSpace snakeInSpace;
+	private int height;
+	private int width;
 
 	public MenuScreen(SnakeInSpace snakeInSpace, int width, int height) {
+		this.snakeInSpace = snakeInSpace;
 		this.width = width;
 		this.height = height;
-		this.font = new BitmapFont();
-		this.stringHeight = 15;
-		this.menuX = this.width / 2;
-		this.menuY = this.height / 2;
-		this.snakeInSpace = snakeInSpace;
+		
+		sounds = new GalaxySounds();
+		font = new BitmapFont();
+		stringHeight = 15;
+		menuX = this.width / 2;
+		menuY = this.height / 2;
 	}
 
 	@Override
@@ -41,6 +45,7 @@ public class MenuScreen implements Screen, InputProcessor {
 			Controllers.addListener(controller);
 		}
 		Gdx.input.setInputProcessor(this);
+		// sounds.theme.play();
 	}
 
 	@Override
@@ -116,7 +121,7 @@ public class MenuScreen implements Screen, InputProcessor {
 			if (seleted > 3) seleted = 0;
 			return true;
 		} else if (keycode == Keys.ENTER) {
-			snakeInSpace.setScreen(new GameScreen(snakeInSpace, width, height, seleted));
+			snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width, height, seleted));
 			return true;
 		} else if (keycode == Keys.ESCAPE) {
 			Gdx.app.exit();
