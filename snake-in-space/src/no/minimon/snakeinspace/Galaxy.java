@@ -150,12 +150,12 @@ public class Galaxy {
 	public void snakeAsteroidHitDetection() {
 		for (Snake snake : getSnakes()) {
 			for (Asteroid asteroid : getAsteroids()) {
-				if (snake.getHead() != null){
+				if (snake.getHead() != null) {
 					Tail remove = null;
 					for (Tail tail : snake.getTails()) {
-						if (GalaxyUtils.circlesIntersect(
-								tail.position, snake.collisionSize,
-								asteroid.position, asteroid.radius)) {
+						if (GalaxyUtils.circlesIntersect(tail.position,
+								snake.collisionSize, asteroid.position,
+								asteroid.radius)) {
 							remove = tail;
 							sounds.explosion.play();
 							break;
@@ -178,27 +178,27 @@ public class Galaxy {
 				if (GalaxyUtils.circlesIntersect(a.position, a.radius,
 						a2.position, a.radius)) {
 					// asteroid <--> asteroid collision!
-					
+
 					// get vector to represent "axis of impulse"
-					Vector2 VCollideAxis= a.position.cpy().sub(a2.position);
-					
-					// get copies of velocity vectors 
+					Vector2 VCollideAxis = a.position.cpy().sub(a2.position);
+
+					// get copies of velocity vectors
 					// aligned so that VCollideAxis is the X axis (rotated)
-					Vector2 a1VelocityTemp = 
-							a.velocity.cpy().rotate(VCollideAxis.angle());
-					Vector2 a2VelocityTemp = 
-							a2.velocity.cpy().rotate(VCollideAxis.angle());
-					
+					Vector2 a1VelocityTemp = a.velocity.cpy().rotate(
+							VCollideAxis.angle());
+					Vector2 a2VelocityTemp = a2.velocity.cpy().rotate(
+							VCollideAxis.angle());
+
 					// swap the x values of the two vectors, y value unchanged
 					float tmp = a1VelocityTemp.x;
 					a1VelocityTemp.x = a2VelocityTemp.x;
 					a2VelocityTemp.x = tmp;
-					
+
 					// rotate the aligned vectors back to 'normal' perspective
 					a1VelocityTemp.rotate(-VCollideAxis.angle());
 					a2VelocityTemp.rotate(-VCollideAxis.angle());
-					
-					// replace actual velocities with the new post-collision 
+
+					// replace actual velocities with the new post-collision
 					// velocities
 					a.velocity = a1VelocityTemp;
 					a2.velocity = a2VelocityTemp;

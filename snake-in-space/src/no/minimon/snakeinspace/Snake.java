@@ -235,8 +235,6 @@ public class Snake implements Movable {
 	private void drawSnake(Tail tail, ShapeRenderer renderer) {
 		renderer.begin(ShapeType.Line);
 		renderer.identity();
-		// renderer.setColor(tail.position.x / 265, tail.position.y / 256,
-		// tail.direction.x / 256, 255);
 		renderer.setColor(Color.GRAY);
 		renderer.circle(tail.position.x, tail.position.y, collisionSize);
 		renderer.setColor(getPlayerColor());
@@ -333,6 +331,6 @@ public class Snake implements Movable {
 
 	public void deceleration(boolean b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
