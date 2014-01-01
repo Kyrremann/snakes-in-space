@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 public class GameScreen implements Screen, InputProcessor {
 
@@ -13,6 +14,7 @@ public class GameScreen implements Screen, InputProcessor {
 	private Galaxy galaxy;
 	private GalaxyRenderer renderer;
 	private GalaxyController controller;
+
 	private int width, height;
 	private int players;
 
@@ -41,7 +43,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		galaxy.updateApple(delta);
-		
+
 		for (Snake snake : galaxy.getSnakes()) {
 			snake.update(delta, width, height);
 			snake.hitDetection(width, height);

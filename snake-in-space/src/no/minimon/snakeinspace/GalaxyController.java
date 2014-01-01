@@ -47,6 +47,7 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.J:
 		case Keys.P:
 			galaxy.getSnake(player).setState(Snake.State.RIGHT);
+			break;
 		case Keys.MENU:
 			galaxy.snakeInSpace.setScreen(new MenuScreen(galaxy.snakeInSpace,
 					galaxy.width, galaxy.height));

@@ -11,7 +11,7 @@ public class Galaxy {
 	public SnakeInSpace snakeInSpace;
 	public int width;
 	public int height;
-	
+
 	private List<Snake> snakes;
 	private List<Apple> apples;
 	private List<Asteroid> asteroids;
@@ -67,7 +67,7 @@ public class Galaxy {
 	}
 
 	public void updateApple(float delta) {
-		if (apples.isEmpty() || apples.size() < snakes.size()) {
+		if (apples.size() < snakes.size()) {
 			Vector2 position = getRandomPositionClearOffSnakes();
 			apples.add(new Apple(position));
 		}
@@ -77,7 +77,7 @@ public class Galaxy {
 		Apple remove = null;
 		for (Apple apple : apples) {
 			for (Snake snake : snakes) {
-				if (snake.getPosition() != null){
+				if (snake.getPosition() != null) {
 					if (GalaxyUtils.circlesIntersect(apple.getPosition(), 5,
 							snake.getPosition(), 7)) {
 						snake.eatApple();
