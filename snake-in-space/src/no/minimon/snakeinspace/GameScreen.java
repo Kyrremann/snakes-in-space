@@ -41,6 +41,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		galaxy.updateApple(delta);
+		
 		for (Snake snake : galaxy.getSnakes()) {
 			snake.update(delta, width, height);
 			snake.hitDetection(width, height);

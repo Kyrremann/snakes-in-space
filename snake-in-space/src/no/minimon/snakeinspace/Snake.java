@@ -54,14 +54,14 @@ public class Snake implements Movable {
 	 *  turn left at TURN_SPEED degrees per second
 	 */
 	public void turnLeft(float delta) {
-		tails.get(0).direction.rotate(TURN_SPEED * delta);
+		getHead().direction.rotate(TURN_SPEED * delta);
 	}
 
 	/*
 	 * turn right at TURNSPEED degrees per second
 	 */
 	public void turnRight(float delta) {
-		tails.get(0).direction.rotate(TURN_SPEED * delta * -1);
+		getHead().direction.rotate(TURN_SPEED * delta * -1);
 	}
 
 	public void update(float delta, int width, int height) {
@@ -75,19 +75,21 @@ public class Snake implements Movable {
 	}
 
 	private void turnSnake(float delta) {
-		switch (state) {
-		case LEFT:
-			turnLeft(delta);
-			break;
-		case RIGHT:
-			turnRight(delta);
-		default:
-			break;
+		if (getHead() != null){
+			switch (state) {
+			case LEFT:
+				turnLeft(delta);
+				break;
+			case RIGHT:
+				turnRight(delta);
+			default:
+				break;
+			}
 		}
 	}
 
 	/**
-	 * update head location (first tail segment) of piece at index
+	 * update location of piece at index
 	 * 
 	 * @param index
 	 *            - the piece to update
@@ -108,9 +110,10 @@ public class Snake implements Movable {
 		}
 		// if other piece, calculate new angle, then move straight forward
 		else {
+			
 			Tail prev = tails.get(index - 1);
 
-			// ASSUMPTION: SPEED is never greater than WIDTH or HEIGHT!!!!
+			// ASSUMPTION: when segments separated by more than SPEED -> wrap
 
 			// OPTIMIZE: shrink repeated code here!!!
 			// if dist to prev is greater than SPEED dictates = it has wrapped
@@ -237,6 +240,9 @@ public class Snake implements Movable {
 	}
 
 	private Tail getHead() {
+		if (tails.isEmpty()){
+			return null;
+		}
 		return tails.get(0);
 	}
 
@@ -249,7 +255,14 @@ public class Snake implements Movable {
 		tails.add(new Tail());
 	}
 
+	/**
+	 * 
+	 * @return position of first segment, null if snake is 'dead' / empty
+	 */
 	public Vector2 getPosition() {
+		if (tails.isEmpty()){
+			return null;
+		}
 		return getHead().position;
 	}
 
