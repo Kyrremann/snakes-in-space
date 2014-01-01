@@ -40,30 +40,27 @@ public class Galaxy {
 	}
 
 	private void createAsteroids() {
-		for (int i=0; i< 10; ++i) {
-			asteroids.add(createAsteroid());			
+		for (int i = 0; i < 10; ++i) {
+			asteroids.add(createAsteroid());
 		}
 	}
 
 	private Asteroid createAsteroid() {
 		float vel_x = (float) random.nextGaussian();
 		float vel_y = (float) random.nextGaussian();
-		
+
 		Vector2 vel = new Vector2(vel_x, vel_y);
-		
+
 		// turn into unit vector
 		vel.nor();
 		// currently just a random unit vector (direction), adding speed
-		float speed = Math.abs((float) random.nextGaussian()*80) + 20;
+		float speed = Math.abs((float) random.nextGaussian() * 80) + 20;
 		// speed distribution of velocity should look something like this:
 		// (0) ______ (20) ``'-,_ (100)
 		vel.scl(speed);
-		
-		return new Asteroid(
-				getRandomInt(-2, 2),
-				20, 
-				new Vector2(getRandomPositionClearOfEverythingElse()),
-				vel );
+
+		return new Asteroid(getRandomInt(-2, 2), 20, new Vector2(
+				getRandomPositionClearOfEverythingElse()), vel);
 	}
 
 	public Snake getSnake(int index) {

@@ -327,4 +327,9 @@ public class Snake implements Movable {
 			ACCELERATION_DIR = -1;
 		}
 	}
+
+	public void deceleration(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 }

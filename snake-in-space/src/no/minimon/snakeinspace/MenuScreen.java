@@ -1,7 +1,6 @@
 package no.minimon.snakeinspace;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controllers;
@@ -22,9 +21,10 @@ public class MenuScreen implements Screen, InputProcessor {
 	private float stringHeight;
 	private float menuX;
 	private float menuY;
-	private int seleted;
 	private int height;
 	private int width;
+
+	public int seleted;
 
 	public MenuScreen(SnakeInSpace snakeInSpace, int width, int height) {
 		this.snakeInSpace = snakeInSpace;
@@ -40,7 +40,7 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void show() {
-		controller = new MenuController();
+		controller = new MenuController(this);
 		if (Ouya.runningOnOuya) {
 			Controllers.addListener(controller);
 		}
@@ -112,25 +112,7 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (keycode == Keys.UP) {
-			seleted--;
-			if (seleted < 0)
-				seleted = 3;
-			return true;
-		} else if (keycode == Keys.DOWN) {
-			seleted++;
-			if (seleted > 3)
-				seleted = 0;
-			return true;
-		} else if (keycode == Keys.ENTER) {
-			snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width,
-					height, seleted));
-			return true;
-		} else if (keycode == Keys.ESCAPE) {
-			Gdx.app.exit();
-		}
-
-		return false;
+		return controller.keyDown(keycode);
 	}
 
 	@Override
@@ -173,6 +155,11 @@ public class MenuScreen implements Screen, InputProcessor {
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public void changeToGameScreen() {
+		snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width,
+				height, seleted));
 	}
 
 }
