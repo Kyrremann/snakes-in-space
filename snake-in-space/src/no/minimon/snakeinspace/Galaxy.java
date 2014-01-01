@@ -8,14 +8,17 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Galaxy {
 
+	public SnakeInSpace snakeInSpace;
+	public int width;
+	public int height;
+	
 	private List<Snake> snakes;
 	private List<Apple> apples;
 	private List<Asteroid> asteroids;
-	private int width;
-	private int height;
 	private Random random;
 
-	public Galaxy(int players, int width, int height) {
+	public Galaxy(SnakeInSpace snakeInSpace, int players, int width, int height) {
+		this.snakeInSpace = snakeInSpace;
 		this.width = width;
 		this.height = height;
 
@@ -30,7 +33,7 @@ public class Galaxy {
 
 	private void createPlayers(int players) {
 		for (int i = 0; i <= players; i++)
-			snakes.add(new Snake("Player " + i, new Vector2(100, 100)));
+			snakes.add(new Snake(i, "Player " + i, new Vector2(100, 100)));
 	}
 
 	private void createAsteroids() {

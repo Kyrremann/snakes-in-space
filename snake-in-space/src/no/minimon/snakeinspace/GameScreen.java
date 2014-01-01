@@ -9,13 +9,16 @@ import com.badlogic.gdx.graphics.GL10;
 
 public class GameScreen implements Screen, InputProcessor {
 
+	private SnakeInSpace snakeInSpace;
 	private Galaxy galaxy;
 	private GalaxyRenderer renderer;
 	private GalaxyController controller;
 	private int width, height;
 	private int players;
 
-	public GameScreen(int width, int height, int players) {
+	public GameScreen(SnakeInSpace snakeInSpace, int width, int height,
+			int players) {
+		this.snakeInSpace = snakeInSpace;
 		this.width = width;
 		this.height = height;
 		this.players = players;
@@ -23,7 +26,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void show() {
-		galaxy = new Galaxy(players, width, height);
+		galaxy = new Galaxy(snakeInSpace, players, width, height);
 		renderer = new GalaxyRenderer(galaxy, true);
 		controller = new GalaxyController(galaxy);
 		if (Ouya.runningOnOuya) {
@@ -42,16 +45,16 @@ public class GameScreen implements Screen, InputProcessor {
 			snake.update(delta, width, height);
 			snake.hitDetection(width, height);
 		}
-		
+
 		for (Asteroid asteroid : galaxy.getAsteroids()) {
 			asteroid.update(delta);
 			asteroid.hitDetection(width, height);
 		}
-		
+
 		galaxy.updateAppleSnakeInteraction();
 		galaxy.snakeAsteroidHitDetection();
 		galaxy.asteroidAsteroidHitDetection();
-		
+
 		renderer.render(delta);
 	}
 

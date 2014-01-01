@@ -21,11 +21,13 @@ public class Snake implements Movable {
 	private State state;
 	private int applesEaten;
 	private int tailsLost;
+	private int player;
 
-	public Snake(String name, Vector2 position) {
+	public Snake(int player, String name, Vector2 position) {
 		this.state = State.IDLE;
 		this.applesEaten = 0;
 		this.tailsLost = 0;
+		this.player = player;
 
 		tails = new ArrayList<Tail>();
 		for (int i = 0; i < 10; i++) {
@@ -39,11 +41,11 @@ public class Snake implements Movable {
 	public void setState(State state) {
 		this.state = state;
 	}
-	
+
 	public int getApplesEaten() {
 		return applesEaten;
 	}
-	
+
 	public int getTailsLost() {
 		return tailsLost;
 	}
@@ -91,10 +93,13 @@ public class Snake implements Movable {
 	 *            - the piece to update
 	 * @param delta
 	 *            - the amount to update (1 = per second)
-	 * @param height height of screen
-	 * @param width width of screen
+	 * @param height
+	 *            height of screen
+	 * @param width
+	 *            width of screen
 	 */
-	public void calculatePieceLocation(float delta, int index, int width, int height) {
+	public void calculatePieceLocation(float delta, int index, int width,
+			int height) {
 		Tail piece = tails.get(index);
 
 		// if head piece, move straight forward (angle predetermined)
@@ -197,11 +202,26 @@ public class Snake implements Movable {
 		renderer.identity();
 		// renderer.setColor(tail.position.x / 265, tail.position.y / 256,
 		// tail.direction.x / 256, 255);
-		renderer.setColor(Color.WHITE);
+		renderer.setColor(getPlayerColor());
 		renderer.translate(tail.position.x, tail.position.y, 0);
 		renderer.rotate(0, 0, 1, tail.direction.angle());
 		renderer.triangle(0, -5, 0, 5, 10, 0);
 		renderer.end();
+	}
+
+	private Color getPlayerColor() {
+		switch (player) {
+		case 0:
+			return Color.ORANGE;
+		case 1:
+			return Color.BLUE;
+		case 2:
+			return Color.RED;
+		case 3:
+			return Color.GREEN;
+		default:
+			return Color.WHITE;
+		}
 	}
 
 	public void hitDetection(int width, int height) {

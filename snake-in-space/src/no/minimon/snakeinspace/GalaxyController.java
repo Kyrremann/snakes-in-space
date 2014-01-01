@@ -27,8 +27,14 @@ public class GalaxyController extends ControllerAdapter {
 
 	public void keyDown(int player, int keyCode) {
 		player = mapCorrectPlayerIndex(player, keyCode);
-		if (player < 0 || player > galaxy.getSnakes().size())
+		if (player < 0 || player > galaxy.getSnakes().size()) {
+			if (keyCode == Keys.ESCAPE) {
+				galaxy.snakeInSpace.setScreen(new MenuScreen(
+						galaxy.snakeInSpace, galaxy.width, galaxy.height));
+			}
 			return;
+		}
+
 		switch (keyCode) {
 		case Keys.LEFT:
 		case Keys.A:
@@ -41,6 +47,10 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.J:
 		case Keys.P:
 			galaxy.getSnake(player).setState(Snake.State.RIGHT);
+		case Keys.MENU:
+			galaxy.snakeInSpace.setScreen(new MenuScreen(galaxy.snakeInSpace,
+					galaxy.width, galaxy.height));
+			break;
 		default:
 			break;
 		}
