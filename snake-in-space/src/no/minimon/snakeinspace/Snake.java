@@ -13,7 +13,8 @@ public class Snake implements Movable {
 		LEFT, RIGHT, IDLE;
 	}
 
-	private int SIZE = 10;
+	public int size = 10;
+	public int collisionSize = 7;
 	private float TURN_SPEED = 360; // degrees per second
 
 	private float BASE_SPEED = 200;
@@ -160,7 +161,7 @@ public class Snake implements Movable {
 				piece.direction.nor(); // normalize direction
 
 				piece.position = dest.cpy()
-						.sub(piece.direction.cpy().scl(SIZE));
+						.sub(piece.direction.cpy().scl(size));
 			} else if (piece.position.cpy().sub(prev.position).x < -SPEED) {
 				// prev has wrapped towards east
 
@@ -173,7 +174,7 @@ public class Snake implements Movable {
 				piece.direction.nor(); // normalize direction
 
 				piece.position = dest.cpy()
-						.sub(piece.direction.cpy().scl(SIZE));
+						.sub(piece.direction.cpy().scl(size));
 			} else if (piece.position.cpy().sub(prev.position).y > SPEED) {
 				// prev has wrapped towards south
 
@@ -186,7 +187,7 @@ public class Snake implements Movable {
 				piece.direction.nor(); // normalize direction
 
 				piece.position = dest.cpy()
-						.sub(piece.direction.cpy().scl(SIZE));
+						.sub(piece.direction.cpy().scl(size));
 			} else if (piece.position.cpy().sub(prev.position).y < -SPEED) {
 				// prev has wrapped towards north
 
@@ -199,7 +200,7 @@ public class Snake implements Movable {
 				piece.direction.nor(); // normalize direction
 
 				piece.position = dest.cpy()
-						.sub(piece.direction.cpy().scl(SIZE));
+						.sub(piece.direction.cpy().scl(size));
 			} else {
 				// continue 'normally'
 
@@ -209,7 +210,7 @@ public class Snake implements Movable {
 
 				// set location to SIZE distance from preceding piece
 				piece.position = prev.position.cpy().sub(
-						piece.direction.cpy().scl(SIZE));
+						piece.direction.cpy().scl(size));
 			}
 		}
 		// if outside boundaries, wrap to other side
@@ -236,6 +237,8 @@ public class Snake implements Movable {
 		renderer.identity();
 		// renderer.setColor(tail.position.x / 265, tail.position.y / 256,
 		// tail.direction.x / 256, 255);
+		renderer.setColor(Color.GRAY);
+		renderer.circle(tail.position.x, tail.position.y, collisionSize);
 		renderer.setColor(getPlayerColor());
 		renderer.translate(tail.position.x, tail.position.y, 0);
 		renderer.rotate(0, 0, 1, tail.direction.angle());
@@ -258,7 +261,7 @@ public class Snake implements Movable {
 		}
 	}
 
-	public void hitDetection(int width, int height) {
+	public void wallHit(int width, int height) {
 		if (hasSnakeHitWall(width, height)) {
 			// swapHeadToOtherSide(width, height);
 		}
@@ -270,7 +273,7 @@ public class Snake implements Movable {
 				|| (tail.position.y > height || tail.position.y < 0);
 	}
 
-	private Tail getHead() {
+	public Tail getHead() {
 		if (tails.isEmpty()) {
 			return null;
 		}

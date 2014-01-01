@@ -1,5 +1,6 @@
 package no.minimon.snakeinspace;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -30,7 +31,7 @@ public class Asteroid implements Movable {
 		rotate += ROTATE_SPEED;
 	}
 
-	public void hitDetection(int width, int height) {
+	public void wallHit(int width, int height) {
 		if (hasAsteroidHitWall(width, height)) {
 			teleportAsteroidToOppositeSize(width, height);
 		}
@@ -63,8 +64,11 @@ public class Asteroid implements Movable {
 	public void draw(ShapeRenderer renderer) {
 		renderer.begin(ShapeType.Line);
 		renderer.identity();
-		renderer.setColor(33, 33, 33, 255);
+		renderer.setColor(Color.GRAY);
+		renderer.circle(position.x, position.y, radius);
+		renderer.flush();
 		renderer.translate(position.x, position.y, 0);
+		renderer.setColor(33, 33, 33, 255);
 		renderer.rotate(0, 0, 1, rotate);
 		renderer.polygon(new float[] { 0, 0, 12, 1, 18, 10, 13, 16, -1, 17, -4,
 				14, 1, 10, -6, 10, -5, 3 });

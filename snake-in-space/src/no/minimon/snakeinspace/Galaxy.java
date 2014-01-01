@@ -98,7 +98,6 @@ public class Galaxy {
 								sounds.nomSounds.size() - 1));
 						remove = apple;
 						break;
-
 					}
 				}
 			}
@@ -151,31 +150,58 @@ public class Galaxy {
 	public void snakeAsteroidHitDetection() {
 		for (Snake snake : getSnakes()) {
 			for (Asteroid asteroid : getAsteroids()) {
-				Tail remove = null;
-				for (Tail tail : snake.getTails()) {
-					if (GalaxyUtils.circlesIntersect(tail.position, 7,
-							asteroid.position, 7)) {
-						remove = tail;
-						sounds.explosion.play();
-						break;
+				if (snake.getHead() != null){
+					Tail remove = null;
+					for (Tail tail : snake.getTails()) {
+						if (GalaxyUtils.circlesIntersect(
+								tail.position, snake.collisionSize,
+								asteroid.position, asteroid.radius)) {
+							remove = tail;
+							sounds.explosion.play();
+							break;
+						}
 					}
-				}
 
-				if (remove != null) {
-					snake.removeTailPiece(remove);
+					if (remove != null) {
+						snake.removeTailPiece(remove);
+					}
 				}
 			}
 		}
 	}
 
 	public void asteroidAsteroidHitDetection() {
-		for (Asteroid asteroid : getAsteroids()) {
-			for (Asteroid asteroid2 : getAsteroids()) {
-				if (asteroid.equals(asteroid2))
-					continue;
-				if (GalaxyUtils.circlesIntersect(asteroid.position, 10,
-						asteroid2.position, 10)) {
-					asteroid.velocity.x *= -1;
+		for (Asteroid a : getAsteroids()) {
+			for (Asteroid a2 : getAsteroids()) {
+				if (a.equals(a2))
+					continue; // avoid self collision
+				if (GalaxyUtils.circlesIntersect(a.position, a.radius,
+						a2.position, a.radius)) {
+					// asteroid <--> asteroid collision!
+					
+					// get vector to represent "axis of impulse"
+					Vector2 VCollideAxis= a.position.cpy().sub(a2.position);
+					
+					// get copies of velocity vectors 
+					// aligned so that VCollideAxis is the X axis (rotated)
+					Vector2 a1VelocityTemp = 
+							a.velocity.cpy().rotate(VCollideAxis.angle());
+					Vector2 a2VelocityTemp = 
+							a2.velocity.cpy().rotate(VCollideAxis.angle());
+					
+					// swap the x values of the two vectors, y value unchanged
+					float tmp = a1VelocityTemp.x;
+					a1VelocityTemp.x = a2VelocityTemp.x;
+					a2VelocityTemp.x = tmp;
+					
+					// rotate the aligned vectors back to 'normal' perspective
+					a1VelocityTemp.rotate(-VCollideAxis.angle());
+					a2VelocityTemp.rotate(-VCollideAxis.angle());
+					
+					// replace actual velocities with the new post-collision 
+					// velocities
+					a.velocity = a1VelocityTemp;
+					a2.velocity = a2VelocityTemp;
 
 					sounds.blop.play();
 					return;
