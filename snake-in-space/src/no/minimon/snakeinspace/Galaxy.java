@@ -17,6 +17,9 @@ public class Galaxy {
 	private List<Asteroid> asteroids;
 	private Random random;
 	private GalaxySounds sounds;
+	
+	// DEBUG (double arraylist for vectors)
+	public ArrayList<ArrayList <Vector2>> table;
 
 	public Galaxy(SnakeInSpace snakeInSpace, GalaxySounds galaxySounds,
 			int players, int width, int height) {
@@ -29,6 +32,9 @@ public class Galaxy {
 		snakes = new ArrayList<Snake>(players);
 		apples = new ArrayList<Apple>();
 		asteroids = new ArrayList<Asteroid>(4);
+		
+		// DEBUG
+		table = new ArrayList<ArrayList <Vector2>>();
 
 		createAsteroids();
 		createPlayers(players);
@@ -179,8 +185,31 @@ public class Galaxy {
 						a2.position, a.radius)) {
 					// asteroid <--> asteroid collision!
 					
-					// get vector to represent "axis of impulse"
+					// get vector to represent "axis of impulse" (B->A)
 					Vector2 VCollideAxis= a.position.cpy().sub(a2.position);
+					
+					// DEBUG add the collision axis vector to table
+					ArrayList<Vector2> temp = new ArrayList<Vector2>();
+					temp.add(a2.position.cpy()); // index 0
+					temp.add(VCollideAxis.cpy()); // index 1
+					table.add(temp);
+					
+					// since they have collided, they need to be moved out
+					// of each others hitboxes into an un-collided state
+					
+					// middle = halfway between the 2 asteroids
+					Vector2 middle = VCollideAxis.cpy().scl(0.5f);
+					
+					// radius vectors
+					Vector2 a2Radius = middle.cpy().nor().scl(a2.radius);
+					
+					// amount to displace the asteroids (overlapping middle)
+					Vector2 a2Displace = middle.cpy().sub(a2Radius);
+					Vector2 a1Displace = a2Displace.cpy().scl(-1);
+					
+					// displace the asteroids
+					a.position.add(a1Displace);
+					a2.position.add(a2Displace);
 					
 					// get copies of velocity vectors 
 					// aligned so that VCollideAxis is the X axis (rotated)
