@@ -15,3 +15,4 @@ TODO
 * Optimize Ouya controllers
 * Add the famous Snake Shield!
 * Add Snake Bombs (it's when you leave the last piece of your tail to detonate)
+* Add replay-function
