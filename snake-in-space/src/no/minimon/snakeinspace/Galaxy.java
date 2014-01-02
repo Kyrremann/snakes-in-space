@@ -30,7 +30,7 @@ public class Galaxy {
 		apples = new ArrayList<Apple>();
 		asteroids = new ArrayList<Asteroid>(4);
 
-		createAsteroids();
+		// createAsteroids();
 		createPlayers(players);
 	}
 
