@@ -118,9 +118,11 @@ public class Snake implements Movable {
 		}
 
 		// if from max/min speed, stop accelerating/decelerating
-		if ((states.contains(FROM_BOOST) && SPEED < BASE_SPEED)
-				|| (states.contains(FROM_SLOW) && SPEED > BASE_SPEED)) {
+		if (states.contains(FROM_BOOST) && SPEED < BASE_SPEED) {
 			states.remove(FROM_BOOST);
+			SPEED = BASE_SPEED;
+			ACCELERATION_DIR = 0;
+		} else if (states.contains(FROM_SLOW) && SPEED > BASE_SPEED) {
 			states.remove(FROM_SLOW);
 			SPEED = BASE_SPEED;
 			ACCELERATION_DIR = 0;
@@ -355,6 +357,7 @@ public class Snake implements Movable {
 	public void accelerate(boolean b) {
 		if (b) {
 			states.add(BOOST);
+			states.remove(FROM_SLOW);
 			ACCELERATION_DIR = 1;
 		} else {
 			ACCELERATION_DIR = -1;
@@ -366,6 +369,7 @@ public class Snake implements Movable {
 	public void deceleration(boolean b) {
 		if (b) {
 			states.add(SLOW);
+			states.remove(FROM_BOOST);
 			ACCELERATION_DIR = -1;
 		} else {
 			ACCELERATION_DIR = 1;
