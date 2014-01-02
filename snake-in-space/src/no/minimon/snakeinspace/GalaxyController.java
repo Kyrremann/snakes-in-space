@@ -40,13 +40,13 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.A:
 		case Keys.G:
 		case Keys.I:
-			galaxy.getSnake(player).setState(Snake.State.LEFT);
+			galaxy.getSnake(player).addState(Snake.State.LEFT);
 			break;
 		case Keys.RIGHT:
 		case Keys.D:
 		case Keys.J:
 		case Keys.P:
-			galaxy.getSnake(player).setState(Snake.State.RIGHT);
+			galaxy.getSnake(player).addState(Snake.State.RIGHT);
 			break;
 		case Keys.UP:
 		case Keys.W:
@@ -54,12 +54,17 @@ public class GalaxyController extends ControllerAdapter {
 		case 9:
 			galaxy.getSnake(player).accelerate(true);
 			break;
+		case Keys.DOWN:
+		case Keys.S:
+		case Keys.H:
+		case Keys.O:
+			galaxy.getSnake(player).deceleration(true);
+			break;
 		case Keys.MENU:
 			galaxy.snakeInSpace.setScreen(new MenuScreen(galaxy.snakeInSpace,
 					galaxy.width, galaxy.height));
 			break;
 		default:
-			System.out.println(keyCode);
 			break;
 		}
 	}
@@ -70,23 +75,28 @@ public class GalaxyController extends ControllerAdapter {
 			return;
 		switch (keyCode) {
 		case Keys.LEFT:
-		case Keys.RIGHT:
-
 		case Keys.A:
-		case Keys.D:
-
 		case Keys.G:
-		case Keys.J:
-
 		case Keys.I:
+			galaxy.getSnake(player).removeState(Snake.State.LEFT);
+			break;
+		case Keys.RIGHT:
+		case Keys.D:
+		case Keys.J:
 		case Keys.P:
-			galaxy.getSnake(player).setState(Snake.State.IDLE);
+			galaxy.getSnake(player).removeState(Snake.State.RIGHT);
 			break;
 		case Keys.UP:
 		case Keys.W:
 		case Keys.Y:
 		case 9:
 			galaxy.getSnake(player).accelerate(false);
+			break;
+		case Keys.DOWN:
+		case Keys.S:
+		case Keys.H:
+		case Keys.O:
+			galaxy.getSnake(player).deceleration(false);
 			break;
 		}
 

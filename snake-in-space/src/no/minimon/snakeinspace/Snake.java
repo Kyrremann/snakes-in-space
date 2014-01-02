@@ -1,5 +1,12 @@
 package no.minimon.snakeinspace;
 
+import static no.minimon.snakeinspace.Snake.State.BOOST;
+import static no.minimon.snakeinspace.Snake.State.FROM_BOOST;
+import static no.minimon.snakeinspace.Snake.State.FROM_SLOW;
+import static no.minimon.snakeinspace.Snake.State.LEFT;
+import static no.minimon.snakeinspace.Snake.State.RIGHT;
+import static no.minimon.snakeinspace.Snake.State.SLOW;
+
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
@@ -10,7 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Snake implements Movable {
 
 	public enum State {
-		LEFT, RIGHT, IDLE;
+		LEFT, RIGHT, BOOST, SLOW, FROM_BOOST, FROM_SLOW;
 	}
 
 	public int size = 10;
@@ -19,12 +26,13 @@ public class Snake implements Movable {
 
 	private float BASE_SPEED = 200;
 	private float MAX_SPEED = 400;
+	private float MIN_SPEED = 100;
 	private float SPEED = BASE_SPEED; // pixels per second
 	private float ACCELERATION = 1000; // pixels per second per second
 	private int ACCELERATION_DIR = 0; // 1 = accel, -1 decel, 0 = no force.
 
 	private ArrayList<Tail> tails;
-	private State state;
+	private ArrayList<State> states;
 	private int applesEaten;
 	private int tailsLost;
 	private int player;
@@ -32,7 +40,7 @@ public class Snake implements Movable {
 
 	public Snake(int player, String name, Vector2 position) {
 		this.name = name;
-		this.state = State.IDLE;
+		this.states = new ArrayList<Snake.State>();
 		this.applesEaten = 0;
 		this.tailsLost = 0;
 		this.player = player;
@@ -46,8 +54,12 @@ public class Snake implements Movable {
 		getHead().position = position;
 	}
 
-	public void setState(State state) {
-		this.state = state;
+	public void addState(State state) {
+		states.add(state);
+	}
+
+	public void removeState(State state) {
+		states.remove(state);
 	}
 
 	public int getApplesEaten() {
@@ -95,12 +107,23 @@ public class Snake implements Movable {
 		SPEED += ((ACCELERATION * ACCELERATION_DIR) * delta);
 
 		// if max speed, stop accelerating.
-		if (SPEED > MAX_SPEED) {
+		if (states.contains(BOOST) && SPEED > MAX_SPEED) {
 			SPEED = MAX_SPEED;
 			ACCELERATION_DIR = 0;
 		}
 		// if min speed, stop decelerating
-		if (SPEED < BASE_SPEED) {
+		if (states.contains(SLOW) && SPEED < MIN_SPEED) {
+			SPEED = MIN_SPEED;
+			ACCELERATION_DIR = 0;
+		}
+
+		// if from max/min speed, stop accelerating/decelerating
+		if (states.contains(FROM_BOOST) && SPEED < BASE_SPEED) {
+			states.remove(FROM_BOOST);
+			SPEED = BASE_SPEED;
+			ACCELERATION_DIR = 0;
+		} else if (states.contains(FROM_SLOW) && SPEED > BASE_SPEED) {
+			states.remove(FROM_SLOW);
 			SPEED = BASE_SPEED;
 			ACCELERATION_DIR = 0;
 		}
@@ -108,16 +131,26 @@ public class Snake implements Movable {
 
 	private void turnSnake(float delta) {
 		if (getHead() != null) {
-			switch (state) {
-			case LEFT:
+			State state = getLastLeftOrRight();
+			if (state == null)
+				return;
+
+			if (state == LEFT) {
 				turnLeft(delta);
-				break;
-			case RIGHT:
+			} else if (state == RIGHT) {
 				turnRight(delta);
-			default:
-				break;
 			}
 		}
+	}
+
+	private State getLastLeftOrRight() {
+		if (states.lastIndexOf(LEFT) > states.lastIndexOf(RIGHT)) {
+			return LEFT;
+		} else if (states.lastIndexOf(LEFT) < states.lastIndexOf(RIGHT)) {
+			return RIGHT;
+		}
+
+		return null;
 	}
 
 	/**
@@ -235,8 +268,6 @@ public class Snake implements Movable {
 	private void drawSnake(Tail tail, ShapeRenderer renderer) {
 		renderer.begin(ShapeType.Line);
 		renderer.identity();
-		// renderer.setColor(tail.position.x / 265, tail.position.y / 256,
-		// tail.direction.x / 256, 255);
 		renderer.setColor(Color.GRAY);
 		renderer.circle(tail.position.x, tail.position.y, collisionSize);
 		renderer.setColor(getPlayerColor());
@@ -325,14 +356,25 @@ public class Snake implements Movable {
 	 */
 	public void accelerate(boolean b) {
 		if (b) {
+			states.add(BOOST);
+			states.remove(FROM_SLOW);
 			ACCELERATION_DIR = 1;
 		} else {
 			ACCELERATION_DIR = -1;
+			states.remove(BOOST);
+			states.add(FROM_BOOST);
 		}
 	}
 
 	public void deceleration(boolean b) {
-		// TODO Auto-generated method stub
-		
+		if (b) {
+			states.add(SLOW);
+			states.remove(FROM_BOOST);
+			ACCELERATION_DIR = -1;
+		} else {
+			ACCELERATION_DIR = 1;
+			states.remove(SLOW);
+			states.add(FROM_SLOW);
+		}
 	}
 }

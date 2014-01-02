@@ -10,8 +10,7 @@ public class Main {
 		cfg.useGL20 = false;
 		cfg.width = 800;
 		cfg.height = 600;
-		
+
 		new LwjglApplication(new SnakeInSpace(cfg.width, cfg.height), cfg);
-		// Keyboard.enableRepeatEvents(true);
 	}
 }
