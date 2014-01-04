@@ -42,11 +42,11 @@ public class Galaxy {
 
 	private void createPlayers(int players) {
 		for (int i = 0; i <= players; i++)
-			snakes.add(new Snake(i, "Player " + i, new Vector2(100, 100)));
+			snakes.add(new Snake(i, "Player " + i, getRandomPositionClearOfEverythingElse(50)));
 	}
 
 	private void createAsteroids() {
-		for (int i = 0; i < 10; ++i) {
+		for (int i = 0; i < 50; ++i) {
 			asteroids.add(createAsteroid());
 		}
 	}
@@ -66,7 +66,7 @@ public class Galaxy {
 		vel.scl(speed);
 
 		return new Asteroid(getRandomInt(-2, 2), 10, new Vector2(
-				getRandomPositionClearOfEverythingElse()), vel);
+				getRandomPositionClearOfEverythingElse(50)), vel);
 	}
 
 	public Snake getSnake(int index) {
@@ -86,7 +86,7 @@ public class Galaxy {
 	}
 
 	public void updateApple(float delta) {
-		if (apples.size() < snakes.size()) {
+		if (apples.size() < snakes.size() * 2) {
 			Vector2 position = getRandomPositionClearOffSnakes();
 			apples.add(new Apple(position));
 		}
@@ -127,14 +127,14 @@ public class Galaxy {
 		return position;
 	}
 
-	private Vector2 getRandomPositionClearOfEverythingElse() {
-		Vector2 position = new Vector2(getRandomFloat(10, width),
-				getRandomFloat(10, height));
+	private Vector2 getRandomPositionClearOfEverythingElse(int clearRadius) {
+		Vector2 position = new Vector2(getRandomFloat(100, width - 100),
+				getRandomFloat(100, height - 100));
 
-		while (GalaxyUtils.isIntersectionWith(position, snakes)
-				|| GalaxyUtils.isIntersectionWith(position, asteroids)) {
-			position.x = getRandomFloat(10, width);
-			position.y = getRandomFloat(10, height);
+		while (GalaxyUtils.isIntersectionWith(position, clearRadius, snakes, clearRadius)
+				|| GalaxyUtils.isIntersectionWith(position, clearRadius, asteroids, clearRadius)) {
+			position.x = getRandomFloat(100, width - 100);
+			position.y = getRandomFloat(100, height - 100);
 		}
 
 		return position;
@@ -232,7 +232,8 @@ public class Galaxy {
 					a.velocity = a1VelocityTemp;
 					a2.velocity = a2VelocityTemp;
 
-					sounds.blop.play();
+					// sounds.blop.play();
+					sounds.blop.s.play(.1f);
 					return;
 				}
 			}

@@ -2,6 +2,7 @@ package no.minimon.snakeinspace;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 
 public class MenuController extends ControllerAdapter {
@@ -10,6 +11,12 @@ public class MenuController extends ControllerAdapter {
 
 	public MenuController(MenuScreen screen) {
 		this.screen = screen;
+	}
+	
+	@Override
+	public boolean buttonDown(Controller controller, int buttonIndex) {
+		keyDown(buttonIndex);
+		return true;
 	}
 
 	public boolean keyDown(int keyCode) {
@@ -24,7 +31,7 @@ public class MenuController extends ControllerAdapter {
 			if (screen.seleted > 3)
 				screen.seleted = 0;
 			return true;
-		case 97: // Ouya.BUTTON_A is not constant
+		case 96: // Ouya.BUTTON_A is not constant
 		case Keys.ENTER:
 			screen.changeToGameScreen();
 			return true;

@@ -1,6 +1,7 @@
 package no.minimon.snakeinspace;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 
 public class SnakeInSpace extends Game {
 
@@ -13,7 +14,16 @@ public class SnakeInSpace extends Game {
 	}
 
 	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		this.width = width;
+		this.height = height;
+	}
+
+	@Override
 	public void create() {
+		width = Gdx.graphics.getWidth();
+		height = Gdx.graphics.getHeight();
 		setScreen(new MenuScreen(this, width, height));
 	}
 

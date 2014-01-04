@@ -89,6 +89,8 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void hide() {
+		System.out.println("HIDE");
+		Controllers.removeListener(controller);
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -100,12 +102,15 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void resume() {
+		System.out.println("RESUME");
+		Controllers.addListener(controller);
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void dispose() {
+		sounds.disposeAll();
 		Gdx.input.setInputProcessor(null);
 
 	}
@@ -158,6 +163,7 @@ public class MenuScreen implements Screen, InputProcessor {
 	}
 
 	public void changeToGameScreen() {
+		Controllers.removeListener(controller);
 		snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width,
 				height, seleted));
 	}

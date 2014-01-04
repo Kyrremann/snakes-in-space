@@ -10,6 +10,7 @@ public class Main {
 		cfg.useGL20 = false;
 		cfg.width = 800;
 		cfg.height = 600;
+		// cfg.fullscreen = true;
 
 		new LwjglApplication(new SnakeInSpace(cfg.width, cfg.height), cfg);
 	}

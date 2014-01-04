@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.controllers.mappings.Ouya;
 
 public class GalaxyController extends ControllerAdapter {
 
@@ -31,6 +32,9 @@ public class GalaxyController extends ControllerAdapter {
 			if (keyCode == Keys.ESCAPE) {
 				galaxy.snakeInSpace.setScreen(new MenuScreen(
 						galaxy.snakeInSpace, galaxy.width, galaxy.height));
+			} else if (keyCode == Keys.MENU) {
+				galaxy.snakeInSpace.setScreen(new MenuScreen(
+						galaxy.snakeInSpace, galaxy.width, galaxy.height));
 			}
 			return;
 		}
@@ -52,12 +56,14 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.W:
 		case Keys.Y:
 		case 9:
+		case 96:
 			galaxy.getSnake(player).accelerate(true);
 			break;
 		case Keys.DOWN:
 		case Keys.S:
 		case Keys.H:
 		case Keys.O:
+		case 97:
 			galaxy.getSnake(player).deceleration(true);
 			break;
 		case Keys.MENU:
@@ -90,12 +96,14 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.W:
 		case Keys.Y:
 		case 9:
+		case 96:
 			galaxy.getSnake(player).accelerate(false);
 			break;
 		case Keys.DOWN:
 		case Keys.S:
 		case Keys.H:
 		case Keys.O:
+		case 97:
 			galaxy.getSnake(player).deceleration(false);
 			break;
 		}
@@ -130,10 +138,12 @@ public class GalaxyController extends ControllerAdapter {
 				return 3;
 			}
 		}
-		return player - 1;
+		return player;
 	}
 
 	public int indexOf(Controller controller) {
+		// System.out.println("indexOf: " + controller.getName() + " = " +
+		// Controllers.getControllers().indexOf(controller, true));
 		return Controllers.getControllers().indexOf(controller, true);
 	}
 }

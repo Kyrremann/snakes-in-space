@@ -12,16 +12,22 @@ public class GalaxyUtils {
 
 	public static boolean circlesIntersect(Vector2 pos1, float c1Radius,
 			Vector2 pos2, float c2Radius) {
+		if (pos1 == null || pos2 == null) return false;
 		return pos1.dst(pos2) < c1Radius + c2Radius;
 	}
 
 	public static boolean isIntersectionWith(Vector2 position,
-			List<? extends Movable> movables) {
+			int clearRadius, List<? extends Movable> movables, int clearRadius2) {
 		for (Movable movable : movables) {
-			if (circlesIntersect(position, movable.getPosition())) {
+			if (circlesIntersect(position, clearRadius, movable.getPosition(), clearRadius2)) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public static boolean isIntersectionWith(Vector2 position,
+			List<Snake> snakes) {
+		return isIntersectionWith(position, 10, snakes, 10);
 	}
 }

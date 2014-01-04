@@ -32,7 +32,7 @@ public class GalaxyRenderer {
 		drawScoreboard();
 		
 		// DEBUG
-		drawTable();
+		// drawTable();
 	}
 
 	// DEBUG
@@ -77,8 +77,8 @@ public class GalaxyRenderer {
 		batch.begin();
 		for (Snake snake : galaxy.getSnakes()) {
 			font.setColor(snake.getPlayerColor());
-			font.draw(batch, String.valueOf(snake.getApplesEaten()), 10,
-					galaxy.height - (15 * snake.getPlayerId()));
+			font.draw(batch, String.valueOf(snake.getApplesEaten()), 100,
+					(galaxy.height - 100) - (15 * snake.getPlayerId()));
 		}
 		batch.end();
 
