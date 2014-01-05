@@ -30,7 +30,7 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void show() {
 		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
-		renderer = new GalaxyRenderer(galaxy, true);
+		renderer = new GalaxyRenderer(galaxy);
 		controller = new GalaxyController(galaxy);
 		if (Ouya.runningOnOuya) {
 			Controllers.addListener(controller);

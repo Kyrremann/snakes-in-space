@@ -186,37 +186,57 @@ public class Galaxy {
 					// asteroid <--> asteroid collision!
 					
 					// get vector to represent "axis of impulse" (B->A)
-					Vector2 VCollideAxis= a.position.cpy().sub(a2.position);
+					Vector2 VCollideAxis= a.position.cpy();
+					VCollideAxis.sub(a2.position);
 					
 					// DEBUG add the collision axis vector to table
-					ArrayList<Vector2> temp = new ArrayList<Vector2>();
-					temp.add(a2.position.cpy()); // index 0
-					temp.add(VCollideAxis.cpy()); // index 1
-					table.add(temp);
+//					ArrayList<Vector2> temp = new ArrayList<Vector2>();
+//					temp.add(a.position.cpy()); // index 0
+//					temp.add(a2.position.cpy()); // index 1
+//					temp.add(VCollideAxis.cpy()); // index 2
 					
 					// since they have collided, they need to be moved out
 					// of each others hitboxes into an un-collided state
 					
 					// middle = halfway between the 2 asteroids
-					Vector2 middle = VCollideAxis.cpy().scl(0.5f);
+					Vector2 middle = VCollideAxis.cpy();
+					middle.scl(0.5f);
+
+					// DEBUG more vectors to display
+//					temp.add(middle.cpy()); // index 3
 					
 					// radius vectors
-					Vector2 a2Radius = middle.cpy().nor().scl(a2.radius);
+					Vector2 a2Radius = middle.cpy();
+					a2Radius.nor().scl(a2.radius);
 					
 					// amount to displace the asteroids (overlapping middle)
-					Vector2 a2Displace = middle.cpy().sub(a2Radius);
-					Vector2 a1Displace = a2Displace.cpy().scl(-1);
-					
+					Vector2 a2Displace = middle.cpy();
+					a2Displace.sub(a2Radius);
+					Vector2 a1Displace = a2Displace.cpy();
+					a1Displace.scl(-1);
+
+					// DEBUG vectors
+//					temp.add(a1Displace); // index 4
+//					temp.add(a2Displace); // 5
+
 					// displace the asteroids
 					a.position.add(a1Displace);
 					a2.position.add(a2Displace);
 					
 					// get copies of velocity vectors
 					// aligned so that VCollideAxis is the X axis (rotated)
-					Vector2 a1VelocityTemp = a.velocity.cpy().rotate(
-							VCollideAxis.angle());
-					Vector2 a2VelocityTemp = a2.velocity.cpy().rotate(
-							VCollideAxis.angle());
+					Vector2 a1VelocityTemp = a.velocity.cpy();
+					a1VelocityTemp.rotate(- VCollideAxis.angle());
+					Vector2 a2VelocityTemp = a2.velocity.cpy();
+					a2VelocityTemp.rotate(- VCollideAxis.angle());
+					
+					// DEBUG vectors
+//					temp.add(a1VelocityTemp); // 6
+//					Vector2 dbg_v1 = VCollideAxis.cpy();
+//					dbg_v1.rotate(- VCollideAxis.angle());
+//					temp.add(dbg_v1); // 7
+//					// 7
+//					table.add(temp);
 
 					// swap the x values of the two vectors, y value unchanged
 					float tmp = a1VelocityTemp.x;
@@ -224,8 +244,8 @@ public class Galaxy {
 					a2VelocityTemp.x = tmp;
 
 					// rotate the aligned vectors back to 'normal' perspective
-					a1VelocityTemp.rotate(-VCollideAxis.angle());
-					a2VelocityTemp.rotate(-VCollideAxis.angle());
+					a1VelocityTemp.rotate(VCollideAxis.angle());
+					a2VelocityTemp.rotate(VCollideAxis.angle());
 
 					// replace actual velocities with the new post-collision
 					// velocities

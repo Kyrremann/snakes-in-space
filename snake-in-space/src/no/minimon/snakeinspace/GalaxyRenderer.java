@@ -14,11 +14,9 @@ public class GalaxyRenderer {
 	private BitmapFont font;
 
 	private Galaxy galaxy;
-	private boolean debug;
 
-	public GalaxyRenderer(Galaxy galaxy, boolean debug) {
+	public GalaxyRenderer(Galaxy galaxy) {
 		this.galaxy = galaxy;
-		this.debug = debug;
 
 		renderer = new ShapeRenderer();
 		font = new BitmapFont();
@@ -32,22 +30,29 @@ public class GalaxyRenderer {
 		drawScoreboard();
 		
 		// DEBUG
-		drawTable();
+//		drawTable();
 	}
 
 	// DEBUG
-	private void drawTable() {
-		System.out.println(galaxy.table.size());
-		for (ArrayList<Vector2> vecs : galaxy.table) {
-			renderer.begin(ShapeType.Line);
-			renderer.identity();
-			renderer.setColor(255, 255, 255, 255);
-			renderer.line(vecs.get(0).x, vecs.get(0).y,
-					vecs.get(0).x + vecs.get(1).x,
-					vecs.get(0).y + vecs.get(1).y);
-			renderer.end();
-		}
-	}
+//	private void drawTable() {
+//		//System.out.println(galaxy.table.size());
+//		for (ArrayList<Vector2> vecs : galaxy.table) {
+//			renderer.begin(ShapeType.Line);
+//			renderer.identity();
+//			renderer.setColor(255, 255, 255, 255);
+//			renderer.line(vecs.get(1), vecs.get(1).cpy().add(vecs.get(2)));
+//			renderer.setColor(255, 0, 0, 255);
+//			renderer.line(vecs.get(1), vecs.get(1).cpy().add(vecs.get(3)));
+//			renderer.setColor(0, 0, 255, 255);
+//			renderer.line(vecs.get(0), vecs.get(0).cpy().add(vecs.get(4)));
+//			renderer.line(vecs.get(1), vecs.get(1).cpy().add(vecs.get(5)));
+//			renderer.setColor(0, 255, 0, 255);
+//			renderer.line(vecs.get(0), vecs.get(0).cpy().add(vecs.get(6)));
+//			renderer.setColor(0, 255, 255, 255);
+//			renderer.line(vecs.get(0), vecs.get(0).cpy().add(vecs.get(7)));
+//			renderer.end();
+//		}
+//	}
 
 	private void drawApples() {
 		for (Apple apple : galaxy.getApples()) {
