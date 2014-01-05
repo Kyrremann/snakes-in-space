@@ -30,7 +30,8 @@ public class MenuScreen implements Screen, InputProcessor {
 		this.snakeInSpace = snakeInSpace;
 		this.width = width;
 		this.height = height;
-
+		
+		controller = new MenuController(this);
 		sounds = new GalaxySounds();
 		font = new BitmapFont();
 		stringHeight = 15;
@@ -40,12 +41,21 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void show() {
-		controller = new MenuController(this);
+		ifOuyaAddControllerListener();
+		Gdx.input.setInputProcessor(this);
+		// sounds.theme.play();
+	}
+
+	private void ifOuyaAddControllerListener() {
 		if (Ouya.runningOnOuya) {
 			Controllers.addListener(controller);
 		}
-		Gdx.input.setInputProcessor(this);
-		// sounds.theme.play();
+	}
+	
+	private void ifOuyaRemoveControllerListener() {
+		if (Ouya.runningOnOuya) {
+			Controllers.removeListener(controller);
+		}
 	}
 
 	@Override
@@ -89,8 +99,7 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void hide() {
-		System.out.println("HIDE");
-		Controllers.removeListener(controller);
+		ifOuyaRemoveControllerListener();
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -102,10 +111,7 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void resume() {
-		System.out.println("RESUME");
-		Controllers.addListener(controller);
-		// TODO Auto-generated method stub
-
+		ifOuyaAddControllerListener();
 	}
 
 	@Override
@@ -163,7 +169,7 @@ public class MenuScreen implements Screen, InputProcessor {
 	}
 
 	public void changeToGameScreen() {
-		Controllers.removeListener(controller);
+		ifOuyaRemoveControllerListener();
 		snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width,
 				height, seleted));
 	}

@@ -32,10 +32,7 @@ public class GameScreen implements Screen, InputProcessor {
 		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
 		renderer = new GalaxyRenderer(galaxy);
 		controller = new GalaxyController(galaxy);
-		if (Ouya.runningOnOuya) {
-			System.out.println("Blir satt");
-			Controllers.addListener(controller);
-		}
+		ifOuyaAddControllerListener();
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -74,7 +71,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void hide() {
-		Controllers.removeListener(controller);
+		ifOuyaRemoveControllerListener();
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -86,7 +83,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void resume() {
-		Controllers.addListener(controller);
+		ifOuyaAddControllerListener();
 		// TODO Auto-generated method stub
 
 	}
@@ -138,6 +135,19 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public boolean scrolled(int amount) {
 		return false;
+	}
+
+
+	private void ifOuyaAddControllerListener() {
+		if (Ouya.runningOnOuya) {
+			Controllers.addListener(controller);
+		}
+	}
+	
+	private void ifOuyaRemoveControllerListener() {
+		if (Ouya.runningOnOuya) {
+			Controllers.removeListener(controller);
+		}
 	}
 
 }
