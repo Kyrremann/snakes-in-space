@@ -46,7 +46,7 @@ public class Galaxy {
 	}
 
 	private void createAsteroids() {
-		for (int i = 0; i < 50; ++i) {
+		for (int i = 0; i < 30; ++i) {
 			asteroids.add(createAsteroid());
 		}
 	}
@@ -66,7 +66,7 @@ public class Galaxy {
 		vel.scl(speed);
 
 		return new Asteroid(getRandomInt(-2, 2), 10, new Vector2(
-				getRandomPositionClearOfEverythingElse(50)), vel);
+				getRandomPositionClearOfEverythingElse(10)), vel);
 	}
 
 	public Snake getSnake(int index) {
@@ -87,7 +87,7 @@ public class Galaxy {
 
 	public void updateApple(float delta) {
 		if (apples.size() < snakes.size() * 2) {
-			Vector2 position = getRandomPositionClearOffSnakes();
+			Vector2 position = getRandomPositionClearOffSnakesAndApples();
 			apples.add(new Apple(position));
 		}
 	}
@@ -115,11 +115,12 @@ public class Galaxy {
 		}
 	}
 
-	private Vector2 getRandomPositionClearOffSnakes() {
+	private Vector2 getRandomPositionClearOffSnakesAndApples() {
 		Vector2 position = new Vector2(getRandomFloat(10, width),
 				getRandomFloat(10, height));
 
-		while (GalaxyUtils.isIntersectionWith(position, snakes)) {
+		while (GalaxyUtils.isIntersectionWith(position, snakes)
+				|| GalaxyUtils.isIntersectionWith(position, apples)) {
 			position.x = getRandomFloat(10, width);
 			position.y = getRandomFloat(10, height);
 		}

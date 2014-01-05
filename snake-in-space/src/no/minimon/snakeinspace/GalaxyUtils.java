@@ -27,7 +27,7 @@ public class GalaxyUtils {
 	}
 
 	public static boolean isIntersectionWith(Vector2 position,
-			List<Snake> snakes) {
+			List<? extends Movable> snakes) {
 		return isIntersectionWith(position, 10, snakes, 10);
 	}
 }
