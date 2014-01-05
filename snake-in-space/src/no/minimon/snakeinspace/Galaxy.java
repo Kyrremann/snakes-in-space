@@ -1,8 +1,11 @@
 package no.minimon.snakeinspace;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -36,13 +39,22 @@ public class Galaxy {
 		// DEBUG
 		table = new ArrayList<ArrayList <Vector2>>();
 
-		createAsteroids();
-		createPlayers(players);
+		createPlayers(players); // create players first (they need space)
+		createAsteroids(); // fill in with asteroids (with space for players)
 	}
 
 	private void createPlayers(int players) {
-		for (int i = 0; i <= players; i++)
-			snakes.add(new Snake(i, "Player " + i, getRandomPositionClearOfEverythingElse(50)));
+
+		// map ( thing, how_far_away_to_spawn )
+		HashMap<Collideable, Integer> clearOfMap = 
+				new HashMap<Collideable, Integer>();
+		clearOfMap.put(Collideable.SNAKES, 100);
+		clearOfMap.put(Collideable.ASTEROIDS, 1);
+		
+		for (int i = 0; i <= players; i++){
+			Vector2 position = getRandomPosClear(clearOfMap);
+			snakes.add(new Snake(i, "Player " + i, position));
+		}
 	}
 
 	private void createAsteroids() {
@@ -64,9 +76,18 @@ public class Galaxy {
 		// speed distribution of velocity should look something like this:
 		// (0) ______ (20) ``'-,_ (100)
 		vel.scl(speed);
+		
+		
+		// map ( thing, how_far_away_to_spawn )
+		HashMap<Collideable, Integer> clearOfMap = 
+				new HashMap<Collideable, Integer>();
+		clearOfMap.put(Collideable.SNAKES, 200);
+		clearOfMap.put(Collideable.ASTEROIDS, 1);
+		
+		Vector2 position = getRandomPosClear(clearOfMap);
 
-		return new Asteroid(getRandomInt(-2, 2), 10, new Vector2(
-				getRandomPositionClearOfEverythingElse(10)), vel);
+		return new Asteroid(getRandomInt(-2, 2), 10, 
+				position, vel);
 	}
 
 	public Snake getSnake(int index) {
@@ -87,9 +108,58 @@ public class Galaxy {
 
 	public void updateApple(float delta) {
 		if (apples.size() < snakes.size() * 2) {
-			Vector2 position = getRandomPositionClearOffSnakesAndApples();
+			
+			// map ( thing, how_far_away_to_spawn )
+			HashMap<Collideable, Integer> clearOfMap = 
+					new HashMap<Collideable, Integer>();
+			clearOfMap.put(Collideable.SNAKES, 10);
+			clearOfMap.put(Collideable.APPLES, 10);
+			
+			Vector2 position = getRandomPosClear(clearOfMap);
+
 			apples.add(new Apple(position));
 		}
+	}
+
+	private Vector2 getRandomPosClear(HashMap<Collideable, 
+			Integer> clearOfMap) {
+		Vector2 position = NewRandomPosition();
+		boolean passChecks = false;
+		while (!passChecks){
+			passChecks = true;
+			setRandomPosition(position);
+			
+			if(clearOfMap.containsKey(Collideable.SNAKES)){
+				if(checkClearDistance(position, 
+						clearOfMap.get(Collideable.SNAKES), snakes)){
+					passChecks = false;
+				}
+			}
+			if(clearOfMap.containsKey(Collideable.ASTEROIDS)){
+				if(checkClearDistance(position, 
+						clearOfMap.get(Collideable.ASTEROIDS), asteroids)){
+					passChecks = false;
+				}
+			}
+			if(clearOfMap.containsKey(Collideable.APPLES)){
+				if(checkClearDistance(position, 
+						clearOfMap.get(Collideable.APPLES), apples)){
+					passChecks = false;
+				}
+			}
+		}
+		return position;
+	}
+
+	// faster than reallocating a new random vector
+	private void setRandomPosition(Vector2 position) {
+		position.x = getRandomFloat(10, width-10);
+		position.y = getRandomFloat(10, height-10);
+	}
+
+	private Vector2 NewRandomPosition() {
+		return new Vector2(getRandomFloat(10, width-10),
+				getRandomFloat(10, height-10));
 	}
 
 	public void updateAppleSnakeInteraction() {
@@ -114,31 +184,39 @@ public class Galaxy {
 			updateAppleSnakeInteraction();
 		}
 	}
+	
+//	private Vector2 getRandomPositionClearOffSnakesAndApples() {
+//		Vector2 position = new Vector2(getRandomFloat(10, width),
+//				getRandomFloat(10, height));
+//
+//		while (GalaxyUtils.isIntersectionWith(position, snakes)
+//				|| GalaxyUtils.isIntersectionWith(position, apples)) {
+//			position.x = getRandomFloat(10, width);
+//			position.y = getRandomFloat(10, height);
+//		}
+//
+//		return position;
+//	}
 
-	private Vector2 getRandomPositionClearOffSnakesAndApples() {
-		Vector2 position = new Vector2(getRandomFloat(10, width),
-				getRandomFloat(10, height));
+//	private Vector2 getRandomPositionClearOfEverythingElse(int clearRadius) {
+//		Vector2 position = new Vector2(getRandomFloat(100, width - 100),
+//				getRandomFloat(100, height - 100));
+//
+//		while (GalaxyUtils.isIntersectionWith(position, clearRadius, snakes, clearRadius)
+//				|| GalaxyUtils.isIntersectionWith(position, clearRadius, asteroids, clearRadius)) {
+//			position.x = getRandomFloat(100, width - 100);
+//			position.y = getRandomFloat(100, height - 100);
+//		}
+//
+//		return position;
+//	}
 
-		while (GalaxyUtils.isIntersectionWith(position, snakes)
-				|| GalaxyUtils.isIntersectionWith(position, apples)) {
-			position.x = getRandomFloat(10, width);
-			position.y = getRandomFloat(10, height);
+	private boolean checkClearDistance(Vector2 pos, int radius,
+			List<? extends Movable> movables) {
+		if (GalaxyUtils.isIntersectionWith(pos, radius, movables)){
+			return true;
 		}
-
-		return position;
-	}
-
-	private Vector2 getRandomPositionClearOfEverythingElse(int clearRadius) {
-		Vector2 position = new Vector2(getRandomFloat(100, width - 100),
-				getRandomFloat(100, height - 100));
-
-		while (GalaxyUtils.isIntersectionWith(position, clearRadius, snakes, clearRadius)
-				|| GalaxyUtils.isIntersectionWith(position, clearRadius, asteroids, clearRadius)) {
-			position.x = getRandomFloat(100, width - 100);
-			position.y = getRandomFloat(100, height - 100);
-		}
-
-		return position;
+		return false;
 	}
 
 	private float getRandomFloat(int min, int max) {

@@ -17,9 +17,9 @@ public class GalaxyUtils {
 	}
 
 	public static boolean isIntersectionWith(Vector2 position,
-			int clearRadius, List<? extends Movable> movables, int clearRadius2) {
+			int clearRadius, List<? extends Movable> movables) {
 		for (Movable movable : movables) {
-			if (circlesIntersect(position, clearRadius, movable.getPosition(), clearRadius2)) {
+			if (circlesIntersect(position, clearRadius, movable.getPosition(), movable.getRadius())) {
 				return true;
 			}
 		}
@@ -27,7 +27,7 @@ public class GalaxyUtils {
 	}
 
 	public static boolean isIntersectionWith(Vector2 position,
-			List<? extends Movable> snakes) {
-		return isIntersectionWith(position, 10, snakes, 10);
+			List<? extends Movable> movables) {
+		return isIntersectionWith(position, 10, movables);
 	}
 }

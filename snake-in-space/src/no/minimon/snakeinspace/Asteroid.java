@@ -81,4 +81,9 @@ public class Asteroid implements Movable {
 		return position;
 	}
 
+	@Override
+	public int getRadius() {
+		return radius;
+	}
+
 }

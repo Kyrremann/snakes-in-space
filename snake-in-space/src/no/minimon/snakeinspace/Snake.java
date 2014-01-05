@@ -385,4 +385,9 @@ public class Snake implements Movable {
 			states.add(FROM_SLOW);
 		}
 	}
+
+	@Override
+	public int getRadius() {
+		return collisionSize;
+	}
 }
