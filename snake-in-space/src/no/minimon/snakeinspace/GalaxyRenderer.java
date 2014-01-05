@@ -1,12 +1,8 @@
 package no.minimon.snakeinspace;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
 
 public class GalaxyRenderer {
 
@@ -30,7 +26,7 @@ public class GalaxyRenderer {
 		drawScoreboard();
 		
 		// DEBUG
-//		drawTable();
+		// drawTable();
 	}
 
 	// DEBUG
@@ -82,8 +78,8 @@ public class GalaxyRenderer {
 		batch.begin();
 		for (Snake snake : galaxy.getSnakes()) {
 			font.setColor(snake.getPlayerColor());
-			font.draw(batch, String.valueOf(snake.getApplesEaten()), 10,
-					galaxy.height - (15 * snake.getPlayerId()));
+			font.draw(batch, String.valueOf(snake.getApplesEaten()), 100,
+					(galaxy.height - 100) - (15 * snake.getPlayerId()));
 		}
 		batch.end();
 

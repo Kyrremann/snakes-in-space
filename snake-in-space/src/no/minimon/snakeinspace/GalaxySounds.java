@@ -26,4 +26,12 @@ public class GalaxySounds {
 		nomSounds.get(index).play();
 		return 0;
 	}
+
+	public void disposeAll() {
+		for (SoundData s : nomSounds)
+			s.dispose();
+		theme.dispose();
+		explosion.dispose();
+		blop.dispose();
+	}
 }

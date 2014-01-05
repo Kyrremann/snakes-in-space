@@ -37,6 +37,9 @@ public class Snake implements Movable {
 	private int tailsLost;
 	private int player;
 	private String name;
+	private boolean isDead;
+	
+// legg til isAlive sjekk i getSnakes
 
 	public Snake(int player, String name, Vector2 position) {
 		this.name = name;
@@ -85,6 +88,11 @@ public class Snake implements Movable {
 	}
 
 	public void update(float delta, int width, int height) {
+		if (isDead) return;
+		if (tails.isEmpty()) {
+			isDead = true;
+			return;
+		}
 		// turn head piece of snake
 		turnSnake(delta);
 

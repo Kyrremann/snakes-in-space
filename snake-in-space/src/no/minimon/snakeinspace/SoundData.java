@@ -36,4 +36,8 @@ public class SoundData {
 		System.err.println("MISSING SOUND: " + filepath);
 		return -1l;
 	}
+	
+	public void dispose() {
+		s.dispose();
+	}
 }

@@ -33,6 +33,7 @@ public class GameScreen implements Screen, InputProcessor {
 		renderer = new GalaxyRenderer(galaxy);
 		controller = new GalaxyController(galaxy);
 		if (Ouya.runningOnOuya) {
+			System.out.println("Blir satt");
 			Controllers.addListener(controller);
 		}
 		Gdx.input.setInputProcessor(this);
@@ -73,6 +74,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void hide() {
+		Controllers.removeListener(controller);
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -84,12 +86,14 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void resume() {
+		Controllers.addListener(controller);
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void dispose() {
+		sounds.disposeAll();
 		Gdx.input.setInputProcessor(null);
 	}
 
