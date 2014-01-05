@@ -22,4 +22,4 @@ TODO
  * Add the famous Snake Shield!
  * Add Snake Bombs (it's when you leave the last piece of your tail to detonate)
  * Let the player shoot the snake head into things so it explodes
-
+ * The head should have its own color
