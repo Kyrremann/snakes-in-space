@@ -71,21 +71,23 @@ public class Asteroid implements Movable {
 	}
 
 	public void draw(ShapeRenderer renderer) {
-		renderer.begin(ShapeType.Line);
-		renderer.identity();
+//		renderer.begin(ShapeType.Line);
+//		renderer.identity();
 //		renderer.setColor(Color.GRAY);
 //		renderer.circle(position.x, position.y, radius);
-		renderer.translate(position.x, position.y, 0);
-		renderer.setColor(33, 33, 33, 255);
-		renderer.rotate(0, 0, 1, rotate);
+//		renderer.translate(position.x, position.y, 0);
+//		renderer.setColor(33, 33, 33, 255);
+//		renderer.rotate(0, 0, 1, rotate);
 		//renderer.polygon(new float[] { 0, 0, 12, 1, 18, 10, 13, 16, -1, 17, -4,
 		//14, 1, 10, -6, 10, -5, 3 });
-		renderer.scale(1.3f, 1.3f, 1.0f);
-		renderer.polygon(new float[]{ 3, 1, 9, 1, 8, -1, 2, -8, -5, -8, -9, -2,
-				-5, 5, 1, 9, 7, 6});
-		
+//		renderer.scale(1.3f, 1.3f, 1.0f);
+//		renderer.polygon(new float[]{ 3, 1, 9, 1, 8, -1, 2, -8, -5, -8, -9, -2,
+//				-5, 5, 1, 9, 7, 6});
+//		renderer.end();
+
 		// TEST sprite
 		spriteBatch.begin();
+		// this function has 16 arguments! :D
 		spriteBatch.draw(texture,
 		        position.x-(radius+5),
 		        position.y-(radius+5),
@@ -103,7 +105,6 @@ public class Asteroid implements Movable {
 		        false,
 		        false);
 		spriteBatch.end();
-		renderer.end();
 	}
 
 	@Override
