@@ -84,7 +84,7 @@ public class Galaxy {
 		
 		Vector2 position = getRandomPosClear(clearOfMap);
 
-		return new Asteroid(getRandomInt(-2, 2), 10, 
+		return new Asteroid(GalaxyUtils.getRandomInt(-2, 2), 10, 
 				position, vel);
 	}
 
@@ -105,7 +105,7 @@ public class Galaxy {
 	}
 
 	public void updateApple(float delta) {
-		if (apples.size() < snakes.size() * 2) {
+		if (apples.size() < snakes.size() * 2) { 
 			
 			// map ( thing, how_far_away_to_spawn )
 			HashMap<Collideable, Integer> clearOfMap = 
@@ -151,13 +151,13 @@ public class Galaxy {
 
 	// faster than reallocating a new random vector
 	private void setRandomPosition(Vector2 position) {
-		position.x = getRandomFloat(10, width-10);
-		position.y = getRandomFloat(10, height-10);
+		position.x = GalaxyUtils.getRandomFloat(10, width-10);
+		position.y = GalaxyUtils.getRandomFloat(10, height-10);
 	}
 
 	private Vector2 NewRandomPosition() {
-		return new Vector2(getRandomFloat(10, width-10),
-				getRandomFloat(10, height-10));
+		return new Vector2(GalaxyUtils.getRandomFloat(10, width-10),
+				GalaxyUtils.getRandomFloat(10, height-10));
 	}
 
 	public void updateAppleSnakeInteraction() {
@@ -168,7 +168,7 @@ public class Galaxy {
 					if (GalaxyUtils.circlesIntersect(apple.getPosition(), 5,
 							snake.getPosition(), 7)) {
 						snake.eatApple();
-						sounds.playNom(getRandomInt(0,
+						sounds.playNom(GalaxyUtils.getRandomInt(0,
 								sounds.nomSounds.size() - 1));
 						remove = apple;
 						break;
@@ -189,14 +189,6 @@ public class Galaxy {
 			return true;
 		}
 		return false;
-	}
-
-	private float getRandomFloat(int min, int max) {
-		return Math.abs((random.nextFloat() * (min - max)) + min);
-	}
-
-	private int getRandomInt(int min, int max) {
-		return random.nextInt((max - min) + 1) + min;
 	}
 
 	public void setSize(int width, int height) {

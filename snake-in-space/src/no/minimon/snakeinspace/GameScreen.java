@@ -1,5 +1,7 @@
 package no.minimon.snakeinspace;
 
+import org.lwjgl.opencl.APPLESetMemObjectDestructor;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -42,6 +44,10 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		galaxy.updateApple(delta);
+		
+		for (Apple apple : galaxy.getApples()){
+			apple.update(delta);
+		}
 
 		for (Snake snake : galaxy.getSnakes()) {
 			if (snake.getHead() != null){

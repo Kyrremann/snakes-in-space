@@ -20,8 +20,8 @@ public class GalaxyRenderer {
 
 	public void render(float delta) {
 		drawBackground();
-		drawAstroids();
 		drawApples();
+		drawAstroids();
 		drawPlayers(delta);
 		drawScoreboard();
 		

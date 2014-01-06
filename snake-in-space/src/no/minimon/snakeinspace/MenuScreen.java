@@ -45,6 +45,11 @@ public class MenuScreen implements Screen, InputProcessor {
 		Asteroid.sprite = new Sprite(Asteroid.texture);
 		Asteroid.sprite.setSize(32, 32);
 		Asteroid.spriteBatch = new SpriteBatch();
+		
+		Apple.texture = new Texture(Gdx.files.internal("data/apple.png"));
+		Apple.sprite = new Sprite(Apple.texture);
+		Apple.sprite.setSize(32, 32);
+		Apple.spriteBatch = new SpriteBatch();
 	}
 
 	@Override

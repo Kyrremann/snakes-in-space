@@ -1,10 +1,21 @@
 package no.minimon.snakeinspace;
 
 import java.util.List;
+import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
 
 public class GalaxyUtils {
+	
+	private static Random random = new Random();
+	
+	public static float getRandomFloat(int min, int max) {
+		return Math.abs((random.nextFloat() * (min - max)) + min);
+	}
+
+	public static int getRandomInt(int min, int max) {
+		return random.nextInt((max - min) + 1) + min;
+	}
 
 	public static boolean circlesIntersect(Vector2 pos1, Vector2 pos2) {
 		return circlesIntersect(pos1, 10, pos2, 10);
