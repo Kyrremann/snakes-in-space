@@ -206,7 +206,7 @@ public class Galaxy {
 								snake.collisionSize, asteroid.position,
 								asteroid.radius)) {
 							remove = tail;
-							sounds.explosion.play();
+							sounds.explosion.s.play(0.3f);
 							break;
 						}
 					}
@@ -296,7 +296,7 @@ public class Galaxy {
 					a2.velocity = a2VelocityTemp;
 
 					// sounds.blop.play();
-					sounds.blop.s.play(.1f);
+					sounds.blop.s.play(.2f);
 					return;
 				}
 			}
