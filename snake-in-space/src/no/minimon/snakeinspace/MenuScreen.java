@@ -6,7 +6,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MenuScreen implements Screen, InputProcessor {
@@ -37,6 +39,12 @@ public class MenuScreen implements Screen, InputProcessor {
 		stringHeight = 15;
 		menuX = this.width / 2;
 		menuY = this.height / 2;
+		
+		// TEST sprite
+		Asteroid.texture = new Texture(Gdx.files.internal("data/asteroid.png"));
+		Asteroid.sprite = new Sprite(Asteroid.texture);
+		Asteroid.sprite.setSize(32, 32);
+		Asteroid.spriteBatch = new SpriteBatch();
 	}
 
 	@Override

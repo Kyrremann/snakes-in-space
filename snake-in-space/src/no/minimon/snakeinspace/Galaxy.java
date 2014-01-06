@@ -1,11 +1,9 @@
 package no.minimon.snakeinspace;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -185,32 +183,6 @@ public class Galaxy {
 		}
 	}
 	
-//	private Vector2 getRandomPositionClearOffSnakesAndApples() {
-//		Vector2 position = new Vector2(getRandomFloat(10, width),
-//				getRandomFloat(10, height));
-//
-//		while (GalaxyUtils.isIntersectionWith(position, snakes)
-//				|| GalaxyUtils.isIntersectionWith(position, apples)) {
-//			position.x = getRandomFloat(10, width);
-//			position.y = getRandomFloat(10, height);
-//		}
-//
-//		return position;
-//	}
-
-//	private Vector2 getRandomPositionClearOfEverythingElse(int clearRadius) {
-//		Vector2 position = new Vector2(getRandomFloat(100, width - 100),
-//				getRandomFloat(100, height - 100));
-//
-//		while (GalaxyUtils.isIntersectionWith(position, clearRadius, snakes, clearRadius)
-//				|| GalaxyUtils.isIntersectionWith(position, clearRadius, asteroids, clearRadius)) {
-//			position.x = getRandomFloat(100, width - 100);
-//			position.y = getRandomFloat(100, height - 100);
-//		}
-//
-//		return position;
-//	}
-
 	private boolean checkClearDistance(Vector2 pos, int radius,
 			List<? extends Movable> movables) {
 		if (GalaxyUtils.isIntersectionWith(pos, radius, movables)){

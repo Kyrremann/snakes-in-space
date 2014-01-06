@@ -1,17 +1,27 @@
 package no.minimon.snakeinspace;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.sun.xml.internal.bind.v2.util.CollisionCheckStack;
 
 public class Asteroid implements Movable {
-
+	
 	private final float ROTATE_SPEED;
 
 	public int radius;
 	public Vector2 position;
 	public Vector2 velocity; // direction and speed
 	private float rotate;
+
+	// TEST sprite
+	public static Sprite sprite;
+	public static Texture texture;
+	public static SpriteBatch spriteBatch;
 
 	public Asteroid(float rotateSpeed, int radius, Vector2 position,
 			Vector2 velocity) {
@@ -73,6 +83,26 @@ public class Asteroid implements Movable {
 		renderer.scale(1.3f, 1.3f, 1.0f);
 		renderer.polygon(new float[]{ 3, 1, 9, 1, 8, -1, 2, -8, -5, -8, -9, -2,
 				-5, 5, 1, 9, 7, 6});
+		
+		// TEST sprite
+		spriteBatch.begin();
+		spriteBatch.draw(texture,
+		        position.x-(radius+5),
+		        position.y-(radius+5),
+		        radius+5,
+		        radius+5,
+		        (float) (radius*2)+10,
+		        (float) (radius*2)+10,
+		        1f,
+		        1f,
+		        rotate,
+		        0,
+		        0,
+		        32,
+		        32,
+		        false,
+		        false);
+		spriteBatch.end();
 		renderer.end();
 	}
 
