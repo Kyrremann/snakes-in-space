@@ -7,9 +7,9 @@ import com.badlogic.gdx.controllers.Controllers;
 
 public class GalaxyController extends ControllerAdapter {
 
-	private Galaxy<?> galaxy;
+	private Galaxy galaxy;
 
-	public GalaxyController(Galaxy<?> galaxy) {
+	public GalaxyController(Galaxy galaxy) {
 		this.galaxy = galaxy;
 	}
 

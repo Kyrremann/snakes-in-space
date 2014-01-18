@@ -13,7 +13,7 @@ import no.minimon.snakeinspace.utils.GalaxyUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Galaxy <T extends HasHitBox> {
+public class Galaxy {
 
 	public SnakeInSpace snakeInSpace;
 	public int width;
@@ -22,7 +22,7 @@ public class Galaxy <T extends HasHitBox> {
 	private List<Snake> snakes;
 	private List<Apple> apples;
 	private List<Asteroid> asteroids;
-	private Quadtree<T> quad; // for collisions
+	private Quadtree quad; // for collisions
 	
 	private Random random;
 	private GalaxySounds sounds;
@@ -54,7 +54,7 @@ public class Galaxy <T extends HasHitBox> {
 		createPlayers(players); // create players first (they need space)
 		createAsteroids(); // fill in with asteroids (with space for players)
 		
-		quad = new Quadtree<T>(0, new Rectangle(0, 0, width, height));
+		quad = new Quadtree(0, new Rectangle(0, 0, width, height));
 	}
 
 	private void createPlayers(int players) {
@@ -234,16 +234,16 @@ public class Galaxy <T extends HasHitBox> {
 			quad.clear();
 			// add all asteroids to quadtree
 			for (Asteroid a1 : getAsteroids()) {
-				quad.insert((T) a1); // O(n)
+				quad.insert((HasHitBox) a1); // O(n)
 			}
 			
 			// for each asteroid, retrieve a list of potential collideables
-			ArrayList <T>returnObjects = new ArrayList<T>();
+			ArrayList<HasHitBox> returnObjects = new ArrayList<HasHitBox>();
 			for (Asteroid a1 : getAsteroids()) { // O(n)
 				returnObjects.clear();
-				quad.retrieve(returnObjects, (T) a1);
+				quad.retrieve(returnObjects, (HasHitBox) a1);
 				// run over potential list of collideables 
-				for (T object : returnObjects) { // O(subset of n)
+				for (HasHitBox object : returnObjects) { // O(subset of n)
 					Asteroid a2 = (Asteroid) object;
 					if (GalaxyUtils.circlesIntersect(a1.position, a1.radius,
 							a2.position, a2.radius)) {
@@ -345,7 +345,7 @@ public class Galaxy <T extends HasHitBox> {
 		sounds.blop.s.play(.2f);
 	}
 
-	public Quadtree<T> getQuadtree() {
+	public Quadtree getQuadtree() {
 		return quad;
 	}
 }

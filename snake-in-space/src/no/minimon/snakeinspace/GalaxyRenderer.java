@@ -10,9 +10,9 @@ public class GalaxyRenderer {
 	private BitmapFont font;
 	private SpriteBatch batch;
 
-	private Galaxy<?> galaxy;
+	private Galaxy galaxy;
 
-	public GalaxyRenderer(Galaxy<?> galaxy) {
+	public GalaxyRenderer(Galaxy galaxy) {
 		this.galaxy = galaxy;
 
 		renderer = new ShapeRenderer();
