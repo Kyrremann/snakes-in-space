@@ -41,6 +41,9 @@ public class Asteroid implements Movable, HasHitBox {
 	public void update(float delta) {
 		// update position
 		position.add(velocity.cpy().scl(delta));
+		
+		// update hitbox
+		this.hitbox.setLocation(position);
 
 		// update rotation
 		rotate += ROTATE_SPEED;

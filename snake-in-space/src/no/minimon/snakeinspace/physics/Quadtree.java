@@ -151,4 +151,17 @@ public class Quadtree {
 			nodes[3].draw(renderer);
 		}
 	}
+
+	// return the count of objects in the quadtree
+	public int size() {
+		int count = 0;
+		count += contents.size();
+		if (nodes[0] != null) {
+			count += nodes[0].size();
+			count += nodes[1].size();
+			count += nodes[2].size();
+			count += nodes[3].size();
+		}
+		return count;
+	}
 }

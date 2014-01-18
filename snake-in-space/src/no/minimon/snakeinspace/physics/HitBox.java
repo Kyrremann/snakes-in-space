@@ -1,6 +1,7 @@
 package no.minimon.snakeinspace.physics;
 
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Vector2;
 
 public class HitBox {
 	private Object shape; // very generic pointer for shape data
@@ -95,5 +96,19 @@ public class HitBox {
 			return 0;
 		}
 	}
-
+	public void setLocation(Vector2 position) {
+		switch(this.type){
+		case CIRCLE:
+			Circle c1 = (Circle) this.shape;
+			c1.x = position.x;
+			c1.y = position.y;
+			break;
+		case RECTANGLE:
+			System.err.println("HITBOX: rectangles not supported!");
+			break;
+		default:
+			// this should never happen
+			System.exit(1);
+		}
+	}
 }
