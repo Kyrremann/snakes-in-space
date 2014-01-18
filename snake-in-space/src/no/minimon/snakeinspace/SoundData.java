@@ -36,7 +36,7 @@ public class SoundData {
 		Gdx.app.log("SIS", "MISSING SOUND: " + filepath);
 		return -1l;
 	}
-	
+
 	public long play(float volume) {
 		if (s != null) {
 			return s.play(volume);
@@ -44,7 +44,7 @@ public class SoundData {
 		Gdx.app.log("SIS", "MISSING SOUND: " + filepath);
 		return -1l;
 	}
-	
+
 	public void dispose() {
 		s.dispose();
 	}

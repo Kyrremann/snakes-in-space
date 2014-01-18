@@ -29,8 +29,8 @@ public class GalaxyRenderer {
 		drawQuadTree();
 	}
 
-    private void drawQuadTree() {
-		galaxy.getQuadtree().draw( renderer );
+	private void drawQuadTree() {
+		galaxy.getQuadtree().draw(renderer);
 	}
 
 	private void drawApples() {

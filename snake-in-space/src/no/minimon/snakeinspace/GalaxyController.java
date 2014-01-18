@@ -4,7 +4,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.Controllers;
-import com.badlogic.gdx.controllers.mappings.Ouya;
 
 public class GalaxyController extends ControllerAdapter {
 

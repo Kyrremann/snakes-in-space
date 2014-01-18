@@ -38,8 +38,8 @@ public class Snake implements Movable {
 	private int player;
 	private String name;
 	private boolean isDead;
-	
-// legg til isAlive sjekk i getSnakes
+
+	// legg til isAlive sjekk i getSnakes
 
 	public Snake(int player, String name, Vector2 position) {
 		this.name = name;
@@ -74,7 +74,7 @@ public class Snake implements Movable {
 	}
 
 	/*
-	 *  turn left at TURN_SPEED degrees per second
+	 * turn left at TURN_SPEED degrees per second
 	 */
 	public void turnLeft(float delta) {
 		getHead().direction.rotate(TURN_SPEED * delta);
@@ -88,12 +88,13 @@ public class Snake implements Movable {
 	}
 
 	public void update(float delta, int width, int height) {
-		if (isDead) return;
+		if (isDead)
+			return;
 		if (tails.isEmpty()) {
 			isDead = true;
 			return;
 		}
-		
+
 		// turn head piece of snake
 		turnSnake(delta);
 
