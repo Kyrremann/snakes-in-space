@@ -1,24 +1,25 @@
 package no.minimon.snakeinspace;
 
-import org.lwjgl.opencl.APPLESetMemObjectDestructor;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 
 public class GameScreen implements Screen, InputProcessor {
 
 	private SnakeInSpace snakeInSpace;
-	private Galaxy<?> galaxy;
+	private Galaxy galaxy;
 	private GalaxyRenderer renderer;
 	private GalaxyController controller;
+	private GalaxySounds sounds;
+
+	private FPSLogger logger;
 
 	private int width, height;
 	private int players;
-	private GalaxySounds sounds;
 
 	public GameScreen(SnakeInSpace snakeInSpace, GalaxySounds sounds,
 			int width, int height, int players) {
@@ -36,23 +37,24 @@ public class GameScreen implements Screen, InputProcessor {
 		controller = new GalaxyController(galaxy);
 		ifOuyaAddControllerListener();
 		Gdx.input.setInputProcessor(this);
+		logger = new FPSLogger();
 	}
 
 	@Override
 	public void render(float delta) {
+		logger.log();
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		galaxy.updateApple(delta);
-		
-		for (Apple apple : galaxy.getApples()){
+
+		for (Apple apple : galaxy.getApples()) {
 			apple.update(delta);
 		}
 
 		for (Snake snake : galaxy.getSnakes()) {
-			if (snake.getHead() != null){
+			if (snake.getHead() != null) {
 				snake.update(delta, width, height);
-				snake.wallHit(width, height);
 			}
 		}
 
@@ -63,7 +65,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 		galaxy.updateAppleSnakeInteraction();
 		galaxy.snakeAsteroidHitDetection();
-		galaxy.asteroidAsteroidHitDetection(); // updates velocities
+		galaxy.asteroidAsteroidHitDetection();
 
 		renderer.render(delta);
 	}
@@ -143,13 +145,12 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 
-
 	private void ifOuyaAddControllerListener() {
 		if (Ouya.runningOnOuya) {
 			Controllers.addListener(controller);
 		}
 	}
-	
+
 	private void ifOuyaRemoveControllerListener() {
 		if (Ouya.runningOnOuya) {
 			Controllers.removeListener(controller);

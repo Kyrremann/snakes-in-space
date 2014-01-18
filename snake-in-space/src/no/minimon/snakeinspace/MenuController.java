@@ -12,7 +12,7 @@ public class MenuController extends ControllerAdapter {
 	public MenuController(MenuScreen screen) {
 		this.screen = screen;
 	}
-	
+
 	@Override
 	public boolean buttonDown(Controller controller, int buttonIndex) {
 		keyDown(buttonIndex);

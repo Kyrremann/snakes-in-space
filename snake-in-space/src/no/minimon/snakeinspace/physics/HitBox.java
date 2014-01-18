@@ -4,28 +4,30 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
 public class HitBox {
-	private Object shape;		// very generic pointer for shape data
-	private HitBoxType type;	// how to interpret the shape data (casting)
-	@SuppressWarnings("unused") // TODO (needed for rectangle & polygons)
+	private Object shape; // very generic pointer for shape data
+	private HitBoxType type; // how to interpret the shape data (casting)
+	@SuppressWarnings("unused")
+	// TODO (needed for rectangle & polygons)
 	private Float angle;
 
-	public HitBox (Object shape, HitBoxType type, Float angle) {
+	public HitBox(Object shape, HitBoxType type, Float angle) {
 		this.shape = shape;
 		this.type = type;
 		this.angle = angle;
 	}
-	public HitBox (Object shape, HitBoxType type) {
+
+	public HitBox(Object shape, HitBoxType type) {
 		this(shape, type, 0f);
 	}
-	
+
 	// check whether this hitbox intersects / collides with another hitbox
-	public boolean intersect ( HitBox other ){
-		
-		switch(this.type){
+	public boolean intersect(HitBox other) {
+
+		switch (this.type) {
 		case CIRCLE:
 			Circle c1 = (Circle) this.shape;
-			
-			switch(other.type){
+
+			switch (other.type) {
 			case CIRCLE:
 				Circle c2 = (Circle) other.shape;
 				return c1.overlaps(c2);
@@ -40,17 +42,19 @@ public class HitBox {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Where the object is placed in regards to the given horizontal line
-	 * @param line - defined by a Y coordinate
+	 * 
+	 * @param line
+	 *            - defined by a Y coordinate
 	 * @return 0 for intersects, 1 above, -1 below
 	 */
-	public int relToHorizontalLine( double verticalMidpoint ){
-		switch(this.type){
+	public int relToHorizontalLine(double verticalMidpoint) {
+		switch (this.type) {
 		case CIRCLE:
 			Circle c1 = (Circle) this.shape;
-			if (c1.y - c1.radius > verticalMidpoint){
+			if (c1.y - c1.radius > verticalMidpoint) {
 				return 1;
 			} else if (c1.y + c1.radius < verticalMidpoint) {
 				return -1;
@@ -63,19 +67,21 @@ public class HitBox {
 		}
 		// this should never happen
 		System.exit(1);
-		return 0; 
+		return 0;
 	}
-	
+
 	/**
 	 * Where the object is placed in regards to the given vertical line
-	 * @param line - defined by an X coordinate
+	 * 
+	 * @param line
+	 *            - defined by an X coordinate
 	 * @return 0 for intersects, 1 above, -1 below
 	 */
-	public int relToVerticalLine( double horizontalMidpoint ){
-		switch(this.type){
+	public int relToVerticalLine(double horizontalMidpoint) {
+		switch (this.type) {
 		case CIRCLE:
 			Circle c1 = (Circle) this.shape;
-			if (c1.x - c1.radius > horizontalMidpoint){
+			if (c1.x - c1.radius > horizontalMidpoint) {
 				return 1;
 			} else if (c1.x + c1.radius < horizontalMidpoint) {
 				return -1;

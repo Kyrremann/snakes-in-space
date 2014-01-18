@@ -13,7 +13,7 @@ import no.minimon.snakeinspace.utils.GalaxyUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Galaxy <T extends HasHitBox> {
+public class Galaxy {
 
 	public SnakeInSpace snakeInSpace;
 	public int width;
@@ -22,10 +22,11 @@ public class Galaxy <T extends HasHitBox> {
 	private List<Snake> snakes;
 	private List<Apple> apples;
 	private List<Asteroid> asteroids;
-	private Quadtree<T> quad; // for collisions
+	private Quadtree quad; // for collisions
 	
 	private Random random;
 	private GalaxySounds sounds;
+	HashMap<Collideable, Integer> createApplesClearOfMap;
 	
 	// DEBUG (double arraylist for vectors)
 	public ArrayList<ArrayList <Vector2>> table;
@@ -45,10 +46,15 @@ public class Galaxy <T extends HasHitBox> {
 		// DEBUG
 		table = new ArrayList<ArrayList <Vector2>>();
 
+		createApplesClearOfMap = 
+				new HashMap<Collideable, Integer>();
+		createApplesClearOfMap.put(Collideable.SNAKES, 10);
+		createApplesClearOfMap.put(Collideable.APPLES, 10);
+		
 		createPlayers(players); // create players first (they need space)
 		createAsteroids(); // fill in with asteroids (with space for players)
 		
-		quad = new Quadtree<T>(0, new Rectangle(0, 0, width, height));
+		quad = new Quadtree(0, new Rectangle(0, 0, width, height));
 	}
 
 	private void createPlayers(int players) {
@@ -114,17 +120,8 @@ public class Galaxy <T extends HasHitBox> {
 	}
 
 	public void updateApple(float delta) {
-		if (apples.size() < snakes.size() * 2) { 
-			
-			// map ( thing, how_far_away_to_spawn )
-			HashMap<Collideable, Integer> clearOfMap = 
-					new HashMap<Collideable, Integer>();
-			clearOfMap.put(Collideable.SNAKES, 10);
-			clearOfMap.put(Collideable.APPLES, 10);
-			
-			Vector2 position = getRandomPosClear(clearOfMap);
-
-			apples.add(new Apple(position));
+		if (apples.size() < snakes.size() * 2) {
+			apples.add(new Apple(getRandomPosClear(createApplesClearOfMap)));
 		}
 	}
 
@@ -178,7 +175,7 @@ public class Galaxy <T extends HasHitBox> {
 							snake.getPosition(), 7)) {
 						snake.eatApple();
 						sounds.playNom(GalaxyUtils.getRandomInt(0,
-								sounds.nomSounds.size() - 1));
+								sounds.nomSoundsSize() - 1));
 						remove = apple;
 						break;
 					}
@@ -215,7 +212,7 @@ public class Galaxy <T extends HasHitBox> {
 								snake.collisionSize, asteroid.position,
 								asteroid.radius)) {
 							remove = tail;
-							sounds.explosion.s.play(0.3f);
+							sounds.playExplosion(.3f);
 							break;
 						}
 					}
@@ -237,16 +234,16 @@ public class Galaxy <T extends HasHitBox> {
 			quad.clear();
 			// add all asteroids to quadtree
 			for (Asteroid a1 : getAsteroids()) {
-				quad.insert((T) a1); // O(n)
+				quad.insert((HasHitBox) a1); // O(n)
 			}
 			
 			// for each asteroid, retrieve a list of potential collideables
-			ArrayList <T>returnObjects = new ArrayList<T>();
+			ArrayList<HasHitBox> returnObjects = new ArrayList<HasHitBox>();
 			for (Asteroid a1 : getAsteroids()) { // O(n)
 				returnObjects.clear();
-				quad.retrieve(returnObjects, (T) a1);
+				quad.retrieve(returnObjects, (HasHitBox) a1);
 				// run over potential list of collideables 
-				for (T object : returnObjects) { // O(subset of n)
+				for (HasHitBox object : returnObjects) { // O(subset of n)
 					Asteroid a2 = (Asteroid) object;
 					if (GalaxyUtils.circlesIntersect(a1.position, a1.radius,
 							a2.position, a2.radius)) {
@@ -348,7 +345,7 @@ public class Galaxy <T extends HasHitBox> {
 		sounds.blop.s.play(.2f);
 	}
 
-	public Quadtree<T> getQuadtree() {
+	public Quadtree getQuadtree() {
 		return quad;
 	}
 }

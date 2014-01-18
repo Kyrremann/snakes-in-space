@@ -7,22 +7,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Quadtree<T extends HasHitBox> {
+public class Quadtree {
 	private int MAX_OBJECTS = 2;
 	private int MAX_LEVELS = 4;
 
-	private int level;			// depth of quadtree (not clear())
-	private Rectangle bounds;	// the boundaries of the quadtree (not clear())
-	private ArrayList<T> contents; // objects must implement HasHitBox
-	private Quadtree<T>[] nodes;	// child quadtrees (4 segment divisions)
+	private int level; // depth of quadtree
+	private ArrayList<HasHitBox> contents; // objects must implement HasHitBox
+	private Rectangle bounds; // the boundaries of the quadtree
+	private Quadtree[] nodes; // child quadtrees (4 segment divisions)
 
-	/*
-	 * Constructor
-	 */
-	@SuppressWarnings("unchecked")
 	public Quadtree(int level, Rectangle bounds) {
 		this.level = level;
-		contents = new ArrayList<T>(); // assume implements
+		contents = new ArrayList<HasHitBox>(); // assume implements
 		this.bounds = bounds;
 		nodes = new Quadtree[4];
 	}
@@ -45,32 +41,31 @@ public class Quadtree<T extends HasHitBox> {
 	 * Splits the node into 4 subnodes
 	 */
 	private void split() {
-		int subWidth = (int)(bounds.getWidth() / 2);
-		int subHeight = (int)(bounds.getHeight() / 2);
-		int x = (int)bounds.getX();
-		int y = (int)bounds.getY();
+		int subWidth = (int) (bounds.getWidth() / 2);
+		int subHeight = (int) (bounds.getHeight() / 2);
+		int x = (int) bounds.getX();
+		int y = (int) bounds.getY();
 
 		// top left
-		nodes[0] = new Quadtree<T>(level+1, 
-				new Rectangle(x + subWidth, y, subWidth, subHeight));
+		nodes[0] = new Quadtree(level + 1, new Rectangle(x + subWidth, y,
+				subWidth, subHeight));
 		// top right
-		nodes[1] = new Quadtree<T>(level+1,
-				new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
+		nodes[1] = new Quadtree(level + 1, new Rectangle(x + subWidth, y
+				+ subHeight, subWidth, subHeight));
 		// bottom right
-		nodes[2] = new Quadtree<T>(level+1, 
-				new Rectangle(x, y + subHeight, subWidth, subHeight));
+		nodes[2] = new Quadtree(level + 1, new Rectangle(x, y + subHeight,
+				subWidth, subHeight));
 		// bottom left
-		nodes[3] = new Quadtree<T>(level+1, 
-				new Rectangle(x, y, subWidth, subHeight));
+		nodes[3] = new Quadtree(level + 1, new Rectangle(x, y, subWidth,
+				subHeight));
 	}
 
 	/*
-	 * Determine which node the object belongs to. -1 means
-	 * object cannot completely fit within a child node and is part
-	 * of the parent node
+	 * Determine which node the object belongs to. -1 means object cannot
+	 * completely fit within a child node and is part of the parent node
 	 */
-	private int getIndex( T object ) {
-		HitBox hitbox = (HitBox) object.getHitBox();
+	private int getIndex(HasHitBox a1) {
+		HitBox hitbox = (HitBox) a1.getHitBox();
 
 		double horizontalMidpoint = bounds.getX() + (bounds.getWidth() / 2);
 		double verticalMidpoint = bounds.getY() + (bounds.getHeight() / 2);
@@ -83,36 +78,33 @@ public class Quadtree<T extends HasHitBox> {
 				return 1; // top right
 			else if (relToVertMidpoint == -1)
 				return 0; // top left
-			else 
+			else
 				return -1; // parent
-		}
-		else if (relToHorizMidpoint == -1) {
+		} else if (relToHorizMidpoint == -1) {
 			if (relToVertMidpoint == 1)
 				return 2; // bottom right
 			else if (relToVertMidpoint == -1)
 				return 3; // bottom left
-			else 
+			else
 				return -1; // intersect
-		}
-		else
+		} else
 			return -1; // intersect
 	}
 
 	/*
-	 * Insert the object into the quadtree. If the node
-	 * exceeds the capacity, it will split and add all
-	 * objects to their corresponding nodes.
+	 * Insert the object into the quadtree. If the node exceeds the capacity, it
+	 * will split and add all objects to their corresponding nodes.
 	 */
-	public void insert( T object ) {
+	public void insert(HasHitBox a1) {
 		if (nodes[0] != null) {
-			int index = getIndex(object);
+			int index = getIndex(a1);
 			if (index != -1) {
-				nodes[index].insert(object);
+				nodes[index].insert(a1);
 				return;
 			}
 		}
 
-		contents.add(object);
+		contents.add(a1);
 
 		if (contents.size() > MAX_OBJECTS && level < MAX_LEVELS) {
 			if (nodes[0] == null) {
@@ -121,21 +113,20 @@ public class Quadtree<T extends HasHitBox> {
 
 			int i = 0;
 			while (i < contents.size()) {
-				int index = getIndex((T) contents.get(i));
+				int index = getIndex((HasHitBox) contents.get(i));
 				if (index != -1) {
-					nodes[index].insert((T) contents.remove(i));
-				}
-				else {
+					nodes[index].insert((HasHitBox) contents.remove(i));
+				} else {
 					i++;
 				}
 			}
 		}
 	}
-	
+
 	/*
 	 * Return all objects that could collide with the given object
 	 */
-	public List<T> retrieve(List<T> returnObjects, T object) {
+	public List<HasHitBox> retrieve(List<HasHitBox> returnObjects, HasHitBox object) {
 		int index = getIndex(object);
 		if (index != -1 && nodes[0] != null) {
 			nodes[index].retrieve(returnObjects, object); // recursive
@@ -154,10 +145,10 @@ public class Quadtree<T extends HasHitBox> {
 		renderer.end();
 		// recursive draw
 		if (nodes[0] != null) {
-			nodes[0].draw( renderer );
-			nodes[1].draw( renderer );
-			nodes[2].draw( renderer );
-			nodes[3].draw( renderer );
+			nodes[0].draw(renderer);
+			nodes[1].draw(renderer);
+			nodes[2].draw(renderer);
+			nodes[3].draw(renderer);
 		}
 	}
 
