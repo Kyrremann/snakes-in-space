@@ -1,5 +1,7 @@
 package no.minimon.snakeinspace;
 
+import no.minimon.snakeinspace.physics.Quadtree;
+
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -52,7 +54,8 @@ public class GalaxyRenderer {
 //	}
 
 	private void drawQuadTree() {
-		galaxy.getQuadtree().draw( renderer );
+		Quadtree<?> q = galaxy.getQuadtree();
+		q.draw( renderer );
 	}
 
 	private void drawApples() {

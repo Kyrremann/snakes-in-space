@@ -11,9 +11,9 @@ public class Quadtree<T extends HasHitBox> {
 	private int MAX_OBJECTS = 2;
 	private int MAX_LEVELS = 4;
 
-	private int level;			// depth of quadtree
+	private int level;			// depth of quadtree (not clear())
+	private Rectangle bounds;	// the boundaries of the quadtree (not clear())
 	private ArrayList<T> contents; // objects must implement HasHitBox
-	private Rectangle bounds;	// the boundaries of the quadtree
 	private Quadtree<T>[] nodes;	// child quadtrees (4 segment divisions)
 
 	/*
@@ -159,5 +159,18 @@ public class Quadtree<T extends HasHitBox> {
 			nodes[2].draw( renderer );
 			nodes[3].draw( renderer );
 		}
+	}
+
+	// return the count of objects in the quadtree
+	public int size() {
+		int count = 0;
+		count += contents.size();
+		if (nodes[0] != null) {
+			count += nodes[0].size();
+			count += nodes[1].size();
+			count += nodes[2].size();
+			count += nodes[3].size();
+		}
+		return count;
 	}
 }

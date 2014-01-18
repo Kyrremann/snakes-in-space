@@ -66,7 +66,7 @@ public class Galaxy <T extends HasHitBox> {
 	}
 
 	private void createAsteroids() {
-		for (int i = 0; i < 5; ++i) {
+		for (int i = 0; i < 100; ++i) {
 			asteroids.add(createAsteroid());
 		}
 	}
@@ -230,7 +230,7 @@ public class Galaxy <T extends HasHitBox> {
 
 	@SuppressWarnings("unchecked")
 	public void asteroidAsteroidHitDetection() {
-		boolean useQuadtree = false; // OPTIMIZE (true = faster)
+		boolean useQuadtree = true; // OPTIMIZE (true = faster)
 		
 		if (useQuadtree) {
 			// clear entire quadtree
