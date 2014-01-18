@@ -72,7 +72,7 @@ public class Galaxy {
 	}
 
 	private void createAsteroids() {
-		for (int i = 0; i < 100; ++i) {
+		for (int i = 0; i < 50; ++i) {
 			asteroids.add(createAsteroid());
 		}
 	}
@@ -225,7 +225,6 @@ public class Galaxy {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void asteroidAsteroidHitDetection() {
 		boolean useQuadtree = true; // OPTIMIZE (true = faster)
 		

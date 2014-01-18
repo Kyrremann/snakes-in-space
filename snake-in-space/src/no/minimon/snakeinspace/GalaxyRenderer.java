@@ -28,7 +28,7 @@ public class GalaxyRenderer {
 		drawAsteroids();
 		drawPlayers(delta);
 		drawScoreboard();
-		drawQuadTree();
+		// drawQuadTree();
 	}
 
 	private void drawQuadTree() {

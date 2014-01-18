@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Quadtree {
-	private int MAX_OBJECTS = 2;
+	private int MAX_OBJECTS = 5;
 	private int MAX_LEVELS = 4;
 
 	private int level; // depth of quadtree

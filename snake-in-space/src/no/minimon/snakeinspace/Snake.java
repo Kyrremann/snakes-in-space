@@ -290,6 +290,7 @@ public class Snake implements Movable {
 		} else {
 			renderer.setColor(getPlayerColor());
 			renderer.circle(0, 0, collisionSize);
+			renderer.line(-7, 0, 7, 0);
 			// renderer.triangle(0, -5, 0, 5, 10, 0);
 		}
 
