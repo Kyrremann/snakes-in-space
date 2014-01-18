@@ -18,6 +18,7 @@ public class Galaxy {
 	private List<Asteroid> asteroids;
 	private Random random;
 	private GalaxySounds sounds;
+	HashMap<Collideable, Integer> createApplesClearOfMap;
 	
 	// DEBUG (double arraylist for vectors)
 	public ArrayList<ArrayList <Vector2>> table;
@@ -37,6 +38,11 @@ public class Galaxy {
 		// DEBUG
 		table = new ArrayList<ArrayList <Vector2>>();
 
+		createApplesClearOfMap = 
+				new HashMap<Collideable, Integer>();
+		createApplesClearOfMap.put(Collideable.SNAKES, 10);
+		createApplesClearOfMap.put(Collideable.APPLES, 10);
+		
 		createPlayers(players); // create players first (they need space)
 		createAsteroids(); // fill in with asteroids (with space for players)
 	}
@@ -105,17 +111,8 @@ public class Galaxy {
 	}
 
 	public void updateApple(float delta) {
-		if (apples.size() < snakes.size() * 2) { 
-			
-			// map ( thing, how_far_away_to_spawn )
-			HashMap<Collideable, Integer> clearOfMap = 
-					new HashMap<Collideable, Integer>();
-			clearOfMap.put(Collideable.SNAKES, 10);
-			clearOfMap.put(Collideable.APPLES, 10);
-			
-			Vector2 position = getRandomPosClear(clearOfMap);
-
-			apples.add(new Apple(position));
+		if (apples.size() < snakes.size() * 2) {
+			apples.add(new Apple(getRandomPosClear(createApplesClearOfMap)));
 		}
 	}
 
@@ -169,7 +166,7 @@ public class Galaxy {
 							snake.getPosition(), 7)) {
 						snake.eatApple();
 						sounds.playNom(GalaxyUtils.getRandomInt(0,
-								sounds.nomSounds.size() - 1));
+								sounds.nomSoundsSize() - 1));
 						remove = apple;
 						break;
 					}
@@ -206,7 +203,7 @@ public class Galaxy {
 								snake.collisionSize, asteroid.position,
 								asteroid.radius)) {
 							remove = tail;
-							sounds.explosion.play();
+							sounds.playExplosion();
 							break;
 						}
 					}
@@ -295,8 +292,7 @@ public class Galaxy {
 					a.velocity = a1VelocityTemp;
 					a2.velocity = a2VelocityTemp;
 
-					// sounds.blop.play();
-					sounds.blop.s.play(.1f);
+					sounds.playBlop(.1f);
 					return;
 				}
 			}

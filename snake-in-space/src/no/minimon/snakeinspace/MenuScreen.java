@@ -20,6 +20,8 @@ public class MenuScreen implements Screen, InputProcessor {
 	private BitmapFont font;
 	private GalaxySounds sounds;
 
+	private SpriteBatch batch;
+
 	private float stringHeight;
 	private float menuX;
 	private float menuY;
@@ -32,20 +34,22 @@ public class MenuScreen implements Screen, InputProcessor {
 		this.snakeInSpace = snakeInSpace;
 		this.width = width;
 		this.height = height;
-		
-		controller = new MenuController(this);
-		sounds = new GalaxySounds();
-		font = new BitmapFont();
+
 		stringHeight = 15;
 		menuX = this.width / 2;
 		menuY = this.height / 2;
-		
+
+		controller = new MenuController(this);
+		sounds = new GalaxySounds();
+		font = new BitmapFont();
+		batch = new SpriteBatch();
+
 		// TEST sprite
 		Asteroid.texture = new Texture(Gdx.files.internal("data/asteroid.png"));
 		Asteroid.sprite = new Sprite(Asteroid.texture);
 		Asteroid.sprite.setSize(32, 32);
 		Asteroid.spriteBatch = new SpriteBatch();
-		
+
 		Apple.texture = new Texture(Gdx.files.internal("data/apple.png"));
 		Apple.sprite = new Sprite(Apple.texture);
 		Apple.sprite.setSize(32, 32);
@@ -64,7 +68,7 @@ public class MenuScreen implements Screen, InputProcessor {
 			Controllers.addListener(controller);
 		}
 	}
-	
+
 	private void ifOuyaRemoveControllerListener() {
 		if (Ouya.runningOnOuya) {
 			Controllers.removeListener(controller);
@@ -75,7 +79,6 @@ public class MenuScreen implements Screen, InputProcessor {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		SpriteBatch batch = new SpriteBatch();
 		batch.begin();
 		String players1 = "1 player", players2 = "2 player", players3 = "3 player", players4 = "4 player";
 
@@ -107,7 +110,6 @@ public class MenuScreen implements Screen, InputProcessor {
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -118,8 +120,6 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -153,31 +153,26 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

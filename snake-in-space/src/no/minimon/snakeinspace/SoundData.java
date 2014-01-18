@@ -33,7 +33,15 @@ public class SoundData {
 		if (s != null) {
 			return s.play();
 		}
-		System.err.println("MISSING SOUND: " + filepath);
+		Gdx.app.log("SIS", "MISSING SOUND: " + filepath);
+		return -1l;
+	}
+	
+	public long play(float volume) {
+		if (s != null) {
+			return s.play(volume);
+		}
+		Gdx.app.log("SIS", "MISSING SOUND: " + filepath);
 		return -1l;
 	}
 	

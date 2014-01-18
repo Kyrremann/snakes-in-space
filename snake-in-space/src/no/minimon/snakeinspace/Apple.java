@@ -63,7 +63,7 @@ public class Apple implements Movable {
 	}
 
 	public void update(float delta) {
-		rotation += 15*delta;
+		rotation += 15 * delta;
 	}
 
 }

@@ -93,6 +93,7 @@ public class Snake implements Movable {
 			isDead = true;
 			return;
 		}
+		
 		// turn head piece of snake
 		turnSnake(delta);
 
@@ -298,18 +299,6 @@ public class Snake implements Movable {
 		default:
 			return Color.WHITE;
 		}
-	}
-
-	public void wallHit(int width, int height) {
-		if (hasSnakeHitWall(width, height)) {
-			// swapHeadToOtherSide(width, height);
-		}
-	}
-
-	private boolean hasSnakeHitWall(int width, int height) {
-		Tail tail = getHead();
-		return (tail.position.x > width || tail.position.x < 0)
-				|| (tail.position.y > height || tail.position.y < 0);
 	}
 
 	public Tail getHead() {
