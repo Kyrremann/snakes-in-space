@@ -285,7 +285,7 @@ public class Snake implements Movable {
 
 		// renderer.setColor(Color.GRAY);
 		if (tail.isHead) {
-			renderer.setColor(getPlayerColor());
+			renderer.setColor(Color.MAGENTA);
 			renderer.triangle(0, -7.5f, 0, 7.5f, 15f, 0);
 		} else {
 			renderer.setColor(getPlayerColor());
@@ -320,7 +320,7 @@ public class Snake implements Movable {
 
 	public boolean removeTailPiece(Tail tail) {
 		tailsLost++;
-		if (getHead() != null && tail.equals(getHead()))
+		if (getHead() != null && tail.equals(getHead()) && tails.size() != 1)
 			tails.get(1).isHead = true;
 
 		return tails.remove(tail);
