@@ -7,6 +7,7 @@ TODO
 * Game
  * Optimize the hit detection
  * Fix bug with the sound giving heap size error
+  * The theme song can not be of type Sound, but music
  * Add a proper pause menu
  * A proper menu screen
  * Optimize Ouya controllers
@@ -23,3 +24,7 @@ TODO
  * Add Snake Bombs (it's when you leave the last piece of your tail to detonate)
  * Let the player shoot the snake head into things so it explodes
  * The head should have its own color
+ * Different type of snakes
+  * Circles, Triangles, Squares
+  * Let people make their own pattern of the snakes tails
+  * Use a straight line through the snake
