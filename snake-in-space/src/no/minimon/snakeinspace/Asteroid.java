@@ -1,12 +1,17 @@
 package no.minimon.snakeinspace;
 
+import no.minimon.snakeinspace.physics.HasHitBox;
+import no.minimon.snakeinspace.physics.HitBox;
+import no.minimon.snakeinspace.physics.HitBoxType;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Asteroid implements Movable {
+public class Asteroid implements Movable, HasHitBox {
 	
 	private final float ROTATE_SPEED;
 
@@ -14,6 +19,8 @@ public class Asteroid implements Movable {
 	public Vector2 position;
 	public Vector2 velocity; // direction and speed
 	private float rotate;
+	
+	private HitBox hitbox;
 
 	// TEST sprite
 	public static Sprite sprite;
@@ -27,6 +34,8 @@ public class Asteroid implements Movable {
 		this.velocity = velocity;
 		this.position = position;
 		this.rotate = rotateSpeed;
+		this.hitbox = new HitBox(new Circle(position, radius), 
+				HitBoxType.CIRCLE);
 	}
 
 	public void update(float delta) {
@@ -112,6 +121,11 @@ public class Asteroid implements Movable {
 	@Override
 	public int getRadius() {
 		return radius;
+	}
+
+	@Override
+	public HitBox getHitBox() {
+		return hitbox;
 	}
 
 }
