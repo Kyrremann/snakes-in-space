@@ -55,6 +55,7 @@ public class Snake implements Movable {
 
 		getHead().direction = new Vector2(3, 4).nor();
 		getHead().position = position;
+		getHead().isHead = true;
 	}
 
 	public void addState(State state) {
@@ -278,12 +279,20 @@ public class Snake implements Movable {
 	private void drawSnake(Tail tail, ShapeRenderer renderer) {
 		renderer.begin(ShapeType.Line);
 		renderer.identity();
-		renderer.setColor(Color.GRAY);
-		renderer.circle(tail.position.x, tail.position.y, collisionSize);
-		renderer.setColor(getPlayerColor());
+
 		renderer.translate(tail.position.x, tail.position.y, 0);
 		renderer.rotate(0, 0, 1, tail.direction.angle());
-		renderer.triangle(0, -5, 0, 5, 10, 0);
+
+		// renderer.setColor(Color.GRAY);
+		if (tail.isHead) {
+			renderer.setColor(getPlayerColor());
+			renderer.triangle(0, -7.5f, 0, 7.5f, 15f, 0);
+		} else {
+			renderer.setColor(getPlayerColor());
+			renderer.circle(0, 0, collisionSize);
+			// renderer.triangle(0, -5, 0, 5, 10, 0);
+		}
+
 		renderer.end();
 	}
 
@@ -311,6 +320,9 @@ public class Snake implements Movable {
 
 	public boolean removeTailPiece(Tail tail) {
 		tailsLost++;
+		if (getHead() != null && tail.equals(getHead()))
+			tails.get(1).isHead = true;
+
 		return tails.remove(tail);
 	}
 

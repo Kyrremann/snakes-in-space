@@ -6,6 +6,7 @@ public class Tail {
 
 	public Vector2 direction;
 	public Vector2 position;
+	public boolean isHead;
 
 	public Tail() {
 		this.position = new Vector2();
