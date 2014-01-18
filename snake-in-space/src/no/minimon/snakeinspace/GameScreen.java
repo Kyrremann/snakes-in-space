@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.GL10;
 public class GameScreen implements Screen, InputProcessor {
 
 	private SnakeInSpace snakeInSpace;
-	private Galaxy galaxy;
+	private Galaxy<?> galaxy;
 	private GalaxyRenderer renderer;
 	private GalaxyController controller;
 	private GalaxySounds sounds;

@@ -8,9 +8,9 @@ import com.badlogic.gdx.controllers.mappings.Ouya;
 
 public class GalaxyController extends ControllerAdapter {
 
-	private Galaxy galaxy;
+	private Galaxy<?> galaxy;
 
-	public GalaxyController(Galaxy galaxy) {
+	public GalaxyController(Galaxy<?> galaxy) {
 		this.galaxy = galaxy;
 	}
 

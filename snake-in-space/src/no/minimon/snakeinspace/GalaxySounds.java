@@ -38,8 +38,8 @@ public class GalaxySounds {
 		blop.dispose();
 	}
 
-	public long playExplosion() {
-		return explosion.play();
+	public long playExplosion(float volume) {
+		return explosion.play(volume);
 	}
 
 	public long playBlop(float volume) {

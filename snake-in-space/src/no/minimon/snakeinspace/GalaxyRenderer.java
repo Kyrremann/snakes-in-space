@@ -10,9 +10,9 @@ public class GalaxyRenderer {
 	private BitmapFont font;
 	private SpriteBatch batch;
 
-	private Galaxy galaxy;
+	private Galaxy<?> galaxy;
 
-	public GalaxyRenderer(Galaxy galaxy) {
+	public GalaxyRenderer(Galaxy<?> galaxy) {
 		this.galaxy = galaxy;
 
 		renderer = new ShapeRenderer();
@@ -26,8 +26,13 @@ public class GalaxyRenderer {
 		drawAsteroids();
 		drawPlayers(delta);
 		drawScoreboard();
+		drawQuadTree();
 	}
-	
+
+    private void drawQuadTree() {
+		galaxy.getQuadtree().draw( renderer );
+	}
+
 	private void drawApples() {
 		for (Apple apple : galaxy.getApples()) {
 			apple.draw(renderer);
