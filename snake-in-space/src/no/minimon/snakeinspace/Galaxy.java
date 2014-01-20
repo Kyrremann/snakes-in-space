@@ -16,7 +16,6 @@ import com.badlogic.gdx.math.Vector2;
 public class Galaxy {
 
 	private static final int ASTEROID_COUNT = 0;
-	private static final float ANALOG_DEAD_ZONE = 0.2f;
 
 	public SnakeInSpace snakeInSpace;
 	public int width;
@@ -353,9 +352,5 @@ public class Galaxy {
 
 	public Quadtree getQuadtree() {
 		return quad;
-	}
-
-	public static float getAnalogDeadZone() {
-		return ANALOG_DEAD_ZONE;
 	}
 }

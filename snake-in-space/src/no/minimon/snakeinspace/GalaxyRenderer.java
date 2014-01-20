@@ -1,5 +1,7 @@
 package no.minimon.snakeinspace;
 
+import no.minimon.snakeinspace.controls.GalaxyController;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -42,14 +44,17 @@ public class GalaxyRenderer {
 			renderer.line(vDrawPoint, v.cpy().scl(100).add(vDrawPoint));
 		}
 		renderer.setColor(Color.RED);
-		renderer.circle(vDrawPoint.x, vDrawPoint.y, 100*Galaxy.getAnalogDeadZone());
-		vDrawPoint = new Vector2((float) Math.ceil(galaxy.width*(2/3.0)), galaxy.height/2);
+		renderer.circle(vDrawPoint.x, vDrawPoint.y, 
+				100*GalaxyController.ANALOG_DEAD_ZONE);
+		vDrawPoint = new Vector2((float) Math.ceil(galaxy.width*(2/3.0)), 
+				galaxy.height/2);
 		for (Vector2 v : galaxy.analog_vectors.get(1)){
 			renderer.setColor(Color.WHITE);
 			renderer.line(vDrawPoint, v.cpy().scl(100).add(vDrawPoint));
 		}
 		renderer.setColor(Color.RED);
-		renderer.circle(vDrawPoint.x, vDrawPoint.y, 100*Galaxy.getAnalogDeadZone());
+		renderer.circle(vDrawPoint.x, vDrawPoint.y, 
+				100*GalaxyController.ANALOG_DEAD_ZONE);
 		renderer.end();
 	}
 

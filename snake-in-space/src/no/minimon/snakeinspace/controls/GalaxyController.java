@@ -15,6 +15,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GalaxyController extends ControllerAdapter {
 
+	public static final float ANALOG_DEAD_ZONE = 0.2f;
+
 	private Galaxy galaxy;
 	private Vector2 left_analog;
 	private Vector2 right_analog;
@@ -107,7 +109,7 @@ public class GalaxyController extends ControllerAdapter {
 		galaxy.analog_vectors.get(1).add(right_analog.cpy()); // DEBUG
 
 		// dead-zone
-		if (left_analog.dst(0,0) < Galaxy.getAnalogDeadZone()){
+		if (left_analog.dst(0,0) < ANALOG_DEAD_ZONE){
 			System.out.println("dead-zone: " + 
 					left_analog.x + " , " + left_analog.y);
 			return false;
