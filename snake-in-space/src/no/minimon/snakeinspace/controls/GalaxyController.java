@@ -107,8 +107,9 @@ public class GalaxyController extends ControllerAdapter {
 		galaxy.analog_vectors.get(1).add(right_analog.cpy()); // DEBUG
 
 		// dead-zone
-		if (left_analog.dst(0,0) < 0.2){
-			System.out.println("dead-zone values");
+		if (left_analog.dst(0,0) < Galaxy.getAnalogDeadZone()){
+			System.out.println("dead-zone: " + 
+					left_analog.x + " , " + left_analog.y);
 			return false;
 		}
 		galaxy.getSnake(player).setDestDir(left_analog.cpy().nor());

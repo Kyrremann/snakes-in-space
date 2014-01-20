@@ -35,20 +35,21 @@ public class GalaxyRenderer {
 
 	private void drawMovementVector() {
 		renderer.begin(ShapeType.Line);
+		renderer.identity();
+		Vector2 vDrawPoint = new Vector2(galaxy.width/3, galaxy.height/2);
 		for (Vector2 v : galaxy.analog_vectors.get(0)){
-			Vector2 vMiddle = new Vector2(galaxy.width/3, galaxy.height/2);
-			Vector2 temp = v.cpy();
-			renderer.identity();
 			renderer.setColor(Color.WHITE);
-			renderer.line(vMiddle, temp.cpy().scl(100).add(vMiddle));
+			renderer.line(vDrawPoint, v.cpy().scl(100).add(vDrawPoint));
 		}
+		renderer.setColor(Color.RED);
+		renderer.circle(vDrawPoint.x, vDrawPoint.y, 100*Galaxy.getAnalogDeadZone());
+		vDrawPoint = new Vector2((float) Math.ceil(galaxy.width*(2/3.0)), galaxy.height/2);
 		for (Vector2 v : galaxy.analog_vectors.get(1)){
-			Vector2 vMiddle = new Vector2((float) Math.ceil(galaxy.width*(2/3.0)), galaxy.height/2);
-			Vector2 temp = v.cpy();
-			renderer.identity();
 			renderer.setColor(Color.WHITE);
-			renderer.line(vMiddle, temp.cpy().scl(100).add(vMiddle));
+			renderer.line(vDrawPoint, v.cpy().scl(100).add(vDrawPoint));
 		}
+		renderer.setColor(Color.RED);
+		renderer.circle(vDrawPoint.x, vDrawPoint.y, 100*Galaxy.getAnalogDeadZone());
 		renderer.end();
 	}
 
