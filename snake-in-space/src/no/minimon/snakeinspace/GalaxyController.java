@@ -12,6 +12,12 @@ public class GalaxyController extends ControllerAdapter {
 	public GalaxyController(Galaxy galaxy) {
 		this.galaxy = galaxy;
 	}
+	
+	@Override
+	public boolean axisMoved(Controller controller, int axisIndex, float value) {
+		// TODO add analog controller
+		return super.axisMoved(controller, axisIndex, value);
+	}
 
 	@Override
 	public boolean buttonDown(Controller controller, int buttonIndex) {
@@ -141,8 +147,6 @@ public class GalaxyController extends ControllerAdapter {
 	}
 
 	public int indexOf(Controller controller) {
-		// System.out.println("indexOf: " + controller.getName() + " = " +
-		// Controllers.getControllers().indexOf(controller, true));
 		return Controllers.getControllers().indexOf(controller, true);
 	}
 }
