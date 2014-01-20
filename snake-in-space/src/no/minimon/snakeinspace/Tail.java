@@ -7,10 +7,12 @@ public class Tail {
 	public Vector2 direction;
 	public Vector2 position;
 	public boolean isHead;
+	public Vector2 destdir; // destination direction (turn towards this)
 
 	public Tail() {
 		this.position = new Vector2();
 		this.direction = new Vector2();
+		this.destdir = new Vector2();
 	}
 
 	public Tail(Vector2 position, Vector2 direction) {

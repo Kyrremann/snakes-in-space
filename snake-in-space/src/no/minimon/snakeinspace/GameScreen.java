@@ -3,8 +3,10 @@ package no.minimon.snakeinspace;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
+
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 
@@ -35,14 +37,26 @@ public class GameScreen implements Screen, InputProcessor {
 		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
 		renderer = new GalaxyRenderer(galaxy);
 		controller = new GalaxyController(galaxy);
-		ifOuyaAddControllerListener();
+		
+		handleControllers();
+		//ifOuyaAddControllerListener();
+
 		Gdx.input.setInputProcessor(this);
 		logger = new FPSLogger();
 	}
 
+	private void handleControllers() {
+		for (Controller controller : Controllers.getControllers()) {
+			Gdx.app.log("CONTROLLER", controller.getName());
+		}
+		if (Controllers.getControllers() != null) {
+			Controllers.addListener(controller); // listen all controllers
+		}
+	}
+
 	@Override
 	public void render(float delta) {
-		logger.log();
+		// logger.log();
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -79,7 +93,8 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void hide() {
-		ifOuyaRemoveControllerListener();
+		//ifOuyaRemoveControllerListener();
+		handleControllers();
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -91,7 +106,8 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void resume() {
-		ifOuyaAddControllerListener();
+		//ifOuyaAddControllerListener();
+		handleControllers();
 		// TODO Auto-generated method stub
 
 	}

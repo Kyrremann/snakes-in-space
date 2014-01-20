@@ -1,5 +1,7 @@
 package no.minimon.snakeinspace;
 
+import no.minimon.snakeinspace.utils.Xbox360Pad;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.controllers.Controller;
@@ -33,10 +35,12 @@ public class MenuController extends ControllerAdapter {
 			return true;
 		case 96: // Ouya.BUTTON_A is not constant
 		case Keys.ENTER:
+		case Xbox360Pad.BUTTON_A:
 			screen.changeToGameScreen();
 			return true;
 		case Keys.MENU:
 		case Keys.ESCAPE:
+		case Xbox360Pad.BUTTON_BACK:
 			Gdx.app.exit();
 			return true;
 		}

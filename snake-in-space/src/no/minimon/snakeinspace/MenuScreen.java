@@ -3,6 +3,7 @@ package no.minimon.snakeinspace;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.graphics.GL10;
@@ -58,9 +59,19 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void show() {
-		ifOuyaAddControllerListener();
+		//ifOuyaAddControllerListener();
+		handleControllers();
 		Gdx.input.setInputProcessor(this);
 		// sounds.theme.play();
+	}
+
+	private void handleControllers() {
+		for (Controller controller : Controllers.getControllers()) {
+			Gdx.app.log("CONTROLLER", controller.getName());
+		}
+		if (Controllers.getControllers() != null) {
+			Controllers.addListener(controller); // listen all controllers
+		}
 	}
 
 	private void ifOuyaAddControllerListener() {

@@ -1,9 +1,13 @@
 package no.minimon.snakeinspace;
 
+import no.minimon.snakeinspace.utils.Xbox360Pad;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.math.Vector2;
 
 public class GalaxyController extends ControllerAdapter {
 
@@ -15,13 +19,78 @@ public class GalaxyController extends ControllerAdapter {
 
 	@Override
 	public boolean buttonDown(Controller controller, int buttonIndex) {
+		System.out.println("button_down: " + buttonIndex);
 		keyDown(indexOf(controller), buttonIndex);
 		return true;
 	}
 
 	@Override
 	public boolean buttonUp(Controller controller, int buttonIndex) {
+		System.out.println("button_up: " + buttonIndex);
 		keyUp(indexOf(controller), buttonIndex);
+		return true;
+	}
+
+	/**
+	 * directional pad
+	 */
+	@Override
+	public boolean povMoved(Controller controller, int povCode,
+			PovDirection value) {
+		System.out.println("dpad: " + povCode);
+		int player = indexOf(controller);
+		switch (value) {
+		case north:
+			break;
+		case south:
+			break;
+		case east:
+			galaxy.getSnake(player).addState(Snake.State.RIGHT);
+			break;
+		case west:
+			galaxy.getSnake(player).addState(Snake.State.LEFT);
+			break;
+		default:
+			break;
+		}
+		return true;
+	}
+
+	/**
+	 * analog stick
+	 */
+	@Override
+	public boolean axisMoved(Controller controller, int axisCode, float value){
+		int player = indexOf(controller);
+		if ( galaxy.getSnake(player) == null) {
+			return false;
+		}
+		if (galaxy.getSnake(player).getHead() == null){
+			return false;
+		}
+		Vector2 dir = galaxy.getSnake(player).getHead().destdir;
+		if (dir == null) {
+			dir = new Vector2();
+		}
+
+		if (Math.abs(value) > 0.175){ // not in dead-zone
+//			System.out.println("analog: " + axisCode + ", " + value); // DEBUG
+			
+			switch (axisCode) {
+			case Xbox360Pad.AXIS_LEFT_X: // left analog stick (movement)
+				dir.x = value;
+				break;
+			case Xbox360Pad.AXIS_LEFT_Y:
+				dir.y = -value;
+				break;
+			case Xbox360Pad.AXIS_RIGHT_X: // right analog stick
+			case Xbox360Pad.AXIS_RIGHT_Y:
+				break;
+			}
+			galaxy.getSnake(player).setDestDir(dir.nor());
+		} else {
+			galaxy.getSnake(player).setDestDir(null); // no new destination
+		}
 		return true;
 	}
 
@@ -56,6 +125,7 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.Y:
 		case 9:
 		case 96:
+		case Xbox360Pad.BUTTON_A:
 			galaxy.getSnake(player).accelerate(true);
 			break;
 		case Keys.DOWN:
@@ -63,9 +133,11 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.H:
 		case Keys.O:
 		case 97:
+		case Xbox360Pad.BUTTON_X:
 			galaxy.getSnake(player).deceleration(true);
 			break;
 		case Keys.MENU:
+		case Xbox360Pad.BUTTON_BACK:
 			galaxy.snakeInSpace.setScreen(new MenuScreen(galaxy.snakeInSpace,
 					galaxy.width, galaxy.height));
 			break;
@@ -96,6 +168,7 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.Y:
 		case 9:
 		case 96:
+		case Xbox360Pad.BUTTON_A:
 			galaxy.getSnake(player).accelerate(false);
 			break;
 		case Keys.DOWN:
@@ -103,6 +176,7 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.H:
 		case Keys.O:
 		case 97:
+		case Xbox360Pad.BUTTON_X:
 			galaxy.getSnake(player).deceleration(false);
 			break;
 		}

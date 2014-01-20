@@ -96,6 +96,9 @@ public class Snake implements Movable {
 			return;
 		}
 
+		// update direction (based on destination direction)
+		update_dir();
+		
 		// turn head piece of snake
 		turnSnake(delta);
 
@@ -106,6 +109,18 @@ public class Snake implements Movable {
 
 		// update acceleration
 		updateAcceleration(delta);
+	}
+
+	/**
+	 * if dest dir = null, do nothing,
+	 * otherwise update direction
+	 */
+	private void update_dir() {
+		Tail t = getHead();
+		if (t.destdir == null) {
+			return;
+		}
+		t.direction = t.direction.cpy().add(t.destdir).nor();
 	}
 
 	/**
@@ -392,5 +407,9 @@ public class Snake implements Movable {
 	@Override
 	public int getRadius() {
 		return collisionSize;
+	}
+
+	public void setDestDir(Vector2 destdir) {
+		getHead().destdir = destdir;
 	}
 }
