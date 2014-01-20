@@ -1,5 +1,7 @@
 package no.minimon.snakeinspace;
 
+import no.minimon.snakeinspace.controls.MenuController;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -67,11 +69,10 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	private void handleControllers() {
 		for (Controller controller : Controllers.getControllers()) {
-			Gdx.app.log("CONTROLLER", controller.getName());
+			Gdx.app.log("MENUCONTROLLER", controller.getName());
 		}
-		if (Controllers.getControllers() != null) {
-			Controllers.addListener(controller); // listen all controllers
-		}
+		System.out.println("added menu controller");
+		Controllers.addListener(controller); // listen all controllers
 	}
 
 	private void ifOuyaAddControllerListener() {
@@ -188,7 +189,9 @@ public class MenuScreen implements Screen, InputProcessor {
 	}
 
 	public void changeToGameScreen() {
-		ifOuyaRemoveControllerListener();
+		//ifOuyaRemoveControllerListener();
+		Controllers.removeListener(controller);
+		System.out.println("removed controller");
 		snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width,
 				height, seleted));
 	}

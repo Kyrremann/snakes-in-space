@@ -120,7 +120,8 @@ public class Snake implements Movable {
 		if (t.destdir == null) {
 			return;
 		}
-		t.direction = t.direction.cpy().add(t.destdir).nor();
+		t.direction = t.direction.cpy().add(t.destdir).nor(); 
+		//t.direction = t.destdir;
 	}
 
 	/**

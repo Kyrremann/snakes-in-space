@@ -1,8 +1,11 @@
 package no.minimon.snakeinspace;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 
 public class GalaxyRenderer {
 
@@ -26,7 +29,27 @@ public class GalaxyRenderer {
 		drawAsteroids();
 		drawPlayers(delta);
 		drawScoreboard();
-		// drawQuadTree();
+		// drawQuadTree(); // DEBUG
+		drawMovementVector(); // DEBUG
+	}
+
+	private void drawMovementVector() {
+		renderer.begin(ShapeType.Line);
+		for (Vector2 v : galaxy.analog_vectors.get(0)){
+			Vector2 vMiddle = new Vector2(galaxy.width/3, galaxy.height/2);
+			Vector2 temp = v.cpy();
+			renderer.identity();
+			renderer.setColor(Color.WHITE);
+			renderer.line(vMiddle, temp.cpy().scl(100).add(vMiddle));
+		}
+		for (Vector2 v : galaxy.analog_vectors.get(1)){
+			Vector2 vMiddle = new Vector2((float) Math.ceil(galaxy.width*(2/3.0)), galaxy.height/2);
+			Vector2 temp = v.cpy();
+			renderer.identity();
+			renderer.setColor(Color.WHITE);
+			renderer.line(vMiddle, temp.cpy().scl(100).add(vMiddle));
+		}
+		renderer.end();
 	}
 
 	private void drawQuadTree() {

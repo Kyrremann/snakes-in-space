@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Galaxy {
 
+	private static final int ASTEROID_COUNT = 100;
 	public SnakeInSpace snakeInSpace;
 	public int width;
 	public int height;
@@ -30,6 +31,7 @@ public class Galaxy {
 	
 	// DEBUG (double arraylist for vectors)
 	public ArrayList<ArrayList <Vector2>> table;
+	public ArrayList<ArrayList <Vector2>> analog_vectors;
 
 	public Galaxy(SnakeInSpace snakeInSpace, GalaxySounds galaxySounds,
 			int players, int width, int height) {
@@ -45,6 +47,9 @@ public class Galaxy {
 		
 		// DEBUG
 		table = new ArrayList<ArrayList <Vector2>>();
+		analog_vectors = new ArrayList<ArrayList <Vector2>>();
+		analog_vectors.add(new ArrayList<Vector2>());
+		analog_vectors.add(new ArrayList<Vector2>());
 
 		createApplesClearOfMap = 
 				new HashMap<Collideable, Integer>();
@@ -72,7 +77,7 @@ public class Galaxy {
 	}
 
 	private void createAsteroids() {
-		for (int i = 0; i < 50; ++i) {
+		for (int i = 0; i < ASTEROID_COUNT; ++i) {
 			asteroids.add(createAsteroid());
 		}
 	}

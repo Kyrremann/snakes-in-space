@@ -1,12 +1,13 @@
 package no.minimon.snakeinspace;
 
+import no.minimon.snakeinspace.controls.GalaxyController;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
-
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 
@@ -37,7 +38,6 @@ public class GameScreen implements Screen, InputProcessor {
 		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
 		renderer = new GalaxyRenderer(galaxy);
 		controller = new GalaxyController(galaxy);
-		
 		handleControllers();
 		//ifOuyaAddControllerListener();
 
@@ -45,13 +45,15 @@ public class GameScreen implements Screen, InputProcessor {
 		logger = new FPSLogger();
 	}
 
+	/**
+	 * adds a controller listener if there is none
+	 */
 	private void handleControllers() {
 		for (Controller controller : Controllers.getControllers()) {
-			Gdx.app.log("CONTROLLER", controller.getName());
+			Gdx.app.log("GAMECONTROLLER", controller.getName());
 		}
-		if (Controllers.getControllers() != null) {
-			Controllers.addListener(controller); // listen all controllers
-		}
+		System.out.println("added game controller");
+		Controllers.addListener(controller); // listen all controllers
 	}
 
 	@Override
