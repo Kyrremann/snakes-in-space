@@ -97,9 +97,6 @@ public class GalaxyController extends ControllerAdapter {
 			right_analog.y = -value;
 			break;
 		}
-		if (left_analog.dst(0,0) > 0.9){
-			System.out.println(left_analog.x + " , " + left_analog.y);
-		}
 		if (galaxy.analog_vectors.get(0).size() > 100) {
 			galaxy.analog_vectors.get(0).remove(0);
 		}
@@ -108,6 +105,12 @@ public class GalaxyController extends ControllerAdapter {
 		}
 		galaxy.analog_vectors.get(0).add(left_analog.cpy()); // DEBUG
 		galaxy.analog_vectors.get(1).add(right_analog.cpy()); // DEBUG
+
+		// dead-zone
+		if (left_analog.dst(0,0) < 0.2){
+			System.out.println("dead-zone values");
+			return false;
+		}
 		galaxy.getSnake(player).setDestDir(left_analog.cpy().nor());
 		return true;
 	}

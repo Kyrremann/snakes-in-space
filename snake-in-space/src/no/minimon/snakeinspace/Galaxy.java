@@ -30,7 +30,7 @@ public class Galaxy {
 	HashMap<Collideable, Integer> createApplesClearOfMap;
 	
 	// DEBUG (double arraylist for vectors)
-	public ArrayList<ArrayList <Vector2>> table;
+	public ArrayList<ArrayList <Vector2>> collision_vectors;
 	public ArrayList<ArrayList <Vector2>> analog_vectors;
 
 	public Galaxy(SnakeInSpace snakeInSpace, GalaxySounds galaxySounds,
@@ -46,7 +46,7 @@ public class Galaxy {
 		asteroids = new ArrayList<Asteroid>(4);
 		
 		// DEBUG
-		table = new ArrayList<ArrayList <Vector2>>();
+		collision_vectors = new ArrayList<ArrayList <Vector2>>();
 		analog_vectors = new ArrayList<ArrayList <Vector2>>();
 		analog_vectors.add(new ArrayList<Vector2>());
 		analog_vectors.add(new ArrayList<Vector2>());
