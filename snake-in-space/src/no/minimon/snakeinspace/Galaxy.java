@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import no.minimon.snakeinspace.physics.Collideable;
-import no.minimon.snakeinspace.physics.HasHitBox;
+import no.minimon.snakeinspace.physics.HasHitbox;
 import no.minimon.snakeinspace.physics.Quadtree;
 import no.minimon.snakeinspace.utils.GalaxyUtils;
 
@@ -215,7 +215,7 @@ public class Galaxy {
 					Tail remove = null;
 					for (Tail tail : snake.getTails()) {
 						if (GalaxyUtils.circlesIntersect(tail.position,
-								snake.collisionSize, asteroid.position,
+								tail.radius, asteroid.position,
 								asteroid.radius)) {
 							remove = tail;
 							sounds.playExplosion(.3f);
@@ -239,16 +239,16 @@ public class Galaxy {
 			quad.clear();
 			// add all asteroids to quadtree
 			for (Asteroid a1 : getAsteroids()) {
-				quad.insert((HasHitBox) a1); // O(n)
+				quad.insert((HasHitbox) a1); // O(n)
 			}
 			
 			// for each asteroid, retrieve a list of potential collideables
-			ArrayList<HasHitBox> returnObjects = new ArrayList<HasHitBox>();
+			ArrayList<HasHitbox> returnObjects = new ArrayList<HasHitbox>();
 			for (Asteroid a1 : getAsteroids()) { // O(n)
 				returnObjects.clear();
-				quad.retrieve(returnObjects, (HasHitBox) a1);
+				quad.retrieve(returnObjects, (HasHitbox) a1);
 				// run over potential list of collideables 
-				for (HasHitBox object : returnObjects) { // O(subset of n)
+				for (HasHitbox object : returnObjects) { // O(subset of n)
 					Asteroid a2 = (Asteroid) object;
 					if (GalaxyUtils.circlesIntersect(a1.position, a1.radius,
 							a2.position, a2.radius)) {

@@ -39,7 +39,6 @@ public class Apple implements Movable {
 		return position;
 	}
 
-	@Override
 	public int getRadius() {
 		return this.radius;
 	}

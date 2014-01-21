@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 public class Snake implements Movable {
@@ -20,8 +19,6 @@ public class Snake implements Movable {
 		LEFT, RIGHT, BOOST, SLOW, FROM_BOOST, FROM_SLOW;
 	}
 
-	public int size = 10;
-	public int collisionSize = 7;
 	private float TURN_SPEED = 360; // degrees per second
 
 	private float BASE_SPEED = 200;
@@ -50,7 +47,7 @@ public class Snake implements Movable {
 
 		tails = new ArrayList<Tail>();
 		for (int i = 0; i < 10; i++) {
-			tails.add(new Tail());
+			addTail();
 		}
 
 		getHead().direction = new Vector2(3, 4).nor();
@@ -102,9 +99,9 @@ public class Snake implements Movable {
 		// turn head piece of snake
 		turnSnake(delta);
 
-		// update rotation and position of all pieces (head ignores rotation!)
-		for (int i = 0; i < tails.size(); i++) {
-			calculatePieceLocation(delta, i, width, height);
+		// update orientation and position of all pieces (head ignores rotation)
+		for (Tail t : tails){
+			t.calculatePieceLocation(delta, width, height);
 		}
 
 		// update acceleration
@@ -131,27 +128,27 @@ public class Snake implements Movable {
 	 */
 	private void updateAcceleration(float delta) {
 		// update speed
-		SPEED += ((ACCELERATION * ACCELERATION_DIR) * delta);
+		setSpeed(getSpeed() + ((ACCELERATION * ACCELERATION_DIR) * delta));
 
 		// if max speed, stop accelerating.
-		if (states.contains(BOOST) && SPEED > MAX_SPEED) {
-			SPEED = MAX_SPEED;
+		if (states.contains(BOOST) && getSpeed() > MAX_SPEED) {
+			setSpeed(MAX_SPEED);
 			ACCELERATION_DIR = 0;
 		}
 		// if min speed, stop decelerating
-		if (states.contains(SLOW) && SPEED < MIN_SPEED) {
-			SPEED = MIN_SPEED;
+		if (states.contains(SLOW) && getSpeed() < MIN_SPEED) {
+			setSpeed(MIN_SPEED);
 			ACCELERATION_DIR = 0;
 		}
 
 		// if from max/min speed, stop accelerating/decelerating
-		if (states.contains(FROM_BOOST) && SPEED < BASE_SPEED) {
+		if (states.contains(FROM_BOOST) && getSpeed() < BASE_SPEED) {
 			states.remove(FROM_BOOST);
-			SPEED = BASE_SPEED;
+			setSpeed(BASE_SPEED);
 			ACCELERATION_DIR = 0;
-		} else if (states.contains(FROM_SLOW) && SPEED > BASE_SPEED) {
+		} else if (states.contains(FROM_SLOW) && getSpeed() > BASE_SPEED) {
 			states.remove(FROM_SLOW);
-			SPEED = BASE_SPEED;
+			setSpeed(BASE_SPEED);
 			ACCELERATION_DIR = 0;
 		}
 	}
@@ -180,137 +177,10 @@ public class Snake implements Movable {
 		return null;
 	}
 
-	/**
-	 * update location of piece at index
-	 * 
-	 * @param index
-	 *            - the piece to update
-	 * @param delta
-	 *            - the amount to update (1 = per second)
-	 * @param height
-	 *            height of screen
-	 * @param width
-	 *            width of screen
-	 */
-	public void calculatePieceLocation(float delta, int index, int width,
-			int height) {
-		Tail piece = tails.get(index);
-
-		// if head piece, move straight forward (angle predetermined)
-		if (index == 0) {
-			piece.position.add(piece.direction.cpy().scl(SPEED * delta));
-		}
-		// if other piece, calculate new angle, then move straight forward
-		else {
-
-			Tail prev = tails.get(index - 1);
-
-			// ASSUMPTION: when segments separated by more than SPEED -> wrap
-
-			// OPTIMIZE: shrink repeated code here!!!
-			// if dist to prev is greater than SPEED dictates = it has wrapped
-			if (piece.position.cpy().sub(prev.position).x > SPEED) {
-				// prev has wrapped towards west
-
-				// this piece shall move towards a new destination (un-wrapped)
-				Vector2 dest = prev.position.cpy();
-				dest.x += width; // 'un-wrapping' the prev's position
-
-				// point piece at NEW DEST (not prev piece)
-				piece.direction = dest.cpy().sub(piece.position);
-				piece.direction.nor(); // normalize direction
-
-				piece.position = dest.cpy()
-						.sub(piece.direction.cpy().scl(size));
-			} else if (piece.position.cpy().sub(prev.position).x < -SPEED) {
-				// prev has wrapped towards east
-
-				// this piece shall move towards a new destination (un-wrapped)
-				Vector2 dest = prev.position.cpy();
-				dest.x -= width; // 'un-wrapping' the prev's position
-
-				// point piece at NEW DEST (not prev piece)
-				piece.direction = dest.cpy().sub(piece.position);
-				piece.direction.nor(); // normalize direction
-
-				piece.position = dest.cpy()
-						.sub(piece.direction.cpy().scl(size));
-			} else if (piece.position.cpy().sub(prev.position).y > SPEED) {
-				// prev has wrapped towards south
-
-				// this piece shall move towards a new destination (un-wrapped)
-				Vector2 dest = prev.position.cpy();
-				dest.y += height; // 'un-wrapping' the prev's position
-
-				// point piece at NEW DEST (not prev piece)
-				piece.direction = dest.cpy().sub(piece.position);
-				piece.direction.nor(); // normalize direction
-
-				piece.position = dest.cpy()
-						.sub(piece.direction.cpy().scl(size));
-			} else if (piece.position.cpy().sub(prev.position).y < -SPEED) {
-				// prev has wrapped towards north
-
-				// this piece shall move towards a new destination (un-wrapped)
-				Vector2 dest = prev.position.cpy();
-				dest.y -= height; // 'un-wrapping' the prev's position
-
-				// point piece at NEW DEST (not prev piece)
-				piece.direction = dest.cpy().sub(piece.position);
-				piece.direction.nor(); // normalize direction
-
-				piece.position = dest.cpy()
-						.sub(piece.direction.cpy().scl(size));
-			} else {
-				// continue 'normally'
-
-				// point piece directly at prev piece
-				piece.direction = prev.position.cpy().sub(piece.position);
-				piece.direction.nor(); // normalize direction
-
-				// set location to SIZE distance from preceding piece
-				piece.position = prev.position.cpy().sub(
-						piece.direction.cpy().scl(size));
-			}
-		}
-		// if outside boundaries, wrap to other side
-		if (piece.position.x < 0) {
-			piece.position.x += width; // wrap to east
-		} else if (piece.position.x > width) {
-			piece.position.x -= width; // wrap to west
-		}
-		if (piece.position.y < 0) {
-			piece.position.y += height; // wrap to north
-		} else if (piece.position.y > height) {
-			piece.position.y -= height; // wrap to south
-		}
-	}
-
 	public void draw(ShapeRenderer renderer) {
 		for (Tail t : tails) {
-			drawSnake(t, renderer);
+			t.draw(renderer);
 		}
-	}
-
-	private void drawSnake(Tail tail, ShapeRenderer renderer) {
-		renderer.begin(ShapeType.Line);
-		renderer.identity();
-
-		renderer.translate(tail.position.x, tail.position.y, 0);
-		renderer.rotate(0, 0, 1, tail.direction.angle());
-
-		// renderer.setColor(Color.GRAY);
-		if (tail.isHead) {
-			renderer.setColor(Color.MAGENTA);
-			renderer.triangle(0, -7.5f, 0, 7.5f, 15f, 0);
-		} else {
-			renderer.setColor(getPlayerColor());
-			renderer.circle(0, 0, collisionSize);
-			renderer.line(-7, 0, 7, 0);
-			// renderer.triangle(0, -5, 0, 5, 10, 0);
-		}
-
-		renderer.end();
 	}
 
 	public Color getPlayerColor() {
@@ -343,9 +213,19 @@ public class Snake implements Movable {
 		return tails.remove(tail);
 	}
 
+	/**
+	 * adds segments, updating prev pointers in tail segment
+	 */
 	public void addTail() {
-		tails.add(new Tail());
-	}
+		Tail t = new Tail(this);
+		if(tails.isEmpty()) {
+			t.prev = null;
+		}
+		else {
+			t.prev = tails.get(tails.size()-1);
+		}
+		tails.add(t);
+}
 
 	/**
 	 * 
@@ -405,12 +285,20 @@ public class Snake implements Movable {
 		}
 	}
 
-	@Override
-	public int getRadius() {
-		return collisionSize;
-	}
-
 	public void setDestDir(Vector2 destdir) {
 		getHead().destdir = destdir;
+	}
+
+	public float getSpeed() {
+		return SPEED;
+	}
+
+	public void setSpeed(float speed) {
+		SPEED = speed;
+	}
+
+	@Override
+	public int getRadius() {
+		return getHead().radius;
 	}
 }
