@@ -1,5 +1,9 @@
 package no.minimon.snakeinspace;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
 import no.minimon.snakeinspace.controls.GalaxyController;
 
 import com.badlogic.gdx.Gdx;
@@ -23,6 +27,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	private int width, height;
 	private int players;
+	//private PrintWriter writer; // DEBUG
 
 	public GameScreen(SnakeInSpace snakeInSpace, GalaxySounds sounds,
 			int width, int height, int players) {
@@ -31,6 +36,14 @@ public class GameScreen implements Screen, InputProcessor {
 		this.width = width;
 		this.height = height;
 		this.players = players;
+		
+		// DEBUG
+//		try {
+//			writer = new PrintWriter("data.txt", "utf-8");
+//		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override
@@ -58,6 +71,15 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void render(float delta) {
+//		DEBUG
+		//		int total_energy = 0;
+//		for (Asteroid a : galaxy.getAsteroids()){
+//			total_energy += a.velocity.len();
+//		}
+//		
+//		writer.println(total_energy);
+//		writer.flush();
+		
 		// logger.log();
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);

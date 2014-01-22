@@ -94,7 +94,7 @@ public class Snake implements Movable {
 		}
 
 		// update direction (based on destination direction)
-		update_dir();
+		update_dir(delta);
 		
 		// turn head piece of snake
 		turnSnake(delta);
@@ -112,13 +112,23 @@ public class Snake implements Movable {
 	 * if dest dir = null, do nothing,
 	 * otherwise update direction
 	 */
-	private void update_dir() {
+	private void update_dir( float delta ) {
 		Tail t = getHead();
 		if (t.destdir == null) {
 			return;
 		}
-		t.direction = t.direction.cpy().add(t.destdir).nor(); 
-		//t.direction = t.destdir;
+		//t.direction = t.direction.cpy().add(t.destdir).nor();
+		
+		float angle_to_turn = t.direction.angle() - t.destdir.angle();
+		if (angle_to_turn >= -360 && angle_to_turn < -180) {
+			turnRight(delta);
+		} else if (angle_to_turn >= -180 && angle_to_turn < 0) {
+			turnLeft(delta);
+		} else if (angle_to_turn >= 0 && angle_to_turn < 180) {
+			turnRight(delta);
+		} else if (angle_to_turn >= 180 && angle_to_turn < 360) {
+			turnLeft(delta);
+		}
 	}
 
 	/**

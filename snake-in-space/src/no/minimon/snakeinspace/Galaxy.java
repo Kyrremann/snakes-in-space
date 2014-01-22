@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Galaxy {
 
-	private static final int ASTEROID_COUNT = 0;
+	private static final int ASTEROID_COUNT = 20;
 
 	public SnakeInSpace snakeInSpace;
 	public int width;
