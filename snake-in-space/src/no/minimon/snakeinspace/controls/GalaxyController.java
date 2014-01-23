@@ -90,13 +90,13 @@ public class GalaxyController extends ControllerAdapter {
 			//dir.y = this.getAxis(Xbox360Pad.AXIS_LEFT_Y); //?? not work?
 			break;
 		case Xbox360Pad.AXIS_LEFT_Y:
-			left_analog.y = -value;
+			left_analog.y = -value; // our y-axis = flipped
 			break;
 		case Xbox360Pad.AXIS_RIGHT_X: // right analog stick
 			right_analog.x = value;
 			break;
 		case Xbox360Pad.AXIS_RIGHT_Y:
-			right_analog.y = -value;
+			right_analog.y = -value; // our y-axis = flipped
 			break;
 		}
 		if (galaxy.analog_vectors.get(0).size() > 100) {
@@ -112,6 +112,7 @@ public class GalaxyController extends ControllerAdapter {
 		if (left_analog.dst(0,0) < ANALOG_DEAD_ZONE){
 			System.out.println("dead-zone: " + 
 					left_analog.x + " , " + left_analog.y);
+			galaxy.getSnake(player).setDestDir(null); // do not turn
 			return false;
 		}
 		galaxy.getSnake(player).setDestDir(left_analog.cpy().nor());
@@ -163,7 +164,7 @@ public class GalaxyController extends ControllerAdapter {
 		case Keys.MENU:
 		case Xbox360Pad.BUTTON_BACK:
 			Controllers.removeListener(this);
-			System.out.println("removed controller");
+			System.out.println("removed game controller");
 			galaxy.snakeInSpace.setScreen(new MenuScreen(galaxy.snakeInSpace,
 					galaxy.width, galaxy.height));
 			break;

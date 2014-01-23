@@ -191,7 +191,7 @@ public class MenuScreen implements Screen, InputProcessor {
 	public void changeToGameScreen() {
 		//ifOuyaRemoveControllerListener();
 		Controllers.removeListener(controller);
-		System.out.println("removed controller");
+		System.out.println("removed menu controller");
 		snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width,
 				height, seleted));
 	}
