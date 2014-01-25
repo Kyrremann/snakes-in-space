@@ -57,22 +57,24 @@ public class MenuScreen implements Screen, InputProcessor {
 		Apple.sprite = new Sprite(Apple.texture);
 		Apple.sprite.setSize(32, 32);
 		Apple.spriteBatch = new SpriteBatch();
+		
+		handleControllers();
 	}
 
 	@Override
 	public void show() {
-		//ifOuyaAddControllerListener();
-		handleControllers();
 		Gdx.input.setInputProcessor(this);
 		// sounds.theme.play();
+		
+		handleControllers();
 	}
 
 	private void handleControllers() {
-		for (Controller controller : Controllers.getControllers()) {
-			Gdx.app.log("MENUCONTROLLER", controller.getName());
+		//System.out.println(Controllers..size);
+		if (Controllers.getControllers().size < 1){
+			System.out.println("added game controller");
+			Controllers.addListener(controller); // listen all controllers
 		}
-		System.out.println("added menu controller");
-		Controllers.addListener(controller); // listen all controllers
 	}
 
 	private void ifOuyaAddControllerListener() {
@@ -128,15 +130,17 @@ public class MenuScreen implements Screen, InputProcessor {
 	public void hide() {
 		ifOuyaRemoveControllerListener();
 		Gdx.input.setInputProcessor(this);
+		handleControllers();
 	}
 
 	@Override
 	public void pause() {
+		handleControllers();
 	}
 
 	@Override
 	public void resume() {
-		ifOuyaAddControllerListener();
+		handleControllers();
 	}
 
 	@Override

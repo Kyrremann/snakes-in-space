@@ -14,6 +14,7 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen, InputProcessor {
 
@@ -44,29 +45,29 @@ public class GameScreen implements Screen, InputProcessor {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-	}
-
-	@Override
-	public void show() {
+		
 		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
 		renderer = new GalaxyRenderer(galaxy);
 		controller = new GalaxyController(galaxy);
 		handleControllers();
-		//ifOuyaAddControllerListener();
+	}
 
+	@Override
+	public void show() {
 		Gdx.input.setInputProcessor(this);
 		logger = new FPSLogger();
+		
+		handleControllers();
 	}
 
 	/**
 	 * adds a controller listener if there is none
 	 */
 	private void handleControllers() {
-		for (Controller controller : Controllers.getControllers()) {
-			Gdx.app.log("GAMECONTROLLER", controller.getName());
+		if (Controllers.getControllers().size < 1){
+			System.out.println("added game controller");
+			Controllers.addListener(controller); // listen all controllers
 		}
-		System.out.println("added game controller");
-		Controllers.addListener(controller); // listen all controllers
 	}
 
 	@Override
@@ -117,23 +118,20 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void hide() {
-		//ifOuyaRemoveControllerListener();
-		handleControllers();
 		Gdx.input.setInputProcessor(this);
+		handleControllers();
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-
+		handleControllers();
 	}
 
 	@Override
 	public void resume() {
-		//ifOuyaAddControllerListener();
-		handleControllers();
 		// TODO Auto-generated method stub
-
+		handleControllers();
 	}
 
 	@Override

@@ -110,8 +110,8 @@ public class GalaxyController extends ControllerAdapter {
 
 		// dead-zone
 		if (left_analog.dst(0,0) < ANALOG_DEAD_ZONE){
-			System.out.println("dead-zone: " + 
-					left_analog.x + " , " + left_analog.y);
+//			System.out.println("dead-zone: " + 
+//					left_analog.x + " , " + left_analog.y);
 			galaxy.getSnake(player).setDestDir(null); // do not turn
 			return false;
 		}
@@ -123,9 +123,13 @@ public class GalaxyController extends ControllerAdapter {
 		player = mapCorrectPlayerIndex(player, keyCode);
 		if (player < 0 || player > galaxy.getSnakes().size()) {
 			if (keyCode == Keys.ESCAPE) {
+				Controllers.removeListener(this);
+				System.out.println("removed game controller");
 				galaxy.snakeInSpace.setScreen(new MenuScreen(
 						galaxy.snakeInSpace, galaxy.width, galaxy.height));
 			} else if (keyCode == Keys.MENU) {
+				Controllers.removeListener(this);
+				System.out.println("removed game controller");
 				galaxy.snakeInSpace.setScreen(new MenuScreen(
 						galaxy.snakeInSpace, galaxy.width, galaxy.height));
 			}
