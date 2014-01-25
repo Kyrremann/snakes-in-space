@@ -8,44 +8,63 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class MenuScreen implements Screen, InputProcessor {
 
-	private final String TITLE = "Snakes in Space";
+	private final String TITLE = "SNAKES\nIN\nSPACE!";
 
 	private SnakeInSpace snakeInSpace;
 	private MenuController controller;
-	private BitmapFont font;
+	private BitmapFont font, font_big;
 	private GalaxySounds sounds;
 
 	private SpriteBatch batch;
 
-	private float stringHeight;
-	private float menuX;
-	private float menuY;
 	private int height;
 	private int width;
 
-	public int seleted;
+	public int seleted, multiplayer = 2;
+
+	private ShapeRenderer renderer;
+
+	float menu_box_start;
+	float half_height;
+	float font_height;
+
+	int small_font_size;
+	int box_height;
+	int box_width;
 
 	public MenuScreen(SnakeInSpace snakeInSpace, int width, int height) {
 		this.snakeInSpace = snakeInSpace;
 		this.width = width;
 		this.height = height;
 
-		stringHeight = 15;
-		menuX = this.width / 2;
-		menuY = this.height / 2;
-
 		controller = new MenuController(this);
 		sounds = new GalaxySounds();
 		font = new BitmapFont();
+		font.setScale(1.5f);
+		font_big = new BitmapFont();
+		font_big.setScale(5);
 		batch = new SpriteBatch();
+		renderer = new ShapeRenderer();
+
+		menu_box_start = Gdx.graphics.getWidth() - 200;
+		half_height = Gdx.graphics.getHeight() / 2;
+		font_height = font_big.getBounds(TITLE).height * 3;
+
+		small_font_size = (int) font.getBounds("TEST").height;
+		box_height = (int) (small_font_size * 1.2);
+		box_width = 210;
 
 		// TEST sprite
 		Asteroid.texture = new Texture(Gdx.files.internal("data/asteroid.png"));
@@ -94,29 +113,42 @@ public class MenuScreen implements Screen, InputProcessor {
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		String players1 = "1 player", players2 = "2 player", players3 = "3 player", players4 = "4 player";
 
+		font_big.drawMultiLine(batch, TITLE,
+				Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight()
+						- font_height, 0, HAlignment.RIGHT);
+
+		renderer.begin(ShapeType.Filled);
+		renderer.identity();
+		renderer.setColor(Color.DARK_GRAY);
 		switch (seleted) {
 		case 0:
-			players1 = "- 1 player -";
+			renderer.rect(menu_box_start - 10, half_height
+					+ (int) (small_font_size * 1.5), box_width, box_height);
 			break;
 		case 1:
-			players2 = "- 2 players -";
+			renderer.rect(menu_box_start - 10, half_height, box_width,
+					box_height);
 			break;
 		case 2:
-			players3 = "- 3 players -";
+			renderer.rect(menu_box_start - 10, half_height
+					- (int) (small_font_size * 1.7), box_width, box_height);
 			break;
 		case 3:
-			players4 = "- 4 players -";
+			renderer.rect(menu_box_start - 10, half_height
+					- (int) (small_font_size * 3.2), box_width, box_height);
 			break;
 		}
-		float width = (font.getBounds(TITLE).width / 2);
+		renderer.end();
 
-		font.draw(batch, TITLE, menuX - width, menuY + stringHeight);
-		font.draw(batch, players1, menuX - width, menuY - (stringHeight));
-		font.draw(batch, players2, menuX - width, menuY - (stringHeight * 2));
-		font.draw(batch, players3, menuX - width, menuY - (stringHeight * 3));
-		font.draw(batch, players4, menuX - width, menuY - (stringHeight * 4));
+		font.draw(batch, "Single player", menu_box_start,
+				(float) (half_height + (small_font_size * 2.5)));
+		font.draw(batch, "Multiplayer < " + multiplayer + " >", menu_box_start,
+				half_height + (small_font_size * 1));
+		font.draw(batch, "Options", menu_box_start, half_height
+				- (int) (small_font_size * .5));
+		font.draw(batch, "Exit", menu_box_start,
+				(float) (half_height - (small_font_size * 2)));
 
 		batch.end();
 	}
@@ -193,7 +225,7 @@ public class MenuScreen implements Screen, InputProcessor {
 	}
 
 	public void changeToGameScreen() {
-		//ifOuyaRemoveControllerListener();
+		// ifOuyaRemoveControllerListener();
 		Controllers.removeListener(controller);
 		System.out.println("removed menu controller");
 		snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width,
