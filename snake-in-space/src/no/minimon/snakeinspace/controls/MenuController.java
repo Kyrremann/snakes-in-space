@@ -25,6 +25,18 @@ public class MenuController extends ControllerAdapter {
 
 	public boolean keyDown(int keyCode) {
 		switch (keyCode) {
+		case Keys.LEFT:
+			if (screen.seleted == 1) {
+				screen.multiplayer--;
+				if (screen.multiplayer < 2) screen.multiplayer = 4;
+			}
+			break;
+		case Keys.RIGHT:
+			if (screen.seleted == 1) {
+				screen.multiplayer++;
+				if (screen.multiplayer > 4) screen.multiplayer = 2;
+			}
+			break;
 		case Keys.UP:
 			screen.seleted--;
 			if (screen.seleted < 0)
