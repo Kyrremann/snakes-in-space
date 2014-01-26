@@ -30,7 +30,7 @@ public class Tail implements HasHitbox {
 		this.position = position;
 		this.direction = direction;
 				
-		this.destdir = new Vector2();
+		this.destdir = null;
 	}
 
 	@Override
