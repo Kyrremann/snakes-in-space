@@ -151,10 +151,10 @@ public class Tail implements HasHitbox {
 
 		// renderer.setColor(Color.GRAY);
 		if (isHead) {
-			renderer.setColor(Color.MAGENTA);
+			renderer.setColor(s.getPlayerColor());
 			renderer.triangle(-4, -7.5f, -4, 7.5f, 12f, 0);
 		} else {
-			renderer.setColor(s.getPlayerColor());
+			renderer.setColor(Color.valueOf("feaf58"));
 			renderer.circle(0, 0, radius);
 			renderer.line(-7, 0, 7, 0);
 			// renderer.triangle(0, -5, 0, 5, 10, 0);

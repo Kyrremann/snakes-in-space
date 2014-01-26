@@ -1,5 +1,7 @@
 package no.minimon.snakeinspace;
 
+import java.util.ArrayList;
+
 import no.minimon.snakeinspace.controls.GalaxyController;
 
 import com.badlogic.gdx.Gdx;
@@ -11,37 +13,26 @@ import com.badlogic.gdx.graphics.GL10;
 
 public class GameScreen implements Screen, InputProcessor {
 
-	private SnakeInSpace snakeInSpace;
 	private Galaxy galaxy;
 	private GalaxyRenderer renderer;
-	private GalaxyController controller;
 	private GalaxySounds sounds;
 
 	private FPSLogger logger;
 
 	private int width, height;
-	private int players;
-	//private PrintWriter writer; // DEBUG
+	
+	private int player_count;
+	private ArrayList<Player> players;
 
 	public GameScreen(SnakeInSpace snakeInSpace, GalaxySounds sounds,
 			int width, int height, int players) {
-		this.snakeInSpace = snakeInSpace;
 		this.sounds = sounds;
 		this.width = width;
 		this.height = height;
-		this.players = players;
-		
-		// DEBUG
-//		try {
-//			writer = new PrintWriter("data.txt", "utf-8");
-//		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		this.player_count = players;
 		
 		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
 		renderer = new GalaxyRenderer(galaxy);
-		controller = new GalaxyController(galaxy);
 	}
 
 	@Override
@@ -53,11 +44,13 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 
 	/**
-	 * adds a controller listener if there is none
+	 * adds all players controller listeners if true, else removes them
 	 */
 	private void handleControllers(boolean addListener) {
 		if (addListener){
-			Controllers.addListener(controller);
+			for (Player p : players){
+				Controllers.addListener(p.controller);
+			}
 		} else {
 			Controllers.removeListener(controller);
 		}
@@ -65,15 +58,6 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void render(float delta) {
-//		DEBUG
-		//		int total_energy = 0;
-//		for (Asteroid a : galaxy.getAsteroids()){
-//			total_energy += a.velocity.len();
-//		}
-//		
-//		writer.println(total_energy);
-//		writer.flush();
-		
 		// logger.log();
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
