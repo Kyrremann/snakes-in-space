@@ -45,6 +45,7 @@ public class MenuScreen implements Screen, InputProcessor {
 	int box_width;
 
 	public MenuScreen(SnakeInSpace snakeInSpace, int width, int height) {
+		Gdx.app.log("LC", "CONSTRUCTOR");
 		this.snakeInSpace = snakeInSpace;
 		this.width = width;
 		this.height = height;
@@ -76,34 +77,24 @@ public class MenuScreen implements Screen, InputProcessor {
 		Apple.sprite = new Sprite(Apple.texture);
 		Apple.sprite.setSize(32, 32);
 		Apple.spriteBatch = new SpriteBatch();
-		
-		handleControllers();
 	}
 
 	@Override
 	public void show() {
+		Gdx.app.log("LC", "SHOW");
+		handleControllers(true);
 		Gdx.input.setInputProcessor(this);
 		// sounds.theme.play();
-		
-		handleControllers();
 	}
 
-	private void handleControllers() {
-		//System.out.println(Controllers..size);
-		if (Controllers.getControllers().size < 1){
-			System.out.println("added game controller");
-			Controllers.addListener(controller); // listen all controllers
-		}
-	}
 
-	private void ifOuyaAddControllerListener() {
-		if (Ouya.runningOnOuya) {
+	private void handleControllers(boolean addListener) {
+		if (addListener) {
+			for (Controller controller : Controllers.getControllers()) {
+				Gdx.app.log("MENUCONTROLLER", controller.getName());
+			}
 			Controllers.addListener(controller);
-		}
-	}
-
-	private void ifOuyaRemoveControllerListener() {
-		if (Ouya.runningOnOuya) {
+		} else {
 			Controllers.removeListener(controller);
 		}
 	}
@@ -114,9 +105,8 @@ public class MenuScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 
-		font_big.drawMultiLine(batch, TITLE,
-				Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight()
-						- font_height, 0, HAlignment.RIGHT);
+		font_big.drawMultiLine(batch, TITLE, Gdx.graphics.getWidth() / 2,
+				Gdx.graphics.getHeight() - font_height, 0, HAlignment.RIGHT);
 
 		renderer.begin(ShapeType.Filled);
 		renderer.identity();
@@ -160,23 +150,24 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void hide() {
-		ifOuyaRemoveControllerListener();
+		Gdx.app.log("LC", "HIDE");
 		Gdx.input.setInputProcessor(this);
-		handleControllers();
+		handleControllers(false);
 	}
 
 	@Override
 	public void pause() {
-		handleControllers();
+		Gdx.app.log("LC", "PAUSE");
 	}
 
 	@Override
 	public void resume() {
-		handleControllers();
+		Gdx.app.log("LC", "RESUME");
 	}
 
 	@Override
 	public void dispose() {
+		Gdx.app.log("LC", "DISPOSE");
 		sounds.disposeAll();
 		Gdx.input.setInputProcessor(null);
 
@@ -225,9 +216,7 @@ public class MenuScreen implements Screen, InputProcessor {
 	}
 
 	public void changeToGameScreen() {
-		// ifOuyaRemoveControllerListener();
-		Controllers.removeListener(controller);
-		System.out.println("removed menu controller");
+		handleControllers(false);
 		snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width,
 				height, seleted));
 	}
