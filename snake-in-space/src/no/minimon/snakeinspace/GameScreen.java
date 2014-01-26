@@ -1,20 +1,13 @@
 package no.minimon.snakeinspace;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-
 import no.minimon.snakeinspace.controls.GalaxyController;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
-import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen, InputProcessor {
 
@@ -49,7 +42,6 @@ public class GameScreen implements Screen, InputProcessor {
 		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
 		renderer = new GalaxyRenderer(galaxy);
 		controller = new GalaxyController(galaxy);
-		handleControllers();
 	}
 
 	@Override
@@ -57,16 +49,17 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		logger = new FPSLogger();
 		
-		handleControllers();
+		handleControllers(true);
 	}
 
 	/**
 	 * adds a controller listener if there is none
 	 */
-	private void handleControllers() {
-		if (Controllers.getControllers().size < 1){
-			System.out.println("added game controller");
-			Controllers.addListener(controller); // listen all controllers
+	private void handleControllers(boolean addListener) {
+		if (addListener){
+			Controllers.addListener(controller);
+		} else {
+			Controllers.removeListener(controller);
 		}
 	}
 
@@ -119,19 +112,17 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void hide() {
 		Gdx.input.setInputProcessor(this);
-		handleControllers();
+		handleControllers(false);
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		handleControllers();
+		handleControllers(false);
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		handleControllers();
+		handleControllers(true);
 	}
 
 	@Override
@@ -181,18 +172,6 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public boolean scrolled(int amount) {
 		return false;
-	}
-
-	private void ifOuyaAddControllerListener() {
-		if (Ouya.runningOnOuya) {
-			Controllers.addListener(controller);
-		}
-	}
-
-	private void ifOuyaRemoveControllerListener() {
-		if (Ouya.runningOnOuya) {
-			Controllers.removeListener(controller);
-		}
 	}
 
 }

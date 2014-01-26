@@ -35,15 +35,18 @@ public class MenuRenderer {
 		font_menu = new BitmapFont();
 		font_title = new BitmapFont();
 		
+		int width = Gdx.graphics.getWidth();
+		int height = Gdx.graphics.getHeight();
+		
 		font_menu.setScale(1.5f);
-		font_title.setScale((float) (Gdx.graphics.getHeight() / 120)); // 5 
+		font_title.setScale((float) (height / 120)); 
 
 		half_screen_height = Gdx.graphics.getHeight() / 2;
 		
 		font_title_height = font_title.getBounds(TITLE).height;
 		small_font_size = (int) font_menu.getBounds("TEST").height;
 		
-		menu_box_start = Gdx.graphics.getWidth() - 200;
+		menu_box_start = width - width / 4;
 		box_height = (int) (small_font_size * 1.2);
 		box_width = 210;
 
