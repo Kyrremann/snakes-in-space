@@ -3,25 +3,25 @@ package no.minimon.snakeinspace.physics;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
-public class HitBox {
+public class Hitbox {
 	private Object shape; // very generic pointer for shape data
-	private HitBoxType type; // how to interpret the shape data (casting)
+	private HitboxType type; // how to interpret the shape data (casting)
 	@SuppressWarnings("unused")
 	// TODO (needed for rectangle & polygons)
 	private Float angle;
 
-	public HitBox(Object shape, HitBoxType type, Float angle) {
+	public Hitbox(Object shape, HitboxType type, Float angle) {
 		this.shape = shape;
 		this.type = type;
 		this.angle = angle;
 	}
 
-	public HitBox(Object shape, HitBoxType type) {
+	public Hitbox(Object shape, HitboxType type) {
 		this(shape, type, 0f);
 	}
 
 	// check whether this hitbox intersects / collides with another hitbox
-	public boolean intersect(HitBox other) {
+	public boolean intersect(Hitbox other) {
 
 		switch (this.type) {
 		case CIRCLE:

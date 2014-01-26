@@ -1,8 +1,8 @@
 package no.minimon.snakeinspace;
 
-import no.minimon.snakeinspace.physics.HasHitBox;
-import no.minimon.snakeinspace.physics.HitBox;
-import no.minimon.snakeinspace.physics.HitBoxType;
+import no.minimon.snakeinspace.physics.HasHitbox;
+import no.minimon.snakeinspace.physics.Hitbox;
+import no.minimon.snakeinspace.physics.HitboxType;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Asteroid implements Movable, HasHitBox {
+public class Asteroid implements Movable, HasHitbox {
 
 	private final float ROTATE_SPEED;
 
@@ -20,7 +20,7 @@ public class Asteroid implements Movable, HasHitBox {
 	public Vector2 velocity; // direction and speed
 	private float rotate;
 
-	private HitBox hitbox;
+	private Hitbox hitbox;
 
 	// TEST sprite
 	public static Sprite sprite;
@@ -34,8 +34,8 @@ public class Asteroid implements Movable, HasHitBox {
 		this.velocity = velocity;
 		this.position = position;
 		this.rotate = rotateSpeed;
-		this.hitbox = new HitBox(new Circle(position, radius),
-				HitBoxType.CIRCLE);
+		this.hitbox = new Hitbox(new Circle(position, radius),
+				HitboxType.CIRCLE);
 	}
 
 	public void update(float delta) {
@@ -98,7 +98,7 @@ public class Asteroid implements Movable, HasHitBox {
 	}
 
 	@Override
-	public HitBox getHitBox() {
+	public Hitbox getHitBox() {
 		return hitbox;
 	}
 

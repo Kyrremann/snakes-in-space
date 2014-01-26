@@ -1,4 +1,7 @@
-package no.minimon.snakeinspace;
+package no.minimon.snakeinspace.controls;
+
+import no.minimon.snakeinspace.MenuScreen;
+import no.minimon.snakeinspace.utils.Xbox360Pad;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -21,6 +24,18 @@ public class MenuController extends ControllerAdapter {
 
 	public boolean keyDown(int keyCode) {
 		switch (keyCode) {
+		case Keys.LEFT:
+			if (screen.seleted == 1) {
+				screen.multiplayer--;
+				if (screen.multiplayer < 2) screen.multiplayer = 4;
+			}
+			break;
+		case Keys.RIGHT:
+			if (screen.seleted == 1) {
+				screen.multiplayer++;
+				if (screen.multiplayer > 4) screen.multiplayer = 2;
+			}
+			break;
 		case Keys.UP:
 			screen.seleted--;
 			if (screen.seleted < 0)
@@ -33,10 +48,12 @@ public class MenuController extends ControllerAdapter {
 			return true;
 		case 96: // Ouya.BUTTON_A is not constant
 		case Keys.ENTER:
-			screen.changeToGameScreen();
+		case Xbox360Pad.BUTTON_A:
+			screen.handleConfirmButton();
 			return true;
 		case Keys.MENU:
 		case Keys.ESCAPE:
+		case Xbox360Pad.BUTTON_BACK:
 			Gdx.app.exit();
 			return true;
 		}

@@ -12,13 +12,13 @@ public class Quadtree {
 	private int MAX_LEVELS = 4;
 
 	private int level; // depth of quadtree
-	private ArrayList<HasHitBox> contents; // objects must implement HasHitBox
+	private ArrayList<HasHitbox> contents; // objects must implement HasHitBox
 	private Rectangle bounds; // the boundaries of the quadtree
 	private Quadtree[] nodes; // child quadtrees (4 segment divisions)
 
 	public Quadtree(int level, Rectangle bounds) {
 		this.level = level;
-		contents = new ArrayList<HasHitBox>(); // assume implements
+		contents = new ArrayList<HasHitbox>(); // assume implements
 		this.bounds = bounds;
 		nodes = new Quadtree[4];
 	}
@@ -64,8 +64,8 @@ public class Quadtree {
 	 * Determine which node the object belongs to. -1 means object cannot
 	 * completely fit within a child node and is part of the parent node
 	 */
-	private int getIndex(HasHitBox a1) {
-		HitBox hitbox = (HitBox) a1.getHitBox();
+	private int getIndex(HasHitbox a1) {
+		Hitbox hitbox = (Hitbox) a1.getHitBox();
 
 		double horizontalMidpoint = bounds.getX() + (bounds.getWidth() / 2);
 		double verticalMidpoint = bounds.getY() + (bounds.getHeight() / 2);
@@ -95,7 +95,7 @@ public class Quadtree {
 	 * Insert the object into the quadtree. If the node exceeds the capacity, it
 	 * will split and add all objects to their corresponding nodes.
 	 */
-	public void insert(HasHitBox a1) {
+	public void insert(HasHitbox a1) {
 		if (nodes[0] != null) {
 			int index = getIndex(a1);
 			if (index != -1) {
@@ -113,9 +113,9 @@ public class Quadtree {
 
 			int i = 0;
 			while (i < contents.size()) {
-				int index = getIndex((HasHitBox) contents.get(i));
+				int index = getIndex((HasHitbox) contents.get(i));
 				if (index != -1) {
-					nodes[index].insert((HasHitBox) contents.remove(i));
+					nodes[index].insert((HasHitbox) contents.remove(i));
 				} else {
 					i++;
 				}
@@ -126,7 +126,7 @@ public class Quadtree {
 	/*
 	 * Return all objects that could collide with the given object
 	 */
-	public List<HasHitBox> retrieve(List<HasHitBox> returnObjects, HasHitBox object) {
+	public List<HasHitbox> retrieve(List<HasHitbox> returnObjects, HasHitbox object) {
 		int index = getIndex(object);
 		if (index != -1 && nodes[0] != null) {
 			nodes[index].retrieve(returnObjects, object); // recursive

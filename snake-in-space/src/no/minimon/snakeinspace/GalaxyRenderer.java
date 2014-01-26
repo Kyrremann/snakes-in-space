@@ -1,10 +1,13 @@
 package no.minimon.snakeinspace;
 
-import no.minimon.snakeinspace.physics.Quadtree;
+import no.minimon.snakeinspace.controls.GalaxyController;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 
 public class GalaxyRenderer {
 
@@ -28,7 +31,31 @@ public class GalaxyRenderer {
 		drawAsteroids();
 		drawPlayers(delta);
 		drawScoreboard();
-		// drawQuadTree();
+		// drawQuadTree(); // DEBUG
+		drawMovementVector(); // DEBUG
+	}
+
+	private void drawMovementVector() {
+		renderer.begin(ShapeType.Line);
+		renderer.identity();
+		Vector2 vDrawPoint = new Vector2(galaxy.width/3, galaxy.height/2);
+		for (Vector2 v : galaxy.analog_vectors.get(0)){
+			renderer.setColor(Color.WHITE);
+			renderer.line(vDrawPoint, v.cpy().scl(100).add(vDrawPoint));
+		}
+		renderer.setColor(Color.RED);
+		renderer.circle(vDrawPoint.x, vDrawPoint.y, 
+				100*GalaxyController.ANALOG_DEAD_ZONE);
+		vDrawPoint = new Vector2((float) Math.ceil(galaxy.width*(2/3.0)), 
+				galaxy.height/2);
+		for (Vector2 v : galaxy.analog_vectors.get(1)){
+			renderer.setColor(Color.WHITE);
+			renderer.line(vDrawPoint, v.cpy().scl(100).add(vDrawPoint));
+		}
+		renderer.setColor(Color.RED);
+		renderer.circle(vDrawPoint.x, vDrawPoint.y, 
+				100*GalaxyController.ANALOG_DEAD_ZONE);
+		renderer.end();
 	}
 
 	private void drawQuadTree() {

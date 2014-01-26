@@ -1,10 +1,11 @@
 package no.minimon.snakeinspace;
 
+import no.minimon.snakeinspace.controls.GalaxyController;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controllers;
-import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 
@@ -20,6 +21,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	private int width, height;
 	private int players;
+	//private PrintWriter writer; // DEBUG
 
 	public GameScreen(SnakeInSpace snakeInSpace, GalaxySounds sounds,
 			int width, int height, int players) {
@@ -28,21 +30,51 @@ public class GameScreen implements Screen, InputProcessor {
 		this.width = width;
 		this.height = height;
 		this.players = players;
+		
+		// DEBUG
+//		try {
+//			writer = new PrintWriter("data.txt", "utf-8");
+//		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
+		renderer = new GalaxyRenderer(galaxy);
+		controller = new GalaxyController(galaxy);
 	}
 
 	@Override
 	public void show() {
-		galaxy = new Galaxy(snakeInSpace, sounds, players, width, height);
-		renderer = new GalaxyRenderer(galaxy);
-		controller = new GalaxyController(galaxy);
-		ifOuyaAddControllerListener();
 		Gdx.input.setInputProcessor(this);
 		logger = new FPSLogger();
+		
+		handleControllers(true);
+	}
+
+	/**
+	 * adds a controller listener if there is none
+	 */
+	private void handleControllers(boolean addListener) {
+		if (addListener){
+			Controllers.addListener(controller);
+		} else {
+			Controllers.removeListener(controller);
+		}
 	}
 
 	@Override
 	public void render(float delta) {
-		logger.log();
+//		DEBUG
+		//		int total_energy = 0;
+//		for (Asteroid a : galaxy.getAsteroids()){
+//			total_energy += a.velocity.len();
+//		}
+//		
+//		writer.println(total_energy);
+//		writer.flush();
+		
+		// logger.log();
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -79,21 +111,18 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void hide() {
-		ifOuyaRemoveControllerListener();
 		Gdx.input.setInputProcessor(this);
+		handleControllers(false);
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
+		handleControllers(false);
 	}
 
 	@Override
 	public void resume() {
-		ifOuyaAddControllerListener();
-		// TODO Auto-generated method stub
-
+		handleControllers(true);
 	}
 
 	@Override
@@ -143,18 +172,6 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public boolean scrolled(int amount) {
 		return false;
-	}
-
-	private void ifOuyaAddControllerListener() {
-		if (Ouya.runningOnOuya) {
-			Controllers.addListener(controller);
-		}
-	}
-
-	private void ifOuyaRemoveControllerListener() {
-		if (Ouya.runningOnOuya) {
-			Controllers.removeListener(controller);
-		}
 	}
 
 }

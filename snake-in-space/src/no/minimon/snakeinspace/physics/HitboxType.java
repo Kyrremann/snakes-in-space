@@ -1,5 +1,5 @@
 package no.minimon.snakeinspace.physics;
 
-public enum HitBoxType {
+public enum HitboxType {
 	CIRCLE, RECTANGLE
 }
