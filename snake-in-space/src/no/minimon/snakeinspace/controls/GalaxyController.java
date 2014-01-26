@@ -1,5 +1,6 @@
 package no.minimon.snakeinspace.controls;
 
+import tv.ouya.console.api.OuyaController;
 import no.minimon.snakeinspace.Galaxy;
 import no.minimon.snakeinspace.MenuScreen;
 import no.minimon.snakeinspace.Snake;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.math.Vector2;
 
 public class GalaxyController extends ControllerAdapter {
@@ -83,21 +85,44 @@ public class GalaxyController extends ControllerAdapter {
 			right_analog = new Vector2();
 		}
 		
-		switch (axisCode) {
-		case Xbox360Pad.AXIS_LEFT_X: // left analog stick (movement)
-			left_analog.x = value;
-			//dir.y = this.getAxis(Xbox360Pad.AXIS_LEFT_Y); //?? not work?
-			break;
-		case Xbox360Pad.AXIS_LEFT_Y:
-			left_analog.y = -value; // our y-axis = flipped
-			break;
-		case Xbox360Pad.AXIS_RIGHT_X: // right analog stick
-			right_analog.x = value;
-			break;
-		case Xbox360Pad.AXIS_RIGHT_Y:
-			right_analog.y = -value; // our y-axis = flipped
-			break;
-		}
+		// XBOX controller
+		if (controller.getName().toLowerCase().contains("x-box")){
+			switch (axisCode) {
+			case Xbox360Pad.AXIS_LEFT_X: // left analog stick (movement)
+				left_analog.x = value;
+				//dir.y = this.getAxis(Xbox360Pad.AXIS_LEFT_Y); //?? not work?
+				break;
+			case Xbox360Pad.AXIS_LEFT_Y:
+				left_analog.y = -value; // our y-axis = flipped
+				break;
+			case Xbox360Pad.AXIS_RIGHT_X: // right analog stick
+				right_analog.x = value;
+				break;
+			case Xbox360Pad.AXIS_RIGHT_Y:
+				right_analog.y = -value; // our y-axis = flipped
+				break;
+			}
+		} 
+		// OUYA controller
+		else if (controller.getName().equals(Ouya.ID)){
+			switch (axisCode) {
+			case OuyaController.AXIS_LS_X: // left analog stick (movement)
+				left_analog.x = value;
+				//dir.y = this.getAxis(Xbox360Pad.AXIS_LEFT_Y); //?? not work?
+				break;
+			case OuyaController.AXIS_LS_Y:
+				left_analog.y = -value; // our y-axis = flipped
+				break;
+			case OuyaController.AXIS_RS_X: // right analog stick
+				right_analog.x = value;
+				break;
+			case OuyaController.AXIS_RS_Y:
+				right_analog.y = -value; // our y-axis = flipped
+				break;
+			}
+		} 
+		
+		
 		if (galaxy.analog_vectors.get(0).size() > 100) {
 			galaxy.analog_vectors.get(0).remove(0);
 		}
