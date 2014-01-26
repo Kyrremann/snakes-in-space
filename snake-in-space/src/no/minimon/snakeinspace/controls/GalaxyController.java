@@ -3,7 +3,6 @@ package no.minimon.snakeinspace.controls;
 import no.minimon.snakeinspace.Galaxy;
 import no.minimon.snakeinspace.MenuScreen;
 import no.minimon.snakeinspace.Snake;
-import no.minimon.snakeinspace.Snake.State;
 import no.minimon.snakeinspace.utils.Xbox360Pad;
 
 import com.badlogic.gdx.Input.Keys;

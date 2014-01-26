@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
-import com.badlogic.gdx.controllers.Controllers;
 
 public class MenuController extends ControllerAdapter {
 
@@ -50,7 +49,7 @@ public class MenuController extends ControllerAdapter {
 		case 96: // Ouya.BUTTON_A is not constant
 		case Keys.ENTER:
 		case Xbox360Pad.BUTTON_A:
-			screen.changeToGameScreen();
+			screen.handleConfirmButton();
 			return true;
 		case Keys.MENU:
 		case Keys.ESCAPE:
