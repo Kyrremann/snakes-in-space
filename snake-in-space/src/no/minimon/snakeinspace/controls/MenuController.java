@@ -43,7 +43,7 @@ public class MenuController extends ControllerAdapter {
 			return true;
 		case Keys.DOWN:
 			screen.seleted++;
-			if (screen.seleted > 3)
+			if (screen.seleted > 4)
 				screen.seleted = 0;
 			return true;
 		case 96: // Ouya.BUTTON_A is not constant
