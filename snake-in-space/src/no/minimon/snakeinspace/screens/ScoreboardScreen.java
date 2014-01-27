@@ -27,7 +27,7 @@ public class ScoreboardScreen implements Screen {
 		this.players = players;
 
 		controller = new ScoreboardController(this);
-		renderer = new ScoreboardRenderer();
+		renderer = new ScoreboardRenderer(this);
 	}
 
 	@Override
