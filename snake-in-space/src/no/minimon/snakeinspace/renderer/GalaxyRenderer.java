@@ -1,5 +1,9 @@
-package no.minimon.snakeinspace;
+package no.minimon.snakeinspace.renderer;
 
+import no.minimon.snakeinspace.Apple;
+import no.minimon.snakeinspace.Asteroid;
+import no.minimon.snakeinspace.Galaxy;
+import no.minimon.snakeinspace.Snake;
 import no.minimon.snakeinspace.controls.GalaxyController;
 
 import com.badlogic.gdx.graphics.Color;

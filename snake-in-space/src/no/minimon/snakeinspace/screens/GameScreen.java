@@ -3,11 +3,11 @@ package no.minimon.snakeinspace.screens;
 import no.minimon.snakeinspace.Apple;
 import no.minimon.snakeinspace.Asteroid;
 import no.minimon.snakeinspace.Galaxy;
-import no.minimon.snakeinspace.GalaxyRenderer;
 import no.minimon.snakeinspace.GalaxySounds;
 import no.minimon.snakeinspace.Snake;
 import no.minimon.snakeinspace.SnakeInSpace;
 import no.minimon.snakeinspace.controls.GalaxyController;
+import no.minimon.snakeinspace.renderer.GalaxyRenderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
