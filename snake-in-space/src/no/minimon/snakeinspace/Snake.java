@@ -311,4 +311,8 @@ public class Snake implements Movable {
 	public int getRadius() {
 		return getHead().radius;
 	}
+
+	public boolean isDead() {
+		return tails.isEmpty();
+	}
 }

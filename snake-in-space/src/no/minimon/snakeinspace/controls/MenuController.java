@@ -1,6 +1,6 @@
 package no.minimon.snakeinspace.controls;
 
-import no.minimon.snakeinspace.MenuScreen;
+import no.minimon.snakeinspace.screens.MenuScreen;
 import no.minimon.snakeinspace.utils.Xbox360Pad;
 
 import com.badlogic.gdx.Gdx;

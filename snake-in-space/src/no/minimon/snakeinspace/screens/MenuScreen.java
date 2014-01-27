@@ -1,5 +1,9 @@
-package no.minimon.snakeinspace;
+package no.minimon.snakeinspace.screens;
 
+import no.minimon.snakeinspace.Apple;
+import no.minimon.snakeinspace.Asteroid;
+import no.minimon.snakeinspace.GalaxySounds;
+import no.minimon.snakeinspace.SnakeInSpace;
 import no.minimon.snakeinspace.controls.MenuController;
 import no.minimon.snakeinspace.renderer.MenuRenderer;
 
@@ -76,7 +80,6 @@ public class MenuScreen implements Screen, InputProcessor {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -146,17 +149,19 @@ public class MenuScreen implements Screen, InputProcessor {
 		return false;
 	}
 
-	public void changeToGameScreen() {
+	public void changeToGameScreen(int players) {
 		handleControllers(false);
 		snakeInSpace.setScreen(new GameScreen(snakeInSpace, sounds, width,
-				height, seleted));
+				height, --players));
 	}
 
 	public void handleConfirmButton() {
 		switch (seleted) {
 		case 0:
+			changeToGameScreen(1);
+			break;
 		case 1:
-			changeToGameScreen();
+			changeToGameScreen(multiplayer);
 			break;
 		case 2:
 			// options

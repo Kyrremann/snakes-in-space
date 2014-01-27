@@ -1,5 +1,7 @@
 package no.minimon.snakeinspace;
 
+import no.minimon.snakeinspace.screens.MenuScreen;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 

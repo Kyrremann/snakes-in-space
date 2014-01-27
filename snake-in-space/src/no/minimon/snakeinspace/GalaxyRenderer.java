@@ -89,8 +89,8 @@ public class GalaxyRenderer {
 		batch.begin();
 		for (Snake snake : galaxy.getSnakes()) {
 			font.setColor(snake.getPlayerColor());
-			font.draw(batch, String.valueOf(snake.getApplesEaten()), 100,
-					(galaxy.height - 100) - (15 * snake.getPlayerId()));
+			font.draw(batch, String.valueOf(snake.getApplesEaten()), (galaxy.height / 10),
+					(galaxy.height - (galaxy.height / 10)) - (15 * snake.getPlayerId()));
 		}
 		batch.end();
 	}

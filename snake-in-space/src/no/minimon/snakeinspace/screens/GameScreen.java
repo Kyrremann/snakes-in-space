@@ -1,5 +1,12 @@
-package no.minimon.snakeinspace;
+package no.minimon.snakeinspace.screens;
 
+import no.minimon.snakeinspace.Apple;
+import no.minimon.snakeinspace.Asteroid;
+import no.minimon.snakeinspace.Galaxy;
+import no.minimon.snakeinspace.GalaxyRenderer;
+import no.minimon.snakeinspace.GalaxySounds;
+import no.minimon.snakeinspace.Snake;
+import no.minimon.snakeinspace.SnakeInSpace;
 import no.minimon.snakeinspace.controls.GalaxyController;
 
 import com.badlogic.gdx.Gdx;
@@ -16,8 +23,6 @@ public class GameScreen implements Screen, InputProcessor {
 	private GalaxyRenderer renderer;
 	private GalaxyController controller;
 	private GalaxySounds sounds;
-
-	private FPSLogger logger;
 
 	private int width, height;
 	private int players;
@@ -47,7 +52,6 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(this);
-		logger = new FPSLogger();
 		
 		handleControllers(true);
 	}
@@ -98,8 +102,26 @@ public class GameScreen implements Screen, InputProcessor {
 		galaxy.updateAppleSnakeInteraction();
 		galaxy.snakeAsteroidHitDetection();
 		galaxy.asteroidAsteroidHitDetection();
+		
+		if (areAllSnakesDead()) {
+			switchScreenToScoreboard();
+		}
 
 		renderer.render(delta);
+	}
+
+	private void switchScreenToScoreboard() {
+		snakeInSpace.setScreen(new ScoreboardScreen(snakeInSpace, height, width, players));
+	}
+
+	private boolean areAllSnakesDead() {
+		for (Snake snake : galaxy.getSnakes()) {
+			if (!snake.isDead()) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	@Override

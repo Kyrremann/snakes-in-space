@@ -1,10 +1,10 @@
 package no.minimon.snakeinspace.controls;
 
-import tv.ouya.console.api.OuyaController;
 import no.minimon.snakeinspace.Galaxy;
-import no.minimon.snakeinspace.MenuScreen;
 import no.minimon.snakeinspace.Snake;
+import no.minimon.snakeinspace.screens.MenuScreen;
 import no.minimon.snakeinspace.utils.Xbox360Pad;
+import tv.ouya.console.api.OuyaController;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.controllers.Controller;
