@@ -6,6 +6,7 @@ import no.minimon.snakeinspace.GalaxySounds;
 import no.minimon.snakeinspace.SnakeInSpace;
 import no.minimon.snakeinspace.controls.MenuController;
 import no.minimon.snakeinspace.renderer.MenuRenderer;
+import no.minimon.snakeinspace.utils.Direction;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -26,9 +27,10 @@ public class MenuScreen implements Screen, InputProcessor {
 	private int height;
 	private int width;
 
-	public int seleted, multiplayer = 2;
+	public int selected, multiplayer = 2;
 
 	private MenuRenderer menuRenderer;
+	private float counter = 1;
 
 	public MenuScreen(SnakeInSpace snakeInSpace, int width, int height) {
 		Gdx.app.log("LC", "CONSTRUCTOR");
@@ -71,10 +73,43 @@ public class MenuScreen implements Screen, InputProcessor {
 		}
 	}
 
+	
+	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		counter += delta;
+		
+		if (counter >= 0.20) {
+			// controller update menu selection
+			if (controller.direction_state == Direction.NORTH){
+				selected--;
+			} else if (controller.direction_state == Direction.EAST){
+				if (selected == 1){
+					multiplayer++;
+				}
+			} else if (controller.direction_state == Direction.SOUTH){
+				selected++;
+			} else if (controller.direction_state == Direction.WEST){
+				if (selected == 1){
+					multiplayer--;
+				}
+			}
+			
+			if(selected < 0)
+				selected = 4;
+			else if(selected > 4)
+				selected = 0;
+			if(multiplayer > 4)
+				multiplayer = 2;
+			else if(multiplayer < 2)
+				multiplayer = 4;
+
+			counter = 0;
+		}
+		
 		menuRenderer.render(delta);
 	}
 
@@ -156,7 +191,7 @@ public class MenuScreen implements Screen, InputProcessor {
 	}
 
 	public void handleConfirmButton() {
-		switch (seleted) {
+		switch (selected) {
 		case 0:
 			changeToGameScreen(1);
 			break;
