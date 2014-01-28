@@ -85,26 +85,8 @@ public class GalaxyController extends ControllerAdapter {
 			right_analog = new Vector2();
 		}
 		
-		// XBOX controller
-		if (controller.getName().toLowerCase().contains("x-box")){
-			switch (axisCode) {
-			case Xbox360Pad.AXIS_LEFT_X: // left analog stick (movement)
-				left_analog.x = value;
-				//dir.y = this.getAxis(Xbox360Pad.AXIS_LEFT_Y); //?? not work?
-				break;
-			case Xbox360Pad.AXIS_LEFT_Y:
-				left_analog.y = -value; // our y-axis = flipped
-				break;
-			case Xbox360Pad.AXIS_RIGHT_X: // right analog stick
-				right_analog.x = value;
-				break;
-			case Xbox360Pad.AXIS_RIGHT_Y:
-				right_analog.y = -value; // our y-axis = flipped
-				break;
-			}
-		} 
 		// OUYA controller
-		else if (controller.getName().equals(Ouya.ID)){
+		if (controller.getName().equals(Ouya.ID)){
 			switch (axisCode) {
 			case OuyaController.AXIS_LS_X: // left analog stick (movement)
 				left_analog.x = value;
@@ -117,6 +99,24 @@ public class GalaxyController extends ControllerAdapter {
 				right_analog.x = value;
 				break;
 			case OuyaController.AXIS_RS_Y:
+				right_analog.y = -value; // our y-axis = flipped
+				break;
+			}
+		} 
+		// XBOX controller
+		else if (controller.getName().toLowerCase().contains("x-box")){
+			switch (axisCode) {
+			case Xbox360Pad.AXIS_LEFT_X: // left analog stick (movement)
+				left_analog.x = value;
+				//dir.y = this.getAxis(Xbox360Pad.AXIS_LEFT_Y); //?? not work?
+				break;
+			case Xbox360Pad.AXIS_LEFT_Y:
+				left_analog.y = -value; // our y-axis = flipped
+				break;
+			case Xbox360Pad.AXIS_RIGHT_X: // right analog stick
+				right_analog.x = value;
+				break;
+			case Xbox360Pad.AXIS_RIGHT_Y:
 				right_analog.y = -value; // our y-axis = flipped
 				break;
 			}

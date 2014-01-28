@@ -177,7 +177,7 @@ public class MenuRenderer {
 		float y = 0;
 		float x = menu_start - 10;
 		
-		switch (menuScreen.seleted) {
+		switch (menuScreen.selected) {
 		case 0:
 			y = half_screen_height + (int) (small_font_size * 1.5);
 			break;
