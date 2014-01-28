@@ -104,6 +104,7 @@ public class MenuRenderer {
 	}
 	
 	private Mesh mesh;
+	private float[] jitter_on_mesh;
 	private Random random;
 	private float counter;
 
@@ -117,24 +118,56 @@ public class MenuRenderer {
 
     		mesh.setVertices(giefVertices());
             mesh.setIndices(new short[] { 0, 1, 2, 2, 3, 0 });
+            
+            jitter_on_mesh = new float[8]; // 8 floats = 4 coords
+            new_jitter(jitter_on_mesh);
         }
 		
 		counter += delta;
 		
 		if (counter > .25) {
 			counter -= .25;
-			mesh.setVertices(giefVertices());
+			new_jitter(jitter_on_mesh); // jitter
 		}
+		
+		float[] mesh_vertices;
+		mesh_vertices = giefVertices();
+		
+		combine_position_and_jitter(mesh_vertices, jitter_on_mesh);
+				
+		// set verts to mesh
+		mesh.setVertices(mesh_vertices);
 		
 		mesh.render(GL10.GL_TRIANGLES, 0, 6);
 	}
 	
+	private void combine_position_and_jitter(float[] mesh_vertices,
+			float[] jitter_on_mesh2) {
+		for (int i=0; i<4; ++i) {
+			mesh_vertices[i*4] += jitter_on_mesh2[i];
+			mesh_vertices[(i*4)+1] += jitter_on_mesh2[i+1];
+		}
+	}
+
+	private void new_jitter(float[] jitter_vertices) {
+		for(int i=0; i<8; ++i){
+			jitter_vertices[i] = jitter_2(0.0f);
+		}
+	}
+
 	@SuppressWarnings("unused")
 	private float between(int min, int max) {
 		return (float) random.nextInt(max - min) + min;
 	}
 	
-	private float between(float number) {
+	/**
+	 * Applies a jitter function to the given number.
+	 * gives a float of the following: x-2 < x < x+2
+	 * 
+	 * @param number
+	 * @return
+	 */
+	private float jitter_2(float number) {
 		float min = number - 2;
 		float max = number + 2;
 		return (float) random.nextInt((int) (max - min)) + min;
@@ -176,10 +209,10 @@ public class MenuRenderer {
 				x + box_width, y, 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(0, 255, 0, 255),
 				x + box_width, y + box_height, 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(0, 0, 255, 255),
                 x, y + box_height, 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(0, 255, 0, 255)*/
-                between(x), between(y), 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(255, 0, 0, 255),
-                between(x + box_width), between(y), 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(0, 255, 0, 255),
-                between(x + box_width), between(y + box_height), 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(0, 0, 255, 255),
-                between(x), between(y + box_height), 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(0, 255, 0, 255)
+                x, y, 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(255, 0, 0, 255),
+                x + box_width, y, 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(0, 255, 0, 255),
+                x + box_width, y + box_height, 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(0, 0, 255, 255),
+                x, y + box_height, 0, Color.DARK_GRAY.toFloatBits(), // Color.toFloatBits(0, 255, 0, 255)
                 
 				/*between(40, 60), between(40, 60), 0, Color.toFloatBits(255, 0, 0, 255),
         		between(90, 110), between(40, 60), 0, Color.toFloatBits(0, 255, 0, 255),
