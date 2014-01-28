@@ -164,9 +164,12 @@ public class MenuScreen implements Screen, InputProcessor {
 			changeToGameScreen(multiplayer);
 			break;
 		case 2:
-			// options
+			// scoreboard
 			break;
 		case 3:
+			// options
+			break;
+		case 4:
 			Gdx.app.exit();
 			break;
 		}

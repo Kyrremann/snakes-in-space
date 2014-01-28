@@ -39,7 +39,7 @@ public class MenuController extends ControllerAdapter {
 		case Keys.UP:
 			screen.seleted--;
 			if (screen.seleted < 0)
-				screen.seleted = 3;
+				screen.seleted = 4;
 			return true;
 		case Keys.DOWN:
 			screen.seleted++;
