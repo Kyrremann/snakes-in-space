@@ -164,7 +164,7 @@ public class MenuScreen implements Screen, InputProcessor {
 			changeToGameScreen(multiplayer);
 			break;
 		case 2:
-			// scoreboard
+			snakeInSpace.setScreen(new ScoreboardScreen(snakeInSpace, height, width, 0));
 			break;
 		case 3:
 			// options

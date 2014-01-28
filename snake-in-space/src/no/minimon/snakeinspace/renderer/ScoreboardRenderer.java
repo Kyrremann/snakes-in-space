@@ -7,12 +7,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class ScoreboardRenderer {
 	
 	private final String TITLE = "Hall of fame";
 	
-	private BitmapFont font_menu, font_title;
+	private BitmapFont font_menu, font_title, font_score;
 	private ShapeRenderer renderer;
 	private SpriteBatch batch;
 	private ScoreboardScreen screen;
@@ -31,13 +32,15 @@ public class ScoreboardRenderer {
 		renderer = new ShapeRenderer();
 		batch = new SpriteBatch();
 		font_menu = new BitmapFont();
+		font_score = new BitmapFont();
 		font_title = new BitmapFont();
 		
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		
 		font_menu.setScale(height / 400f);
-		font_title.setScale(height / 120); 
+		font_score.setScale(height / 250f);
+		font_title.setScale(height / 120);
 
 		half_screen_height = Gdx.graphics.getHeight() / 2;
 		
@@ -53,14 +56,47 @@ public class ScoreboardRenderer {
 		batch.begin();
 		
 		drawTitle(batch);
+		drawBox();
+		drawTopTen();
 
-		if (players == 1) {
+		if (players < 2) {
 			renderOnePlayer(delta);
 		} else {
 			renderMultiPlayer(delta);
 		}
 		
 		batch.end();
+	}
+	
+	String[] topTen = new String[] { "Julian", "Kyrre", "Julian", "Kyrre", "Julian", "Kyrre", "Julian", "Kyrre", "Julian", "Kyrre" };
+
+	private void drawTopTen() {
+		float x = width / 4;
+		float xScore = width / 2.5f;
+		float y = height - ((height / 10f) * 2.4f);
+		
+		for (int i = 0; i < topTen.length; i++) {
+			font_score.drawMultiLine(batch, "" + (i + 1), x, y - (i * 40), 0, HAlignment.CENTER);
+			font_menu.draw(batch, topTen[i], x + 50, y - 10 - (i * 40));
+			font_menu.draw(batch, "999 999 999", (width - xScore), y - 10 - (i * 40));
+		}
+	}
+
+	private void drawBox() {
+		renderer.begin(ShapeType.Line);
+		float x = width / 5;
+		float y = height - ((height / 10f) * 1f);
+		renderer.line(x, y, 
+				x, 0);
+		renderer.line(width - x, y, 
+				width - x, 0);
+		
+		renderer.line(x, y, 
+				width - x, y);
+		y = height - ((height / 10f) * 2.1f);
+		renderer.line(x, y, 
+				width - x, y);
+		renderer.end();
 	}
 
 	private void drawTitle(SpriteBatch batch2) {
